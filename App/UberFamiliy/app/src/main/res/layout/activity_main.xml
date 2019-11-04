@@ -8,10 +8,12 @@
 
     <Button
         android:id="@+id/buttonPickUP"
-        android:layout_width="fill_parent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="120dp"
         android:layout_marginEnd="120dp"
         android:layout_marginBottom="30dp"
+        android:background="@drawable/roundedbutton"
         android:backgroundTint="#333333"
         android:foregroundTint="#00F8EEEE"
         android:text="Pick Me Up"
