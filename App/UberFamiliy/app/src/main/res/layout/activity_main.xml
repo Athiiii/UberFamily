@@ -16,7 +16,7 @@
         android:background="@drawable/roundedbutton"
         android:backgroundTint="#333333"
         android:foregroundTint="#00F8EEEE"
-        android:text="Pick Me Up"
+        android:text="@string/button_Pick_Me_Up"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
