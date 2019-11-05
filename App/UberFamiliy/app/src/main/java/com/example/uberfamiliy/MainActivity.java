@@ -1,11 +1,11 @@
 package com.example.uberfamiliy;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.uberfamiliy.Actions.OnPickMeUpClick;
 
@@ -24,11 +24,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    private void openAddFriendWindow(){
-        Intent addFriendWindow = new Intent(this, AddFriend.class);
+
+    private void openAddFriendWindow() {
+        Intent addFriendWindow = new Intent(this, LoginActivity.class);
         startActivity(addFriendWindow);
     }
-
 
 
 }
