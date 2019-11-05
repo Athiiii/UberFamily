@@ -14,8 +14,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Button pickUpBtn = findViewById(R.id.buttonPickUP);
         pickUpBtn.setOnClickListener(new OnPickMeUpClick());
+
         View addFriendIMG = findViewById(R.id.addFriend);
         addFriendIMG.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -26,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openAddFriendWindow() {
-        Intent addFriendWindow = new Intent(this, LoginActivity.class);
+        Intent addFriendWindow = new Intent(this, AddFriend.class);
         startActivity(addFriendWindow);
     }
 
