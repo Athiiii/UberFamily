@@ -1,5 +1,8 @@
 package com.example.uberfamiliy.DBConnection;
 
-public interface connectToDB {
+import com.example.uberfamiliy.bean.User;
+
+public interface ConnectToDB {
+    boolean register(User user);
     int getId();
 }
