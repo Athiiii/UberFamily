@@ -5,8 +5,8 @@ import com.example.uberfamiliy.model.User;
 public class ConnectToAPI implements ConnectToServer {
     private static ConnectToAPI connectToAPI;
 
-    public static ConnectToServer getInstance(){
-        if(connectToAPI == null){
+    public static ConnectToServer getInstance() {
+        if (connectToAPI == null) {
             connectToAPI = new ConnectToAPI();
         }
         return connectToAPI;
@@ -18,12 +18,22 @@ public class ConnectToAPI implements ConnectToServer {
     }
 
     @Override
-    public int register(User user) {
-        return 0;
+    public User register(User user) {
+        return null;
     }
 
     @Override
     public User login(String username, String password) {
         return null;
+    }
+
+    @Override
+    public User verifyUser() {
+        return null;
+    }
+
+    @Override
+    public boolean PickMe() {
+        return false;
     }
 }
