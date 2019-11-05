@@ -1,0 +1,30 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace UberFamily.Services.Models
+{
+    public partial class User
+    {
+        public User()
+        {
+            ChatMessage = new HashSet<ChatMessage>();
+            FriendFirstFriendNavigation = new HashSet<Friend>();
+            FriendSecondFriendNavigation = new HashSet<Friend>();
+            RequestDriverNavigation = new HashSet<Request>();
+            RequestRequesterNavigation = new HashSet<Request>();
+        }
+
+        public int Id { get; set; }
+        public string Fullname { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public byte? IsDriver { get; set; }
+        public string Picture { get; set; }
+
+        public virtual ICollection<ChatMessage> ChatMessage { get; set; }
+        public virtual ICollection<Friend> FriendFirstFriendNavigation { get; set; }
+        public virtual ICollection<Friend> FriendSecondFriendNavigation { get; set; }
+        public virtual ICollection<Request> RequestDriverNavigation { get; set; }
+        public virtual ICollection<Request> RequestRequesterNavigation { get; set; }
+    }
+}
