@@ -1,6 +1,6 @@
 package com.example.uberfamiliy.communicate;
 
-import com.example.uberfamiliy.bean.User;
+import com.example.uberfamiliy.model.User;
 
 public interface ConnectToServer {
     boolean pickMeUp(int id);

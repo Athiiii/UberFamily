@@ -1,4 +1,4 @@
-package com.example.uberfamiliy.bean;
+package com.example.uberfamiliy.model;
 
 public class User {
     private int id;
