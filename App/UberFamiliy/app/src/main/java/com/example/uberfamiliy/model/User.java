@@ -1,15 +1,19 @@
 package com.example.uberfamiliy.model;
 
 import com.orm.SugarRecord;
+import com.orm.dsl.Ignore;
 
 import java.io.Serializable;
 
 public class User extends SugarRecord implements Serializable {
     private Long id;
     private String username;
-    private String fullName;
     private String password;
+    @Ignore
+    private String fullName;
+    @Ignore
     private boolean isDriver;
+    @Ignore
     private String image;
 
     public Long getId() {
