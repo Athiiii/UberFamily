@@ -13,5 +13,6 @@ public class AddFriend extends AppCompatActivity {
         setContentView(R.layout.activity_add_friend);
         EditText searchText = findViewById(R.id.searchText);
         searchText.getText();
+
     }
 }

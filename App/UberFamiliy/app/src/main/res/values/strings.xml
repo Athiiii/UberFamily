@@ -3,4 +3,7 @@
     <string name="button_Pick_Me_Up">Pick me up</string>
     <string name="register"><u>register</u></string>
     <string name="sign_in">Sign in</string>
+    <string name="password_hint">Password</string>
+    <string name="username">Username / email</string>
+    <string name="rememberMe">Remember me</string>
 </resources>
