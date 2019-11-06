@@ -43,13 +43,13 @@ public class CreateUsersForTesting {
         return users;
     }
 
-    public User getUser(boolean driver) {
+    public static User getUser(int id, boolean driver) {
         User user = new User();
         user.setUsername("severin");
         user.setPassword("1234");
         user.setFullName("Severin Hersche");
         user.setDriver(driver);
-        user.setId(1);
+        user.setId(id);
         return user;
     }
 }

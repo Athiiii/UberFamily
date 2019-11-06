@@ -74,17 +74,6 @@ public class AddFriendActivity extends AppCompatActivity {
         });
     }
 
-    private void setButtonEnabled() {
-        addFriendBtn.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.Button)));
-        addFriendBtn.setClickable(true);
-        addFriendBtn.setEnabled(true);
-    }
-
-    private void setButtonDisabled() {
-        addFriendBtn.setEnabled(false);
-        addFriendBtn.setClickable(false);
-    }
-
     private void init() {
         if (userListView == null) {
             userListView = findViewById(R.id.userList);
@@ -96,6 +85,17 @@ public class AddFriendActivity extends AppCompatActivity {
         if (users == null) {
             this.users = this.connectToServer.getAllUsers();
         }
+    }
+
+    private void setButtonEnabled() {
+        addFriendBtn.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.Button)));
+        addFriendBtn.setClickable(true);
+        addFriendBtn.setEnabled(true);
+    }
+
+    private void setButtonDisabled() {
+        addFriendBtn.setEnabled(false);
+        addFriendBtn.setClickable(false);
     }
 
     private void filterList(String searchEntry) {
@@ -122,9 +122,23 @@ public class AddFriendActivity extends AppCompatActivity {
     }
 
     private void fillUpListView(List<User> userList) {
-        ArrayAdapter<User> userArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_single_choice, userList);
+        ArrayAdapter<User> userArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_single_choice, removeOwnUser(userList));
         userListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         userListView.setAdapter(userArrayAdapter);
+    }
+
+    private List<User> removeOwnUser(List<User> userList) {
+        List<User> listWithoutOwnUser = new ArrayList<>();
+        listWithoutOwnUser.addAll(userList);
+
+        User user = getFirstUser();
+        for (User u : userList) {
+            if (u != null && u.getId().equals(user.getId())) {
+                listWithoutOwnUser.remove(u);
+            }
+        }
+
+        return listWithoutOwnUser;
     }
 
     private User getFirstUser() {

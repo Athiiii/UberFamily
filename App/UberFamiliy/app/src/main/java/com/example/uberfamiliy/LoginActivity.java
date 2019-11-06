@@ -21,7 +21,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        if (checkIfUserIsInDB()) {
+        if (checkIfUserUsedRememberMe()) {
             openMainScreen();
         }
         super.onStart();
@@ -58,9 +58,18 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    private boolean checkIfUserIsInDB() {
+    private boolean checkIfUserUsedRememberMe() {
+        User user = getFirstUser();
+        return user != null && user.isRemembered();
+    }
+
+    private User getFirstUser() {
         List<User> users = User.listAll(User.class);
-        return users.size() > 0;
+        User user = null;
+        if (users != null && users.size() > 0) {
+            user = users.get(0);
+        }
+        return user;
     }
 
     private void tryToSignIn() {
@@ -70,8 +79,11 @@ public class LoginActivity extends AppCompatActivity {
             User user = verifyUser();
             if ((user) != null) {
                 if (rememberMe) {
-                    user.save();
+                    user.setRemembered(true);
+                } else {
+                    user.setRemembered(false);
                 }
+                user.save();
                 openMainScreen();
             } else {
                 username.setError("Username or password is incorrect");

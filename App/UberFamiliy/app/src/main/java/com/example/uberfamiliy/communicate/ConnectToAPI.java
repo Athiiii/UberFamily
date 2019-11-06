@@ -32,7 +32,7 @@ public class ConnectToAPI implements ConnectToServer {
 
     @Override
     public User verifyUser() {
-        return new User();
+        return CreateUsersForTesting.getUser(1, true);
     }
 
     @Override

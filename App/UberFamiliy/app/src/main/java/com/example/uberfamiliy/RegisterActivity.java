@@ -1,7 +1,6 @@
 package com.example.uberfamiliy;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,7 +21,7 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        Button buttonLoadImage = (Button) findViewById(R.id.buttonLoadPicture);
+        Button buttonLoadImage = findViewById(R.id.buttonLoadPicture);
         buttonLoadImage.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -37,7 +36,6 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -46,6 +44,7 @@ public class RegisterActivity extends AppCompatActivity {
             Uri selectedImage = data.getData();
 
             Bitmap bitmap = null;
+
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
             } catch (FileNotFoundException e) {
@@ -54,11 +53,10 @@ public class RegisterActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            ImageView imageView = findViewById(R.id.imgView);
-
-
-            imageView.setImageBitmap(bitmap);
-            imageView.setLeft(0);
+            if (bitmap != null) {
+                ImageView imageView = findViewById(R.id.imgView);
+                imageView.setImageBitmap(bitmap);
+            }
 
         }
 

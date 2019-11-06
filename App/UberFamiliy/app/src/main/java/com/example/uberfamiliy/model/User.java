@@ -9,6 +9,7 @@ public class User extends SugarRecord implements Serializable {
     private Long id;
     private String username;
     private String password;
+    private boolean remembered;
     @Ignore
     private String fullName;
     @Ignore
@@ -16,6 +17,7 @@ public class User extends SugarRecord implements Serializable {
     @Ignore
     private String image;
 
+    @Override
     public Long getId() {
         return id;
     }
@@ -62,6 +64,14 @@ public class User extends SugarRecord implements Serializable {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public boolean isRemembered() {
+        return remembered;
+    }
+
+    public void setRemembered(boolean remembered) {
+        this.remembered = remembered;
     }
 
     @Override
