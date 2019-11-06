@@ -1,6 +1,9 @@
 package com.example.uberfamiliy.communicate;
 
+import com.example.uberfamiliy.model.CreateUsersForTesting;
 import com.example.uberfamiliy.model.User;
+
+import java.util.List;
 
 public class ConnectToAPI implements ConnectToServer {
     private static ConnectToAPI connectToAPI;
@@ -35,5 +38,10 @@ public class ConnectToAPI implements ConnectToServer {
     @Override
     public boolean PickMe() {
         return false;
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return CreateUsersForTesting.getUsers();
     }
 }

@@ -62,7 +62,7 @@ public class User extends SugarRecord implements Serializable {
 
     @Override
     public String toString() {
-        return username;
+        return getUsername();
     }
 
 }
