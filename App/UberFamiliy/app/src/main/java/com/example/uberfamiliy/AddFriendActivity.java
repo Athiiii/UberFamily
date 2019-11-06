@@ -55,22 +55,34 @@ public class AddFriendActivity extends AppCompatActivity {
         });
 
         this.addFriendBtn = findViewById(R.id.addFriend);
+        setButtonDisabled();
         this.addFriendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("asd");
+
                 connectToServer.addFriend(getFirstUser().getId(), selectedUser);
+
             }
         });
 
         userListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                addFriendBtn.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.Button)));
-                addFriendBtn.setEnabled(true);
+                setButtonEnabled();
                 selectedUser = (User) (userListView).getAdapter().getItem(position);
             }
         });
+    }
+
+    private void setButtonEnabled() {
+        addFriendBtn.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.Button)));
+        addFriendBtn.setClickable(true);
+        addFriendBtn.setEnabled(true);
+    }
+
+    private void setButtonDisabled() {
+        addFriendBtn.setEnabled(false);
+        addFriendBtn.setClickable(false);
     }
 
     private void init() {
@@ -84,7 +96,6 @@ public class AddFriendActivity extends AppCompatActivity {
         if (users == null) {
             this.users = this.connectToServer.getAllUsers();
         }
-
     }
 
     private void filterList(String searchEntry) {
