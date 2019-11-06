@@ -8,7 +8,7 @@ namespace UberFamily.Services.Models
     [DataContract]
     public partial class Friend
     {
-        public int Id { get; set; }
+        internal int Id { get; set; }
         public int FirstFriend { get; set; }
         public int SecondFriend { get; set; }
         

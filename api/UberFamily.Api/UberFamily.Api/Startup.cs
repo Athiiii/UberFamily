@@ -1,13 +1,9 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
-using System;
-using System.IO;
-using System.Reflection;
 using UberFamily.Api.Swagger;
+using UberFamily.Services.Extensions;
 
 namespace UberFamily.Api
 {
@@ -25,12 +21,11 @@ namespace UberFamily.Api
                 });                
             });
 
+            services
+                .AddUberfamilyServices();
+
             services.AddMvcCore()
-                .AddApiExplorer()
-                .AddJsonOptions(options =>
-                {
-                    options.SerializerSettings.ContractResolver = new IgnoreVirtualContractResolver();
-                });
+                .AddApiExplorer();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -48,6 +43,8 @@ namespace UberFamily.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseMvc();
         }
     }
 }

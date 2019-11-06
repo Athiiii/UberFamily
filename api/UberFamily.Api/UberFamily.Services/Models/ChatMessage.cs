@@ -7,7 +7,7 @@ namespace UberFamily.Services.Models
     [DataContract]
     public partial class ChatMessage
     {
-        public int Id { get; set; }
+        internal int Id { get; set; }
         public int Writer { get; set; }
         public int RequestId { get; set; }
         public string Message { get; set; }

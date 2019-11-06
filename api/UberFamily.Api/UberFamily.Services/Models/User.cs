@@ -16,7 +16,7 @@ namespace UberFamily.Services.Models
             RequestRequesterNavigation = new HashSet<Request>();
         }
 
-        public int Id { get; set; }
+        internal int Id { get; set; }
         public string Fullname { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }

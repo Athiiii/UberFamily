@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UberFamily.Services.Models;
+using UberFamily.Services.Services.Interfaces;
 
 namespace UberFamily.Api.Controllers
 {
@@ -11,16 +12,37 @@ namespace UberFamily.Api.Controllers
     public class RequestController
         : Controller
     {
+        private IRequestService _requestService;
+        private IUserService _userService;
+
+        public RequestController(IRequestService requestService, IUserService userService)
+        {
+            _requestService = requestService;
+            _userService = userService;
+        }
+
         [HttpPost]
         public Request PickMeUp(int userId, string adress)
         {
-            return null;
+            return _requestService.CreateRequest(new Request
+            {
+                Adress = adress,
+                Open = 0,
+                Requester = userId
+            });
         }
 
         [HttpPost("driver")]
-        public Request AddRequestDriver(int userId)
+        public Request AddRequestDriver(int requestId, int userId)
         {
-            return null;
+            var request = _requestService.GetRequestById(requestId);
+            if(request != null)
+            {
+            request.Driver = userId;
+            _requestService.UpdateRequest(request);
+            }
+
+            return request;
         }
 
         [HttpPut]

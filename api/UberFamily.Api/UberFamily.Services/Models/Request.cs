@@ -12,7 +12,7 @@ namespace UberFamily.Services.Models
             ChatMessage = new HashSet<ChatMessage>();
         }
 
-        public int Id { get; set; }
+        internal int Id { get; set; }
         public int Requester { get; set; }
         public int? Driver { get; set; }
         public byte Open { get; set; }

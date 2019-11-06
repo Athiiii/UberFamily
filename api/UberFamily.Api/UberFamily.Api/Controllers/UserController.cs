@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UberFamily.Services.Models;
+using UberFamily.Services.Services.Interfaces;
 
 namespace UberFamily.Api.Controllers
 {
@@ -11,23 +12,32 @@ namespace UberFamily.Api.Controllers
     public class UserController
         : Controller
     {
-        [HttpPost]
-        public User Create(User user)
+        private readonly IUserService _userService;
+        
+        public UserController(IUserService userService)
         {
-            return null;
+            _userService = userService;
+        }
+
+        [HttpPost]
+        public IActionResult Create(User user)
+        {
+            if (string.IsNullOrWhiteSpace(user.Password) || string.IsNullOrWhiteSpace(user.Username))
+                return BadRequest();
+            _userService.AddUser(user);
+            return Ok();
         }
 
         [HttpPost("verify")]
         public User VerifyUser(string username, string password)
-        {
-
-            return null;
+        {            
+            return _userService.GetUser(username, password);
         }
 
         [HttpGet]
         public IEnumerable<User> GetUsers()
         {
-            return null;
+            return _userService.GetUsers();
         }
     }
 }
