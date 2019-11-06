@@ -24,14 +24,12 @@ namespace UberFamily.Services.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseMySQL("server=104.207.133.76;port=3306;user=monty;password=Bensey90;database=uberFamily");
+                optionsBuilder.UseMySQL(@"server=104.207.133.76;port=3306;user=monty;password=Bensey90;database=uberFamily");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("ProductVersion", "2.2.4-servicing-10062");
-
             modelBuilder.Entity<ChatMessage>(entity =>
             {
                 entity.ToTable("ChatMessage", "uberFamily");
@@ -47,9 +45,7 @@ namespace UberFamily.Services.Models
                     .HasColumnType("int(11)")
                     .ValueGeneratedNever();
 
-                entity.Property(e => e.Message)
-                    .HasColumnName("message")
-                    .IsUnicode(false);
+                entity.Property(e => e.Message).HasColumnName("message");
 
                 entity.Property(e => e.RequestId)
                     .HasColumnName("request_id")
@@ -58,10 +54,6 @@ namespace UberFamily.Services.Models
                 entity.Property(e => e.Writer)
                     .HasColumnName("writer")
                     .HasColumnType("int(11)");
-
-                entity.Property(e => e.Approved)
-                    .HasColumnName("approved")
-                    .HasColumnType("tinyint(4)");
 
                 entity.HasOne(d => d.Request)
                     .WithMany(p => p.ChatMessage)
@@ -89,6 +81,10 @@ namespace UberFamily.Services.Models
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
                     .HasColumnType("int(11)");
+
+                entity.Property(e => e.Approved)
+                    .HasColumnName("approved")
+                    .HasColumnType("tinyint(4)");
 
                 entity.Property(e => e.FirstFriend)
                     .HasColumnName("firstFriend")
@@ -177,9 +173,7 @@ namespace UberFamily.Services.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Picture)
-                    .HasColumnName("picture")
-                    .IsUnicode(false);
+                entity.Property(e => e.Picture).HasColumnName("picture");
 
                 entity.Property(e => e.Username)
                     .HasColumnName("username")

@@ -13,12 +13,10 @@ namespace UberFamily.Api.Controllers
         : Controller
     {
         private IRequestService _requestService;
-        private IUserService _userService;
 
-        public RequestController(IRequestService requestService, IUserService userService)
+        public RequestController(IRequestService requestService)
         {
             _requestService = requestService;
-            _userService = userService;
         }
 
         [HttpPost]
@@ -27,7 +25,7 @@ namespace UberFamily.Api.Controllers
             return _requestService.CreateRequest(new Request
             {
                 Adress = adress,
-                Open = 0,
+                Open = 1,
                 Requester = userId
             });
         }
@@ -36,18 +34,24 @@ namespace UberFamily.Api.Controllers
         public Request AddRequestDriver(int requestId, int userId)
         {
             var request = _requestService.GetRequestById(requestId);
-            if(request != null)
+            if (request != null)
             {
-            request.Driver = userId;
-            _requestService.UpdateRequest(request);
+                request.Driver = userId;
+                _requestService.UpdateRequest(request);
             }
-
             return request;
         }
 
         [HttpPut]
-        public IActionResult CloseRequest(int userId)
+        public IActionResult CloseRequest(int requestId)
         {
+            var request = _requestService.GetRequestById(requestId);
+            if (request != null)
+            {
+                request.Open = 0;
+                _requestService.UpdateRequest(request);
+                return BadRequest();
+            }
             return Ok();
         }
     }

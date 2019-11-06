@@ -1,10 +1,9 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 
 namespace UberFamily.Services.Models
 {
-    [DataContract]
     public partial class Request
     {
         public Request()
@@ -18,17 +17,13 @@ namespace UberFamily.Services.Models
         public byte Open { get; set; }
         public string Adress { get; set; }
 
+        [JsonIgnore]
+        internal User DriverNavigation { get; set; }
 
         [JsonIgnore]
-        [IgnoreDataMember]
-        internal virtual User DriverNavigation { get; set; }
+        internal User RequesterNavigation { get; set; }
 
         [JsonIgnore]
-        [IgnoreDataMember]
-        internal virtual User RequesterNavigation { get; set; }
-
-        [JsonIgnore]
-        [IgnoreDataMember]
-        internal virtual ICollection<ChatMessage> ChatMessage { get; set; }
+        internal ICollection<ChatMessage> ChatMessage { get; set; }
     }
 }

@@ -14,7 +14,7 @@ namespace UberFamily.Services.Services
         {
             using (var context = new UberFamilyContext())
             {
-                context.Add(user);
+                context.User.Add(user);
                 await context.SaveChangesAsync();
             }
         }
@@ -39,7 +39,7 @@ namespace UberFamily.Services.Services
         {
             using (var context = new UberFamilyContext())
             {
-                return context.User;
+                return context.User.ToList();
             }
         }
     }

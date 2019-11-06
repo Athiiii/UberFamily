@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using UberFamily.Services.Models;
 using UberFamily.Services.Services.Interfaces;
@@ -9,14 +10,21 @@ namespace UberFamily.Services.Services
     internal class ChatMessageService
         : IChatMessageService
     {
-        public void AddMessage()
+        public async void AddMessage(ChatMessage message)
         {
-            throw new NotImplementedException();
+            using (var context = new UberFamilyContext())
+            {
+                context.ChatMessage.Add(message);
+                await context.SaveChangesAsync();
+            }
         }
 
-        public IEnumerable<ChatMessage> GetMessages()
+        public IEnumerable<ChatMessage> GetMessages(int requestId)
         {
-            throw new NotImplementedException();
+            using (var context = new UberFamilyContext())
+            {
+                return context.ChatMessage.Where(x => x.RequestId == requestId).ToList();
+            }
         }
     }
 }

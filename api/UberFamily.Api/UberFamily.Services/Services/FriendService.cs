@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using UberFamily.Services.Models;
 using UberFamily.Services.Services.Interfaces;
@@ -9,29 +10,50 @@ namespace UberFamily.Services.Services
     internal class FriendService
         : IFriendService
     {
-        public void AddFriend(Friend friend)
+        public Friend AddFriend(Friend friend)
         {
-            throw new NotImplementedException();
+            using (var context = new UberFamilyContext())
+            {
+                var friendItem = context.Friend.Add(friend);
+                context.SaveChanges();
+                return friendItem.Entity;
+            }
         }
 
         public Friend GetFriendById(int friendshipId)
         {
-            throw new NotImplementedException();
+            using (var context = new UberFamilyContext())
+            {
+                return context.Friend.FirstOrDefault(x => x.Id == friendshipId);
+            }
         }
 
-        public IEnumerable<Friend> GetFriends()
+        public IEnumerable<Friend> GetFriends(int userId)
         {
-            throw new NotImplementedException();
+            using (var context = new UberFamilyContext())
+            {
+                return context.Friend.Where(x => x.FirstFriend == userId || x.SecondFriend == userId);
+            }
         }
 
-        public void RemoveFriend(Friend friend)
+        public async void RemoveFriend(int friendId)
         {
-            throw new NotImplementedException();
+            using (var context = new UberFamilyContext())
+            {
+                context.Friend.Remove(context.Friend.FirstOrDefault(x => x.Id == friendId));
+                await context.SaveChangesAsync();
+            }
         }
 
-        public void UpdateFriend(Friend friend)
+        public async void UpdateFriend(Friend friend)
         {
-            throw new NotImplementedException();
+            using (var context = new UberFamilyContext())
+            {
+                var friendItem = context.Friend.FirstOrDefault(x => x.Id == friend.Id);
+                friendItem.FirstFriend = friend.FirstFriend;
+                friendItem.SecondFriend = friend.SecondFriend;
+                await context.SaveChangesAsync();
+            }
         }
     }
 }

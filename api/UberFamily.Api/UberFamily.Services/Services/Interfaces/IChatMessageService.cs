@@ -5,9 +5,9 @@ namespace UberFamily.Services.Services.Interfaces
 {
     public interface IChatMessageService
     {
-        IEnumerable<ChatMessage> GetMessages();
+        IEnumerable<ChatMessage> GetMessages(int requestId);
 
-        void AddMessage();
+        void AddMessage(ChatMessage message);
 
     }
 }

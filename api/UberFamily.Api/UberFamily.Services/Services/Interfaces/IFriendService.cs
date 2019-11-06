@@ -5,11 +5,11 @@ namespace UberFamily.Services.Services.Interfaces
 {
     public interface IFriendService
     {
-        void AddFriend(Friend friend);
+        Friend AddFriend(Friend friend);
 
-        void RemoveFriend(Friend friend);
+        void RemoveFriend(int friendId);
 
-        IEnumerable<Friend> GetFriends();
+        IEnumerable<Friend> GetFriends(int userId);
 
         Friend GetFriendById(int friendshipId);
 
