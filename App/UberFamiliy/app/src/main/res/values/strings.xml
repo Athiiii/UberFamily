@@ -4,7 +4,8 @@
     <string name="register"><u>register</u></string>
     <string name="sign_in">Sign in</string>
     <string name="password_hint">Password</string>
-    <string name="usernameEmail">Username / email</string>
+    <string name="username">Username</string>
     <string name="rememberMe">Remember me</string>
-    <string name="username"><b> Usernames:</b></string>
+    <string name="usernames"><b> Usernames:</b></string>
+    <string name="userSearch"><b>User search</b></string>
 </resources>

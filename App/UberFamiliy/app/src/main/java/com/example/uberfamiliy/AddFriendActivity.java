@@ -29,7 +29,7 @@ public class AddFriendActivity extends AppCompatActivity {
 
     public void setHeader(ListView listView) {
         TextView textView = new TextView(this);
-        textView.setText(R.string.username);
+        textView.setText(R.string.usernames);
         textView.setTextSize(15);
         listView.addHeaderView(textView);
     }

@@ -30,11 +30,9 @@
         android:layout_marginStart="100dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="100dp"
-        android:autofillHints="@string/usernameEmail"
-
-
+        android:autofillHints="@string/username"
         android:ems="10"
-        android:hint="@string/usernameEmail"
+        android:hint="@string/username"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
