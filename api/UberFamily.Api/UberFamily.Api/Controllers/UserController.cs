@@ -35,9 +35,10 @@ namespace UberFamily.Api.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<User> GetUsers()
+        public IActionResult GetUsers()
         {
-            return _userService.GetUsers();
+            var r = _userService.GetUsers();
+            return Json(r);
         }
     }
 }

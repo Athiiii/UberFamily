@@ -24,8 +24,7 @@ namespace UberFamily.Api
             services
                 .AddUberfamilyServices();
 
-            services.AddMvcCore()
-                .AddApiExplorer();
+            services.AddMvc();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

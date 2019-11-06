@@ -6,7 +6,6 @@ namespace UberFamily.Services.Models
 {
     public partial class ChatMessage
     {
-        [JsonIgnore]
         public int Id { get; set; }
         public int Writer { get; set; }
         public int RequestId { get; set; }

@@ -54,5 +54,18 @@ namespace UberFamily.Api.Controllers
             }
             return Ok();
         }
+
+        [HttpGet]
+        public IEnumerable<Request> GetRequest()
+        {
+            return _requestService.GetRequests();
+        }
+
+
+        [HttpGet("open")]
+        public IEnumerable<Request> GetOpenRequest()
+        {
+            return _requestService.GetOpenRequests();
+        }
     }
 }

@@ -10,18 +10,6 @@ namespace UberFamily.Services.Services
     class UserService
         : IUserService
     {
-        public static void Main(string[] args)
-        {
-            new UserService().AddUser(new User
-            {
-                Fullname = "adsfsdfdsf",
-                IsDriver = 1,
-                Password = "kjföadlkf",
-                Picture = "kjöaldjksf",
-                Username = "klajödsfjkö"
-            });
-        }
-
         public async void AddUser(User user)
         {
             using (var context = new UberFamilyContext())

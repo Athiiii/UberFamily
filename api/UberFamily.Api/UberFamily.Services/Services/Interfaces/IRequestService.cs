@@ -1,4 +1,5 @@
-﻿using UberFamily.Services.Models;
+﻿using System.Collections.Generic;
+using UberFamily.Services.Models;
 
 namespace UberFamily.Services.Services.Interfaces
 {
@@ -9,5 +10,9 @@ namespace UberFamily.Services.Services.Interfaces
         void UpdateRequest(Request request);
 
         Request GetRequestById(int requestId);
+
+        IEnumerable<Request> GetOpenRequests();
+
+        IEnumerable<Request> GetRequests();
     }
 }

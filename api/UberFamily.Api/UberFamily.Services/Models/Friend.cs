@@ -6,7 +6,7 @@ namespace UberFamily.Services.Models
 {
     public partial class Friend
     {
-        internal int Id { get; set; }
+        public int Id { get; set; }
         public int FirstFriend { get; set; }
         public int SecondFriend { get; set; }
         public byte? Approved { get; set; }

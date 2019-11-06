@@ -22,11 +22,27 @@ namespace UberFamily.Services.Services
             }
         }
 
+        public IEnumerable<Request> GetOpenRequests()
+        {
+            using (var context = new UberFamilyContext())
+            {
+                return context.Request.Where(x => x.Open == 1).ToList();
+            }
+        }
+
         public Request GetRequestById(int requestId)
         {
             using (var context = new UberFamilyContext()) 
             {
                 return context.Request.FirstOrDefault(x => x.Id == requestId);
+            }
+        }
+
+        public IEnumerable<Request> GetRequests()
+        {
+            using (var context = new UberFamilyContext())
+            {
+                return context.Request.ToList();
             }
         }
 
