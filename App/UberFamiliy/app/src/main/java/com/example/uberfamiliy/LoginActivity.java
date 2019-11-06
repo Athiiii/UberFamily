@@ -40,6 +40,13 @@ public class LoginActivity extends AppCompatActivity {
                 rememberMe = ((CheckBox) view).isChecked();
             }
         });
+        View register = findViewById(R.id.register);
+        register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openRegisterScreen();
+            }
+        });
 
         Button signInBtn = findViewById(R.id.signIn);
         signInBtn.setOnClickListener(new View.OnClickListener() {
@@ -94,6 +101,11 @@ public class LoginActivity extends AppCompatActivity {
 
     private void openMainScreen() {
         Intent addFriendWindow = new Intent(this, MainActivity.class);
+        startActivity(addFriendWindow);
+    }
+
+    private void openRegisterScreen() {
+        Intent addFriendWindow = new Intent(this, RegisterActivity.class);
         startActivity(addFriendWindow);
     }
 }

@@ -46,7 +46,7 @@ public class ConnectToAPI implements ConnectToServer {
     }
 
     @Override
-    public boolean addFriend(long id, User friend) {
+    public boolean addFriend(long id, long friendId) {
 
         return false;
     }

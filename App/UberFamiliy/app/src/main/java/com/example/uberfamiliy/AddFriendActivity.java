@@ -60,7 +60,7 @@ public class AddFriendActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                connectToServer.addFriend(getFirstUser().getId(), selectedUser);
+                connectToServer.addFriend(getFirstUser().getId(), selectedUser.getId());
 
             }
         });
