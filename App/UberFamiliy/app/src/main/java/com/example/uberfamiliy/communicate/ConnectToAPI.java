@@ -44,4 +44,10 @@ public class ConnectToAPI implements ConnectToServer {
     public List<User> getAllUsers() {
         return CreateUsersForTesting.getUsers();
     }
+
+    @Override
+    public boolean addFriend(long id, User friend) {
+
+        return false;
+    }
 }

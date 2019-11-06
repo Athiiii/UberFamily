@@ -14,7 +14,7 @@
         android:layout_marginEnd="100dp"
         android:layout_marginBottom="40dp"
         android:background="@drawable/roundedbutton"
-        android:backgroundTint="#333333"
+        android:backgroundTint="@color/Button"
         android:foregroundTint="#00F8EEEE"
         android:text="@string/button_Pick_Me_Up"
         android:textAlignment="center"

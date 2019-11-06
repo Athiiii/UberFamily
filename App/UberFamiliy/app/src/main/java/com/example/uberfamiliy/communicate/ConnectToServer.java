@@ -16,4 +16,6 @@ public interface ConnectToServer {
     boolean PickMe();
 
     List<User> getAllUsers();
+
+    boolean addFriend(long id, User friend);
 }
