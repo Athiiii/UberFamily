@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace UberFamily.Services.Models
 {
-    public partial class uberFamilyContext : DbContext
+    public partial class UberFamilyContext : DbContext
     {
-        public uberFamilyContext()
+        public UberFamilyContext()
         {
         }
 
-        public uberFamilyContext(DbContextOptions<uberFamilyContext> options)
+        public UberFamilyContext(DbContextOptions<UberFamilyContext> options)
             : base(options)
         {
         }
@@ -24,7 +24,6 @@ namespace UberFamily.Services.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseMySQL("server=104.207.133.76;port=3306;user=monty;password=Bensey90;database=uberFamily");
             }
         }
@@ -59,6 +58,10 @@ namespace UberFamily.Services.Models
                 entity.Property(e => e.Writer)
                     .HasColumnName("writer")
                     .HasColumnType("int(11)");
+
+                entity.Property(e => e.Approved)
+                    .HasColumnName("approved")
+                    .HasColumnType("tinyint(4)");
 
                 entity.HasOne(d => d.Request)
                     .WithMany(p => p.ChatMessage)
