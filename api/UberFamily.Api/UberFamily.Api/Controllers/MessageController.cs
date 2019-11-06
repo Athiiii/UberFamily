@@ -7,7 +7,7 @@ using UberFamily.Services.Models;
 
 namespace UberFamily.Api.Controllers
 {
-    [Route("api[controller]")]
+    [Route("api/[controller]")]
     public class MessageController
         : Controller
     {

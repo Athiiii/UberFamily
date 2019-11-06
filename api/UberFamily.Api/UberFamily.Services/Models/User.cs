@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace UberFamily.Services.Models
 {
+    [DataContract]
     public partial class User
     {
         public User()
@@ -21,10 +23,24 @@ namespace UberFamily.Services.Models
         public byte? IsDriver { get; set; }
         public string Picture { get; set; }
 
-        public virtual ICollection<ChatMessage> ChatMessage { get; set; }
-        public virtual ICollection<Friend> FriendFirstFriendNavigation { get; set; }
-        public virtual ICollection<Friend> FriendSecondFriendNavigation { get; set; }
-        public virtual ICollection<Request> RequestDriverNavigation { get; set; }
-        public virtual ICollection<Request> RequestRequesterNavigation { get; set; }
+        [JsonIgnore]
+        [IgnoreDataMember]
+        internal virtual ICollection<ChatMessage> ChatMessage { get; set; }
+
+        [JsonIgnore]
+        [IgnoreDataMember]
+        internal virtual ICollection<Friend> FriendFirstFriendNavigation { get; set; }
+
+        [JsonIgnore]
+        [IgnoreDataMember]
+        internal virtual ICollection<Friend> FriendSecondFriendNavigation { get; set; }
+
+        [JsonIgnore]
+        [IgnoreDataMember]
+        internal virtual ICollection<Request> RequestDriverNavigation { get; set; }
+
+        [JsonIgnore]
+        [IgnoreDataMember]
+        internal virtual ICollection<Request> RequestRequesterNavigation { get; set; }
     }
 }

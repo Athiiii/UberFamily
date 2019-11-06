@@ -1,5 +1,10 @@
-﻿namespace UberFamily.Services.Models
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Runtime.Serialization;
+
+namespace UberFamily.Services.Models
 {
+    [DataContract]
     public partial class ChatMessage
     {
         public int Id { get; set; }
@@ -8,7 +13,12 @@
         public string Message { get; set; }
         public byte Approved { get; set; }
 
-        public virtual Request Request { get; set; }
-        public virtual User WriterNavigation { get; set; }
+        [JsonIgnore]
+        [IgnoreDataMember]
+        internal virtual Request Request { get; set; }
+
+        [JsonIgnore]
+        [IgnoreDataMember]
+        internal virtual User WriterNavigation { get; set; }
     }
 }
