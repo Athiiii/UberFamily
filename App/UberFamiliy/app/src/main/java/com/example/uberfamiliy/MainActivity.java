@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openAddFriendWindow() {
-        Intent addFriendWindow = new Intent(this, AddFriend.class);
+        Intent addFriendWindow = new Intent(this, AddFriendActivity.class);
         startActivity(addFriendWindow);
     }
 

@@ -60,4 +60,9 @@ public class User extends SugarRecord implements Serializable {
         this.image = image;
     }
 
+    @Override
+    public String toString() {
+        return username;
+    }
+
 }
