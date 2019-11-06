@@ -52,11 +52,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void tryToSignIn() {
-        System.out.println("asd");
         EditText username = findViewById(R.id.username);
         EditText password = findViewById(R.id.password);
         if (checkInputFields(username, password)) {
-            User user = null;
+            User user = verifyUser();
             if ((user) != null) {
                 if (rememberMe) {
                     user.save();
@@ -84,8 +83,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private User verifyUser() {
         ConnectToServer connectToServer = ConnectToAPI.getInstance();
-        connectToServer.verifyUser();
-        return new User();
+        User user = connectToServer.verifyUser();
+        return user;
     }
 
     private void openMainScreen() {

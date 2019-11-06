@@ -29,7 +29,7 @@ public class ConnectToAPI implements ConnectToServer {
 
     @Override
     public User verifyUser() {
-        return null;
+        return new User();
     }
 
     @Override
