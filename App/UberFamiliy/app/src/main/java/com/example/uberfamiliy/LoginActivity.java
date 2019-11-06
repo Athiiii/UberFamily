@@ -20,14 +20,18 @@ public class LoginActivity extends AppCompatActivity {
     private boolean rememberMe = false;
 
     @Override
+    protected void onStart() {
+        if (checkIfUserIsInDB()) {
+            openMainScreen();
+        }
+        super.onStart();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         SugarContext.init(this);
-
-        if (checkIfUserIsInDB()) {
-            openMainScreen();
-        }
 
         CheckBox rememberMeBtn = findViewById(R.id.rememberMe);
         rememberMeBtn.setOnClickListener(new View.OnClickListener() {
@@ -45,6 +49,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private boolean checkIfUserIsInDB() {
         List<User> users = User.listAll(User.class);
