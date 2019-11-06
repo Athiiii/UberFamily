@@ -63,22 +63,18 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 openMainScreen();
             } else {
-
+                username.setError("Username or password is incorrect");
             }
         }
     }
 
     private boolean checkInputFields(EditText username, EditText password) {
         boolean inputFieldIsOK = true;
-        System.out.println("Text: " + username.getText());
-        System.out.println("ddddd");
         if (username.getText().toString().trim().equals("")) {
-            System.out.println("error");
             username.setError("Type in a username");
             inputFieldIsOK = false;
         }
         if (password.getText().toString().trim().equals("")) {
-            System.out.println("error2");
             password.setError("Type in a password");
             inputFieldIsOK = false;
         }
