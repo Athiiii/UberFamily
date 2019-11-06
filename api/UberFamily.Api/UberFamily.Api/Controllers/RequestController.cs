@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UberFamily.Services.Models;
 
 namespace UberFamily.Api.Controllers
 {
@@ -11,15 +12,15 @@ namespace UberFamily.Api.Controllers
         : Controller
     {
         [HttpPost]
-        public IActionResult PickMeUp(int userId, string adress)
+        public Request PickMeUp(int userId, string adress)
         {
-            return Ok();
+            return null;
         }
 
         [HttpPost("driver")]
-        public IActionResult AddRequestDriver(int userId)
+        public Request AddRequestDriver(int userId)
         {
-            return Ok();
+            return null;
         }
 
         [HttpPut]

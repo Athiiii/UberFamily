@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace UberFamily.Services.Models
+﻿namespace UberFamily.Services.Models
 {
     public partial class ChatMessage
     {

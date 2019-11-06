@@ -7,25 +7,18 @@ using UberFamily.Services.Models;
 
 namespace UberFamily.Api.Controllers
 {
-    [Route("api/[controller]")]
-    public class UserController
+    [Route("api[controller]")]
+    public class MessageController
         : Controller
     {
         [HttpPost]
-        public User Create(User user)
+        public IActionResult AddMessage(ChatMessage message)
         {
-            return null;
-        }
-
-        [HttpPost("verify")]
-        public User VerifyUser(string username, string password)
-        {
-
-            return null;
+            return Ok();
         }
 
         [HttpGet]
-        public IEnumerable<User> GetUsers()
+        public IEnumerable<ChatMessage> GetMessage(int requestId)
         {
             return null;
         }
