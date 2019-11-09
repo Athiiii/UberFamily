@@ -2,6 +2,8 @@ package com.example.uberfamiliy;
 
 import android.content.Context;
 
+import com.example.uberfamiliy.DBConnection.ConnectToDB;
+
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -23,5 +25,10 @@ public class ExampleInstrumentedTest {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
         assertEquals("com.example.uberfamiliy", appContext.getPackageName());
+    }
+
+    @Test
+    public void run() {
+        ConnectToDB.getInstance().getUsers();
     }
 }
