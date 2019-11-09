@@ -135,12 +135,11 @@
             app:layout_constraintTop_toBottomOf="@+id/password"></Button>
 
         <Button
-            android:id="@+id/buttonLoadPicture2"
+            android:id="@+id/takeAPic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"
             android:text="@string/takeAPicture"
-
             app:layout_constraintTop_toBottomOf="@+id/password"></Button>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
