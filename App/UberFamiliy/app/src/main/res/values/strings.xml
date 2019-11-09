@@ -1,4 +1,18 @@
 <resources>
     <string name="app_name">UberFamiliy</string>
     <string name="button_Pick_Me_Up">Pick me up</string>
+    <string name="registerLink"><u>register</u></string>
+    <string name="signInLink"><u>Sign in</u></string>
+    <string name="sign_in">Sign in</string>
+    <string name="password_hint">Password</string>
+    <string name="fullName">Full Name</string>
+    <string name="username">Username</string>
+    <string name="loadPicture"><b>Load picture</b></string>
+    <string name="takeAPicture"><b>Take a picture</b></string>
+    <string name="register">Register</string>
+    <string name="rememberMe">Remember me</string>
+    <string name="usernames"><b> Usernames:</b></string>
+    <string name="userSearch"><b>User search</b></string>
+    <string name="addFriend"><b>Add Friend</b></string>
+
 </resources>

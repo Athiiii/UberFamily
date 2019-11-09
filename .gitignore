@@ -437,3 +437,16 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+App/UberFamiliy/.idea/render.experimental.xml
+App/UberFamiliy/.idea/render.experimental.xml
+App/UberFamiliy/app/.idea/codeStyles/Project.xml
+App/UberFamiliy/app/.idea/gradle.xml
+App/UberFamiliy/app/.idea/misc.xml
+App/UberFamiliy/app/.idea/modules.xml
+App/UberFamiliy/app/.idea/runConfigurations.xml
+App/UberFamiliy/app/.idea/workspace.xml
+App/UberFamiliy/app/gradle/wrapper/gradle-wrapper.jar
+App/UberFamiliy/app/gradle/wrapper/gradle-wrapper.properties
+App/UberFamiliy/app/gradlew
+App/UberFamiliy/app/gradlew.bat

@@ -1,12 +1,15 @@
 package com.example.uberfamiliy.communicate;
 
+import com.example.uberfamiliy.model.CreateUsersForTesting;
 import com.example.uberfamiliy.model.User;
+
+import java.util.List;
 
 public class ConnectToAPI implements ConnectToServer {
     private static ConnectToAPI connectToAPI;
 
-    public static ConnectToServer getInstance(){
-        if(connectToAPI == null){
+    public static ConnectToServer getInstance() {
+        if (connectToAPI == null) {
             connectToAPI = new ConnectToAPI();
         }
         return connectToAPI;
@@ -18,12 +21,33 @@ public class ConnectToAPI implements ConnectToServer {
     }
 
     @Override
-    public int register(User user) {
-        return 0;
+    public User register(User user) {
+        return null;
     }
 
     @Override
     public User login(String username, String password) {
         return null;
+    }
+
+    @Override
+    public User verifyUser() {
+        return CreateUsersForTesting.getUser(1, true);
+    }
+
+    @Override
+    public boolean PickMe() {
+        return false;
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return CreateUsersForTesting.getUsers();
+    }
+
+    @Override
+    public boolean addFriend(long id, long friendId) {
+
+        return false;
     }
 }
