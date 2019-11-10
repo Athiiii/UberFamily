@@ -44,11 +44,11 @@ public class ConnectToDBTest {
     }
 
     @Test
-    public void closeRequest() {
+    public void createRequest() {
     }
 
     @Test
-    public void createRequest() {
+    public void closeRequest() {
     }
 
     @Test
