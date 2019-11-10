@@ -12,5 +12,7 @@ namespace UberFamily.Services.Services.Interfaces
         User GetUserById(int userId);
 
         IEnumerable<User> GetUsers();
+
+        void DeleteUser(int userId);
     }
 }

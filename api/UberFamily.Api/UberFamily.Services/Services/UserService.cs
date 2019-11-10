@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using UberFamily.Services.Models;
+﻿using System.Collections.Generic;
 using System.Linq;
+using UberFamily.Services.Models;
 using UberFamily.Services.Services.Interfaces;
 
 namespace UberFamily.Services.Services
@@ -15,6 +13,15 @@ namespace UberFamily.Services.Services
             using (var context = new UberFamilyContext())
             {
                 context.User.Add(user);
+                await context.SaveChangesAsync();
+            }
+        }
+
+        public async void DeleteUser(int userId)
+        {
+            using (var context = new UberFamilyContext())
+            {
+                context.User.Remove(context.User.FirstOrDefault(x => x.Id == userId));
                 await context.SaveChangesAsync();
             }
         }

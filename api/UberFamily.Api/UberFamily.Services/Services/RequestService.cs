@@ -22,6 +22,15 @@ namespace UberFamily.Services.Services
             }
         }
 
+        public async void DeleteRequest(int requestId)
+        {
+            using (var context = new UberFamilyContext())
+            {
+                context.Request.Remove(context.Request.FirstOrDefault(x => x.Id == requestId));
+                await context.SaveChangesAsync();
+            }
+        }
+
         public IEnumerable<Request> GetOpenRequests()
         {
             using (var context = new UberFamilyContext())

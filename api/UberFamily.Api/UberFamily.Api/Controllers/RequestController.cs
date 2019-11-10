@@ -67,5 +67,12 @@ namespace UberFamily.Api.Controllers
         {
             return _requestService.GetOpenRequests();
         }
+
+        [HttpDelete]
+        public IActionResult DeleteRequest(int requestId)
+        {
+            _requestService.DeleteRequest(requestId);
+            return Ok();
+        }
     }
 }

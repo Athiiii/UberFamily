@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using UberFamily.Services.Models;
 using UberFamily.Services.Services.Interfaces;
 
@@ -35,10 +32,16 @@ namespace UberFamily.Api.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetUsers()
+        public IEnumerable<User> GetUsers()
         {
-            var r = _userService.GetUsers();
-            return Json(r);
+            return _userService.GetUsers();
+        }
+
+        [HttpDelete]
+        public IActionResult DeleteUser(int userId)
+        {
+            _userService.DeleteUser(userId);
+            return Ok();
         }
     }
 }
