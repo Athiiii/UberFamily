@@ -50,13 +50,9 @@ public class User extends SugarRecord implements Serializable {
         this.password = password;
     }
 
-    public boolean isDriver() {
-        return isDriver;
-    }
+    public boolean isDriver() {  return isDriver; }
 
-    public void setDriver(boolean driver) {
-        isDriver = driver;
-    }
+    public void setDriver(boolean driver) { isDriver = driver; }
 
     public String getImage() {
         return image;

@@ -123,8 +123,14 @@ public class ConnectToDB implements IConnectToDB {
 
     @Override
     public boolean createUser(User user) {
-        
-        return false;
+        int driver = 0;
+        if(user.isDriver()) {
+            driver = 1;
+        }
+        String query = "fullname="+ user.getFullName() +"&username="+ user.getUsername()
+                +"&password="+ user.getPassword() +"&isDriver="+ driver +"&picture="+ user.getImage() +"";
+        JSONArray response = connect(POST, "api/User", query);
+        return response != null;
     }
 
     @Override
