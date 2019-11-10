@@ -5,11 +5,16 @@ import com.example.uberfamiliy.model.Friend;
 import com.example.uberfamiliy.model.Request;
 import com.example.uberfamiliy.model.User;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -118,41 +123,95 @@ public class ConnectToDB implements IConnectToDB {
 
     @Override
     public boolean createUser(User user) {
+        
         return false;
     }
 
     @Override
-    public User VerifyUser(String username, String password) {
-        return null;
+    public User verifyUser(String username, String password) {
+        User user = null;
+        JSONArray jsonObject = connect(POST, "api/User/verify", "username=" + username + "&password=" + password + "");
+        if(jsonObject != null) {
+            try {
+                JSONObject object = jsonObject.getJSONObject(0);
+                user = new User();
+                user.setId(object.getInt("id"));
+                user.setFullName(object.getString("fullname"));
+                user.setUsername(object.getString("username"));
+                user.setPassword(object.getString("password"));
+                user.setDriver(object.getInt("isDriver") == 1);
+                user.setImage(object.getString("picture"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return user;
     }
 
     @Override
     public List<User> getUsers() {
         List<User> users = null;
 
-        JSONObject response = connect("GET", "api/User");
-
+        JSONArray jsonObjects = connect(GET, "api/User");
+        if(jsonObjects != null) {
+            users = new ArrayList<>();
+            try {
+                for (int i = 0; i < jsonObjects.length(); ++i) {
+                    User user = new User();
+                    JSONObject object = jsonObjects.getJSONObject(i);
+                    user.setId(object.getInt("id"));
+                    user.setFullName(object.getString("fullname"));
+                    user.setUsername(object.getString("username"));
+                    user.setPassword(object.getString("password"));
+                    user.setDriver(object.getInt("isDriver") == 1);
+                    user.setImage(object.getString("picture"));
+                    users.add(user);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
         return users;
     }
 
-    private JSONObject connect(String type, String apiDomain) {
-        JSONObject json = null;
+    private JSONArray connect(String type, String apiDomain, String body) {
+        JSONArray output = null;
+        BufferedReader br = null;
+        String response = "";
 
         try {
             URL url = new URL(domain + apiDomain);
             HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
+            conn.setRequestMethod(type);
             conn.setRequestProperty("Accept", "application/json");
 
+            if(body != null) {
+                byte[] postData = body.getBytes( StandardCharsets.UTF_8 );
+                conn.setRequestProperty( "Content-Length", Integer.toString( postData.length ));
+                try( DataOutputStream wr = new DataOutputStream( conn.getOutputStream())) {
+                    wr.write( postData );
+                }
+            }
             if(conn.getResponseCode() == 200) {
-                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                String output = br.lines().collect(Collectors.joining());
-                json = new JSONObject(output);
+                br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                response = br.lines().collect(Collectors.joining());
+                output = new JSONArray(response);
             }
             conn.disconnect();
+        } catch (JSONException je) {
+            try {
+                output = new JSONArray("[" + response + "]");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
         } catch (Exception e) {
             System.out.println("Exception in NetClientGet:- " + e);
         }
-        return json;
+        return output;
+    }
+
+    private JSONArray connect(String type, String apiDomain) {
+        return connect(type, apiDomain, null);
     }
 }

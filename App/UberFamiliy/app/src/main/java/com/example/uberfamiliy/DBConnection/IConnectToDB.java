@@ -26,6 +26,6 @@ public interface IConnectToDB {
     Request acceptRequest(Long requestId, Long userId);
 
     boolean createUser(User user);
-    User VerifyUser(String username, String password);
+    User verifyUser(String username, String password);
     List<User> getUsers();
 }
