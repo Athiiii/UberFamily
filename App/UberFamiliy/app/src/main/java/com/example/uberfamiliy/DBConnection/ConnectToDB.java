@@ -100,24 +100,81 @@ public class ConnectToDB implements IConnectToDB {
 
     @Override
     public List<Request> getRequests() {
-        return null;
+        List<Request> requests = null;
+        JSONArray response = connect(GET, "api/Request");
+
+        if(response != null) {
+            requests = new ArrayList<>();
+            try {
+                for (int i = 0; i < response.length(); ++i) {
+                    Request request = new Request();
+                    JSONObject object = response.getJSONObject(i);
+                    request.setId(object.getLong("id"));
+                    request.setRequester(object.getLong("requester"));
+
+                    Object driver = object.getString("driver");
+                    if(driver != null && !driver.equals("null"))
+                        request.setDriver(object.getLong("driver"));
+
+                    request.setOpen(object.getInt("open") == 1);
+                    request.setAdress(object.getString("adress"));
+                    requests.add(request);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return requests;
     }
 
     @Override
     public List<Request> getOpenRequest() {
-        return null;
+        List<Request> requests = null;
+        JSONArray response = connect(GET, "api/Request/open");
+
+        if(response != null) {
+            requests = new ArrayList<>();
+            try {
+                for (int i = 0; i < response.length(); ++i) {
+                    Request request = new Request();
+                    JSONObject object = response.getJSONObject(i);
+                    request.setId(object.getLong("id"));
+                    request.setRequester(object.getLong("requester"));
+
+                    Object driver = object.getString("driver");
+                    if(driver != null && !driver.equals("null"))
+                    request.setDriver(object.getLong("driver"));
+
+                    request.setOpen(object.getInt("open") == 1);
+                    request.setAdress(object.getString("adress"));
+                    requests.add(request);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return requests;
     }
 
     @Override
     public boolean closeRequest(Long requestId) {
-        return false;
+        String query  = "requestId" + requestId;
+        JSONArray response = connect(PUT, "api/Request", query);
+        return response != null;
     }
 
     @Override
-    public Request createRequest(Long userId, String adress) {
-        Request request = null;
+    public void createRequest(Long userId, String adress) {
         String query = "userId=" + userId + "&adress=" + adress;
         JSONArray response = connect(POST, "api/Request", query);
+    }
+
+    @Override
+    public Request acceptRequest(Long requestId, Long userId) {
+        Request request = null;
+        String query = "requestId=" + requestId + "&userId=" + userId;
+        JSONArray response = connect(POST, "api/Request/driver", query);
+
         if(response != null) {
             try {
                 JSONObject object = response.getJSONObject(0);
@@ -133,9 +190,6 @@ public class ConnectToDB implements IConnectToDB {
         }
         return request;
     }
-
-    @Override
-    public Request acceptRequest(Long requestId, Long userId) { return null; }
 
     @Override
     public boolean deleteRequest(Long requestId) {

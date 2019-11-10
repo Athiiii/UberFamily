@@ -29,21 +29,15 @@ public class Request extends SugarRecord implements Serializable {
         this.requester = requester;
     }
 
-    public Long getDriver() {
-        return driver;
-    }
+    public Long getDriver() { return driver; }
 
     public void setDriver(Long driver) {
         this.driver = driver;
     }
 
-    public boolean getOpen() {
-        return open;
-    }
+    public boolean getOpen() { return open; }
 
-    public void setOpen(boolean open) {
-        this.open = open;
-    }
+    public void setOpen(boolean open) { this.open = open; }
 
     public String getAdress() {
         return adress;

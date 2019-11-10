@@ -22,7 +22,7 @@ public interface IConnectToDB {
     List<Request> getRequests();
     List<Request> getOpenRequest();
     boolean closeRequest(Long requestId);
-    Request createRequest(Long userId, String adress);
+    void createRequest(Long userId, String adress);
     Request acceptRequest(Long requestId, Long userId);
     boolean deleteRequest(Long requestId);
 

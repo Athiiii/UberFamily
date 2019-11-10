@@ -7,6 +7,7 @@ import com.example.uberfamiliy.model.User;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.List;
 import java.util.UUID;
 
 public class ConnectToDBTest {
@@ -38,24 +39,30 @@ public class ConnectToDBTest {
 
     @Test
     public void getRequests() {
+        List<Request> openRequest = connectToDB.getRequests();
+        Assert.assertNotNull(openRequest);
     }
 
     @Test
     public void getOpenRequest() {
+        List<Request> openRequest = connectToDB.getOpenRequest();
+        Assert.assertNotNull(openRequest);
     }
 
     @Test
     public void createRequest() {
+        connectToDB.createRequest((long) 1, "Allrüti 21a");
     }
 
     @Test
     public void closeRequest() {
+        connectToDB.closeRequest((long)1);
     }
 
     @Test
     public void acceptRequest() {
-        Request request = connectToDB.createRequest((long) 1, "Allrüti 21a");
-        connectToDB.acceptRequest(request.getId(), (long)1);
+        Request driverResponse = connectToDB.acceptRequest((long)1, (long)2);
+        Assert.assertNotNull(driverResponse);
     }
 
     @Test
