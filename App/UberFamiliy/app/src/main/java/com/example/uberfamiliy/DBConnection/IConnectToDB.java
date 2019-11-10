@@ -24,8 +24,10 @@ public interface IConnectToDB {
     boolean closeRequest(Long requestId);
     Request createRequest(Long userId, String adress);
     Request acceptRequest(Long requestId, Long userId);
+    boolean deleteRequest(Long requestId);
 
     boolean createUser(User user);
     User verifyUser(String username, String password);
     List<User> getUsers();
+    boolean deleteUser(Long userId);
 }

@@ -8,7 +8,7 @@ public class Request extends SugarRecord implements Serializable {
     private Long id;
     private Long requester;
     private Long driver;
-    private byte open;
+    private boolean open;
     private String adress;
 
     @Override
@@ -37,11 +37,11 @@ public class Request extends SugarRecord implements Serializable {
         this.driver = driver;
     }
 
-    public byte getOpen() {
+    public boolean getOpen() {
         return open;
     }
 
-    public void setOpen(byte open) {
+    public void setOpen(boolean open) {
         this.open = open;
     }
 

@@ -1,5 +1,7 @@
 package com.example.uberfamiliy.DBConnection;
 
+import android.app.admin.DelegatedAdminReceiver;
+
 import com.example.uberfamiliy.model.ChatMessage;
 import com.example.uberfamiliy.model.Friend;
 import com.example.uberfamiliy.model.Request;
@@ -113,12 +115,33 @@ public class ConnectToDB implements IConnectToDB {
 
     @Override
     public Request createRequest(Long userId, String adress) {
-        return null;
+        Request request = null;
+        String query = "userId=" + userId + "&adress=" + adress;
+        JSONArray response = connect(POST, "api/Request", query);
+        if(response != null) {
+            try {
+                JSONObject object = response.getJSONObject(0);
+                request = new Request();
+                request.setAdress(object.getString("adress"));
+                request.setDriver(object.getLong("driver"));
+                request.setId(object.getLong("id"));
+                request.setRequester(object.getLong("id"));
+                request.setOpen(object.getInt("open") == 1);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return request;
     }
 
     @Override
-    public Request acceptRequest(Long requestId, Long userId) {
-        return null;
+    public Request acceptRequest(Long requestId, Long userId) { return null; }
+
+    @Override
+    public boolean deleteRequest(Long requestId) {
+        String query = "requestId=" + requestId;
+        JSONArray response = connect(DELETE, "api/Request", query);
+        return response != null;
     }
 
     @Override
@@ -178,6 +201,13 @@ public class ConnectToDB implements IConnectToDB {
             }
         }
         return users;
+    }
+
+    @Override
+    public boolean deleteUser(Long userid) {
+        String query = "userId=" + userid;
+        JSONArray response = connect(DELETE, "api/User", query);
+        return response != null;
     }
 
     private JSONArray connect(String type, String apiDomain, String body) {
