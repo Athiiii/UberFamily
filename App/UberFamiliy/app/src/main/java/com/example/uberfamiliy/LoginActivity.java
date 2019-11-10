@@ -17,7 +17,7 @@ import com.orm.SugarContext;
 import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
-    private boolean rememberMe = false;
+
 
     @Override
     protected void onStart() {
@@ -33,13 +33,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         SugarContext.init(this);
 
-        CheckBox rememberMeBtn = findViewById(R.id.rememberMe);
-        rememberMeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                rememberMe = ((CheckBox) view).isChecked();
-            }
-        });
         View register = findViewById(R.id.register);
         register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,10 +68,11 @@ public class LoginActivity extends AppCompatActivity {
     private void tryToSignIn() {
         EditText username = findViewById(R.id.username);
         EditText password = findViewById(R.id.password);
+        CheckBox rememberMe = findViewById(R.id.rememberMe);
         if (checkInputFields(username, password)) {
             User user = verifyUser();
             if ((user) != null) {
-                if (rememberMe) {
+                if (rememberMe.isChecked()) {
                     user.setRemembered(true);
                 } else {
                     user.setRemembered(false);

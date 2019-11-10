@@ -9,12 +9,18 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import com.example.uberfamiliy.communicate.ConnectToAPI;
+import com.example.uberfamiliy.communicate.ConnectToServer;
+import com.example.uberfamiliy.model.User;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -28,6 +34,7 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_register);
 
         View signIn = findViewById(R.id.signIn);
@@ -60,6 +67,14 @@ public class RegisterActivity extends AppCompatActivity {
                 if (handleCameraPermissions()) {
                     callCamera();
                 }
+            }
+        });
+
+        Button buttonRegister = findViewById(R.id.register);
+        buttonRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tryToRegister();
             }
         });
 
@@ -121,6 +136,51 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
+    private void tryToRegister() {
+        EditText fullName = findViewById(R.id.fullName);
+        EditText username = findViewById(R.id.username);
+        EditText password = findViewById(R.id.password);
+        CheckBox rememberMe = findViewById(R.id.rememberMe);
+        if (checkInputFields(username, password, fullName)) {
+            User user = verifyUser();
+            if ((user) != null) {
+                if (rememberMe.isChecked()) {
+                    user.setRemembered(true);
+                } else {
+                    user.setRemembered(false);
+                }
+                user.save();
+                openMainScreen();
+            } else {
+                username.setError("Username or password is incorrect");
+            }
+        }
+    }
+
+    private User verifyUser() {
+        ConnectToServer connectToServer = ConnectToAPI.getInstance();
+        User user = connectToServer.verifyUser();
+        return user;
+    }
+
+
+    private boolean checkInputFields(EditText username, EditText password, EditText fullName) {
+        boolean inputFieldIsOK = true;
+        if (username.getText().toString().trim().equals("")) {
+            username.setError("Type in a username");
+            inputFieldIsOK = false;
+        }
+        if (password.getText().toString().trim().equals("")) {
+            password.setError("Type in a password");
+            inputFieldIsOK = false;
+        }
+        if (fullName.toString().trim().equals("")) {
+            fullName.setError("Type in a fullName");
+            inputFieldIsOK = false;
+        }
+        return inputFieldIsOK;
+    }
+
     private void pictureLoad(Intent data, ImageView imageView) {
         Uri selectedImage = data.getData();
 
@@ -148,5 +208,10 @@ public class RegisterActivity extends AppCompatActivity {
     private void openSignInScreen() {
         Intent login = new Intent(this, LoginActivity.class);
         startActivity(login);
+    }
+
+    private void openMainScreen() {
+        Intent main = new Intent(this, MainActivity.class);
+        startActivity(main);
     }
 }
