@@ -112,12 +112,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void openMainScreen() {
-        Intent addFriendWindow = new Intent(this, MainActivity.class);
-        startActivity(addFriendWindow);
+        Intent main = new Intent(this, MainActivity.class);
+        startActivity(main);
     }
 
     private void openRegisterScreen() {
-        Intent addFriendWindow = new Intent(this, RegisterActivity.class);
-        startActivity(addFriendWindow);
+        Intent register = new Intent(this, RegisterActivity.class);
+        startActivity(register);
     }
 }

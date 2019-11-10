@@ -30,6 +30,15 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        View signIn = findViewById(R.id.signIn);
+        signIn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                openSignInScreen();
+            }
+        });
+
         Button buttonLoadImage = findViewById(R.id.buttonLoadPicture);
         buttonLoadImage.setOnClickListener(new View.OnClickListener() {
 
@@ -134,5 +143,10 @@ public class RegisterActivity extends AppCompatActivity {
         Bitmap bitmap = (Bitmap) data.getExtras().get("data");
 
         imageView.setImageBitmap(bitmap);
+    }
+
+    private void openSignInScreen() {
+        Intent login = new Intent(this, LoginActivity.class);
+        startActivity(login);
     }
 }
