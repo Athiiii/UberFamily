@@ -8,7 +8,7 @@ public class Friend extends SugarRecord implements Serializable {
     private Long id;
     private Long firstFriend;
     private Long secondFriend;
-    private byte approved;
+    private boolean approved;
 
     @Override
     public Long getId() {
@@ -36,11 +36,11 @@ public class Friend extends SugarRecord implements Serializable {
         this.secondFriend = secondFriend;
     }
 
-    public byte getApproved() {
+    public boolean getApproved() {
         return approved;
     }
 
-    public void setApproved(byte approved) {
+    public void setApproved(boolean approved) {
         this.approved = approved;
     }
 }

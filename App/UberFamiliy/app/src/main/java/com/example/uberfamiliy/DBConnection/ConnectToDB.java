@@ -14,7 +14,6 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -72,22 +71,65 @@ public class ConnectToDB implements IConnectToDB {
 
     @Override
     public List<Friend> getFriends(Long userId) {
-        return null;
+        List<Friend> friends = null;
+        String query = "userId=" + userId;
+        JSONArray response = connect(GET, "api/Friend?" + query);
+
+        if(response != null) {
+            friends = new ArrayList<>();
+            for(int i = 0; i < response.length(); ++i) {
+                try {
+                    JSONObject object = response.getJSONObject(i);
+                    Friend friend = new Friend();
+                    friend.setId(object.getLong("id"));
+                    friend.setFirstFriend(object.getLong("firstFriend"));
+                    friend.setSecondFriend(object.getLong("secondFriend"));
+                    friend.setApproved(object.getInt("approved") == 1);
+                    friends.add(friend);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return friends;
     }
 
     @Override
     public Friend sendFriendRequest(Long userId, Long friendId) {
-        return null;
+        String query = "userId=" + userId + "&friendId=" + friendId;
+        Friend friend = null;
+        JSONArray response = connect(POST, "api/Friend", query);
+
+        if(response != null) {
+            try {
+                JSONObject object = response.getJSONObject(0);
+                friend = new Friend();
+                friend.setApproved(object.getInt("approved") == 1);
+                friend.setId(object.getLong("id"));
+                friend.setFirstFriend(object.getLong("firstFriend"));
+                friend.setSecondFriend(object.getLong("secondFriend"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return friend;
     }
 
     @Override
     public boolean acceptFriendship(boolean accepted, Long friendshipId) {
-        return false;
+        int approved = accepted ? 1 : 0;
+        String query = "friendshipId=" + friendshipId + "&approved=" + approved;
+        JSONArray response = connect(PUT, "api/Friend", query);
+        return response != null;
     }
 
     @Override
     public boolean removeFriend(Long friendshipId) {
-        return false;
+        String query = "friendId=" + friendshipId;
+        JSONArray response = connect(DELETE, "api/Friend", query);
+        return response != null;
     }
 
     @Override
@@ -193,8 +235,8 @@ public class ConnectToDB implements IConnectToDB {
     }
 
     @Override
-    public void createRequest(Long userId, String adress) {
-        String query = "userId=" + userId + "&adress=" + adress;
+    public void createRequest(Long userId, String address) {
+        String query = "userId=" + userId + "&adress=" + address;
         JSONArray response = connect(POST, "api/Request", query);
     }
 
@@ -287,8 +329,8 @@ public class ConnectToDB implements IConnectToDB {
     }
 
     @Override
-    public boolean deleteUser(Long userid) {
-        String query = "userId=" + userid;
+    public boolean deleteUser(Long userId) {
+        String query = "userId=" + userId;
         JSONArray response = connect(DELETE, "api/User", query);
         return response != null;
     }

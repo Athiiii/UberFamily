@@ -2,6 +2,7 @@ package com.example.uberfamiliy.Test;
 
 import com.example.uberfamiliy.DBConnection.*;
 import com.example.uberfamiliy.model.ChatMessage;
+import com.example.uberfamiliy.model.Friend;
 import com.example.uberfamiliy.model.Request;
 import com.example.uberfamiliy.model.User;
 
@@ -16,18 +17,13 @@ public class ConnectToDBTest {
 
     @Test
     public void getFriends() {
+        List<Friend> friends = connectToDB.getFriends((long)1);
+        Assert.assertNotNull(friends);
     }
 
     @Test
     public void sendFriendRequest() {
-    }
-
-    @Test
-    public void acceptFriendship() {
-    }
-
-    @Test
-    public void removeFriend() {
+       Assert.assertNotNull(connectToDB.sendFriendRequest((long)1, (long)2));
     }
 
     @Test
