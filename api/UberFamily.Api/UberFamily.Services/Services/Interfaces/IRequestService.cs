@@ -14,5 +14,7 @@ namespace UberFamily.Services.Services.Interfaces
         IEnumerable<Request> GetOpenRequests();
 
         IEnumerable<Request> GetRequests();
+
+        void DeleteRequest(int requestId);
     }
 }

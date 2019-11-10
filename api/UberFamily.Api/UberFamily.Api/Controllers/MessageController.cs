@@ -20,9 +20,14 @@ namespace UberFamily.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddMessage(ChatMessage message)
+        public IActionResult AddMessage(int writer, int requestId, string message)
         {
-            _messageService.AddMessage(message);
+            _messageService.AddMessage(new ChatMessage
+            {
+                Message = message,
+                RequestId = requestId,
+                Writer = writer
+            });
             return Ok();
         }
 
