@@ -51,9 +51,11 @@ public class ConnectToDB implements IConnectToDB {
                     public java.security.cert.X509Certificate[] getAcceptedIssuers() {
                         return null;
                     }
+
                     public void checkClientTrusted(
                             java.security.cert.X509Certificate[] certs, String authType) {
                     }
+
                     public void checkServerTrusted(
                             java.security.cert.X509Certificate[] certs, String authType) {
                     }
@@ -90,12 +92,38 @@ public class ConnectToDB implements IConnectToDB {
 
     @Override
     public List<ChatMessage> getMessages(Long requestId) {
-        return null;
+        String query = "requestId=" + requestId;
+        JSONArray response = connect(GET, "api/Message?" + query);
+        List<ChatMessage> messages = null;
+
+        if (response != null) {
+            messages = new ArrayList<>();
+
+            for (int i = 0; i < response.length(); ++i) {
+                try {
+                    ChatMessage message = new ChatMessage();
+                    JSONObject object = response.getJSONObject(i);
+                    message.setId(object.getLong("id"));
+                    message.setWriter(object.getLong("writer"));
+                    message.setRequestId(object.getLong("requestId"));
+                    message.setMessage(object.getString("message"));
+                    messages.add(message);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return messages;
     }
 
     @Override
     public boolean sendMessage(ChatMessage message) {
-        return false;
+        String query = "writer=" + message.getWriter() + "&requestId=" + message.getRequestId()
+                + "&message=" + message.getMessage();
+        JSONArray response = connect(POST, "api/Message", query);
+        return response != null;
     }
 
     @Override
@@ -103,7 +131,37 @@ public class ConnectToDB implements IConnectToDB {
         List<Request> requests = null;
         JSONArray response = connect(GET, "api/Request");
 
-        if(response != null) {
+        if (response != null) {
+            requests = new ArrayList<>();
+            for (int i = 0; i < response.length(); ++i) {
+                try {
+                    Request request = new Request();
+                    JSONObject object = response.getJSONObject(i);
+                    request.setId(object.getLong("id"));
+                    request.setRequester(object.getLong("requester"));
+
+                    Object driver = object.getString("driver");
+                    if (driver != null && !driver.equals("null"))
+                        request.setDriver(object.getLong("driver"));
+
+                    request.setOpen(object.getInt("open") == 1);
+                    request.setAdress(object.getString("adress"));
+                    requests.add(request);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+        return requests;
+    }
+
+    @Override
+    public List<Request> getOpenRequest() {
+        List<Request> requests = null;
+        JSONArray response = connect(GET, "api/Request/open");
+
+        if (response != null) {
             requests = new ArrayList<>();
             try {
                 for (int i = 0; i < response.length(); ++i) {
@@ -113,7 +171,7 @@ public class ConnectToDB implements IConnectToDB {
                     request.setRequester(object.getLong("requester"));
 
                     Object driver = object.getString("driver");
-                    if(driver != null && !driver.equals("null"))
+                    if (driver != null && !driver.equals("null"))
                         request.setDriver(object.getLong("driver"));
 
                     request.setOpen(object.getInt("open") == 1);
@@ -128,37 +186,8 @@ public class ConnectToDB implements IConnectToDB {
     }
 
     @Override
-    public List<Request> getOpenRequest() {
-        List<Request> requests = null;
-        JSONArray response = connect(GET, "api/Request/open");
-
-        if(response != null) {
-            requests = new ArrayList<>();
-            try {
-                for (int i = 0; i < response.length(); ++i) {
-                    Request request = new Request();
-                    JSONObject object = response.getJSONObject(i);
-                    request.setId(object.getLong("id"));
-                    request.setRequester(object.getLong("requester"));
-
-                    Object driver = object.getString("driver");
-                    if(driver != null && !driver.equals("null"))
-                    request.setDriver(object.getLong("driver"));
-
-                    request.setOpen(object.getInt("open") == 1);
-                    request.setAdress(object.getString("adress"));
-                    requests.add(request);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        return requests;
-    }
-
-    @Override
     public boolean closeRequest(Long requestId) {
-        String query  = "requestId" + requestId;
+        String query = "requestId" + requestId;
         JSONArray response = connect(PUT, "api/Request", query);
         return response != null;
     }
@@ -175,7 +204,7 @@ public class ConnectToDB implements IConnectToDB {
         String query = "requestId=" + requestId + "&userId=" + userId;
         JSONArray response = connect(POST, "api/Request/driver", query);
 
-        if(response != null) {
+        if (response != null) {
             try {
                 JSONObject object = response.getJSONObject(0);
                 request = new Request();
@@ -201,11 +230,11 @@ public class ConnectToDB implements IConnectToDB {
     @Override
     public boolean createUser(User user) {
         int driver = 0;
-        if(user.isDriver()) {
+        if (user.isDriver()) {
             driver = 1;
         }
-        String query = "fullname="+ user.getFullName() +"&username="+ user.getUsername()
-                +"&password="+ user.getPassword() +"&isDriver="+ driver +"&picture="+ user.getImage() +"";
+        String query = "fullname=" + user.getFullName() + "&username=" + user.getUsername()
+                + "&password=" + user.getPassword() + "&isDriver=" + driver + "&picture=" + user.getImage() + "";
         JSONArray response = connect(POST, "api/User", query);
         return response != null;
     }
@@ -214,7 +243,7 @@ public class ConnectToDB implements IConnectToDB {
     public User verifyUser(String username, String password) {
         User user = null;
         JSONArray jsonObject = connect(POST, "api/User/verify", "username=" + username + "&password=" + password + "");
-        if(jsonObject != null) {
+        if (jsonObject != null) {
             try {
                 JSONObject object = jsonObject.getJSONObject(0);
                 user = new User();
@@ -236,7 +265,7 @@ public class ConnectToDB implements IConnectToDB {
         List<User> users = null;
 
         JSONArray jsonObjects = connect(GET, "api/User");
-        if(jsonObjects != null) {
+        if (jsonObjects != null) {
             users = new ArrayList<>();
             try {
                 for (int i = 0; i < jsonObjects.length(); ++i) {
@@ -275,14 +304,14 @@ public class ConnectToDB implements IConnectToDB {
             conn.setRequestMethod(type);
             conn.setRequestProperty("Accept", "application/json");
 
-            if(body != null) {
-                byte[] postData = body.getBytes( StandardCharsets.UTF_8 );
-                conn.setRequestProperty( "Content-Length", Integer.toString( postData.length ));
-                try( DataOutputStream wr = new DataOutputStream( conn.getOutputStream())) {
-                    wr.write( postData );
+            if (body != null) {
+                byte[] postData = body.getBytes(StandardCharsets.UTF_8);
+                conn.setRequestProperty("Content-Length", Integer.toString(postData.length));
+                try (DataOutputStream wr = new DataOutputStream(conn.getOutputStream())) {
+                    wr.write(postData);
                 }
             }
-            if(conn.getResponseCode() == 200) {
+            if (conn.getResponseCode() == 200) {
                 br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 response = br.lines().collect(Collectors.joining());
                 output = new JSONArray(response);

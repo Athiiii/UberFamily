@@ -1,6 +1,7 @@
 package com.example.uberfamiliy.Test;
 
 import com.example.uberfamiliy.DBConnection.*;
+import com.example.uberfamiliy.model.ChatMessage;
 import com.example.uberfamiliy.model.Request;
 import com.example.uberfamiliy.model.User;
 
@@ -30,11 +31,19 @@ public class ConnectToDBTest {
     }
 
     @Test
-    public void getMessages() {
+    public void sendMessage() {
+        ChatMessage message = new ChatMessage();
+        message.setRequestId((long)1);
+        message.setWriter((long)1);
+        message.setMessage("Hello world");
+        boolean response = connectToDB.sendMessage(message);
+        Assert.assertTrue(response);
     }
 
     @Test
-    public void sendMessage() {
+    public void getMessages() {
+        List<ChatMessage> messages = connectToDB.getMessages((long)1);
+        Assert.assertNotNull(messages);
     }
 
     @Test
