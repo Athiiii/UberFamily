@@ -32,7 +32,7 @@ namespace UberFamily.Services.Services
         {
             using (var context = new UberFamilyContext())
             {
-                return context.Friend.Where(x => x.FirstFriend == userId || x.SecondFriend == userId);
+                return context.Friend.Where(x => x.FirstFriend == userId || x.SecondFriend == userId).ToList();
             }
         }
 
