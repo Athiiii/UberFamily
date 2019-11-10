@@ -27,6 +27,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
+        android:layout_marginTop="50dp"
         android:layout_marginEnd="100dp"
         android:autofillHints="@string/fullName"
         android:ems="10"
@@ -35,7 +36,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/inputFieldsPos" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/password"
@@ -63,13 +64,6 @@
         android:textColor="#948D8D"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/inputFieldsPos"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_end="600dp" />
 
     <CheckBox
         android:id="@+id/rememberMe"
@@ -135,12 +129,11 @@
             app:layout_constraintTop_toBottomOf="@+id/password"></Button>
 
         <Button
-            android:id="@+id/buttonLoadPicture2"
+            android:id="@+id/takeAPic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"
             android:text="@string/takeAPicture"
-
             app:layout_constraintTop_toBottomOf="@+id/password"></Button>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
