@@ -111,7 +111,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void openRegisterScreen() {
-        Intent register = new Intent(this, RegisterActivity.class);
+        Intent register = new Intent(this, NavigationActivity.class);
         startActivity(register);
     }
 }

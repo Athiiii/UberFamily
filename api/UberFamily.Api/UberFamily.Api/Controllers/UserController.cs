@@ -37,6 +37,12 @@ namespace UberFamily.Api.Controllers
             return _userService.GetUsers();
         }
 
+        [HttpGet("approvedFriends")] 
+        public IEnumerable<User> GetApprovedFriends(int userId)
+        {
+            return _userService.GetApprovedFriends(userId);
+        }
+
         [HttpDelete]
         public IActionResult DeleteUser(int userId)
         {

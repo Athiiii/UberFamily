@@ -14,5 +14,7 @@ namespace UberFamily.Services.Services.Interfaces
         IEnumerable<User> GetUsers();
 
         void DeleteUser(int userId);
+
+        IEnumerable<User> GetApprovedFriends(int userId);
     }
 }
