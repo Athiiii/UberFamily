@@ -1,5 +1,6 @@
 package com.example.uberfamiliy;
 
+import android.content.Context;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -25,6 +27,7 @@ import java.util.List;
 public class AddFriendActivity extends AppCompatActivity implements CallAPIResponse {
     private ListView userListView;
     private List<User> users;
+    private User firstUser;
     private User selectedUser;
 
     Button addFriendBtn;
@@ -56,20 +59,43 @@ public class AddFriendActivity extends AppCompatActivity implements CallAPIRespo
 
         this.addFriendBtn = findViewById(R.id.addFriend);
         setButtonDisabled();
-        this.addFriendBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                //connectToServer.addFriend(getFirstUser().getUserId(), selectedUser.getUserId());
-
-            }
-        });
 
         userListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 setButtonEnabled();
                 selectedUser = (User) (userListView).getAdapter().getItem(position);
+            }
+        });
+
+        this.addFriendBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                ConnectToDB.getInstance().sendFriendRequest(firstUser.getUserId(), selectedUser.getUserId(), new CallAPIResponse() {
+                    @Override
+                    public void processFinish(String output) {
+                        ConnectToDB.getInstance().getAllFriends(firstUser.getUserId(), new CallAPIResponse() {
+                            @Override
+                            public void processFinish(String output) {
+                                List<User> friends = ConvertJSON.getInstance().toFriends(output);
+                                users.removeAll(friends);
+                                fillUpListView(users);
+                            }
+                        });
+                        Context context = getApplicationContext();
+
+                        CharSequence text = "You have send a friend request to " + selectedUser.getUsername();
+                        int duration = Toast.LENGTH_SHORT;
+
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
+
+
+                    }
+
+                });
+
             }
         });
     }
@@ -79,7 +105,9 @@ public class AddFriendActivity extends AppCompatActivity implements CallAPIRespo
             userListView = findViewById(R.id.userList);
             setHeader();
         }
-
+        if (firstUser == null) {
+            firstUser = getFirstUser();
+        }
         if (users == null) {
 
             ConnectToDB.getInstance().getUsers(this);
@@ -89,10 +117,9 @@ public class AddFriendActivity extends AppCompatActivity implements CallAPIRespo
 
     @Override
     public void processFinish(String output) {
-        User user = getFirstUser();
         List<User> userList = ConvertJSON.getInstance().toFriends(output);
         this.users = userList;
-        ConnectToDB.getInstance().getApprovedFriends(user.getUserId(), new CallAPIResponse() {
+        ConnectToDB.getInstance().getAllFriends(firstUser.getUserId(), new CallAPIResponse() {
             @Override
             public void processFinish(String output) {
                 List<User> friends = ConvertJSON.getInstance().toFriends(output);
@@ -146,11 +173,10 @@ public class AddFriendActivity extends AppCompatActivity implements CallAPIRespo
         List<User> listWithoutOwnUser = new ArrayList<>();
         listWithoutOwnUser.addAll(userList);
 
-        User user = getFirstUser();
-        System.out.println(user.getUserId());
+
         for (User u : userList) {
             if (u != null) {
-                if (u.getUserId().equals(user.getUserId())) {
+                if (u.getUserId().equals(firstUser.getUserId())) {
                     listWithoutOwnUser.remove(u);
                 }
             }

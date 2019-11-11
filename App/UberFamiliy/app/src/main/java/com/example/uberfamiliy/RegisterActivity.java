@@ -27,12 +27,14 @@ import com.example.uberfamiliy.model.User;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 
 public class RegisterActivity extends AppCompatActivity implements CallAPIResponse {
     private static final int RESULT_TAKE_IMAGE = 7;
     private static int RESULT_LOAD_IMAGE = 1;
     private static final int RequestPermissionCode = 1;
     private Bitmap bitmap;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,6 +145,10 @@ public class RegisterActivity extends AppCompatActivity implements CallAPIRespon
         User user = ConvertJSON.getInstance().toUser(output);
 
         if ((user) != null) {
+            User firstUser = getFirstUser();
+            if (firstUser != null) {
+                firstUser.deleteAll(User.class);
+            }
             if (rememberMe.isChecked()) {
                 user.setRemembered(true);
             } else {
@@ -170,6 +176,16 @@ public class RegisterActivity extends AppCompatActivity implements CallAPIRespon
             inputFieldIsOK = false;
         }
         return inputFieldIsOK;
+    }
+
+    private User getFirstUser() {
+        List<User> users = User.listAll(User.class);
+        User user = null;
+        if (users != null && users.size() > 0) {
+            user = users.get(0);
+        }
+
+        return user;
     }
 
     private boolean handleCameraPermissions() {

@@ -9,6 +9,8 @@ public interface IConnectToDB {
 
     void getApprovedFriends(Long userId, CallAPIResponse callAPIResponse);
 
+    void getAllFriends(Long userId, CallAPIResponse callAPIResponse);
+
     void sendFriendRequest(Long userId, Long friendId, CallAPIResponse callAPIResponse);
 
     void acceptFriendship(boolean accepted, Long friendshipId, CallAPIResponse callAPIResponse);

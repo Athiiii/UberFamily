@@ -67,6 +67,12 @@ public class ConnectToDB implements IConnectToDB {
     }
 
     @Override
+    public void getAllFriends(Long userId, CallAPIResponse callAPIResponse) {
+        String query = "userId=" + userId;
+        connect(callAPIResponse, GET, "api/User/allFriends?" + query);
+    }
+
+    @Override
     public void sendFriendRequest(Long userId, Long friendId, CallAPIResponse callAPIResponse) {
         String query = "userId=" + userId + "&friendId=" + friendId;
         connect(callAPIResponse, POST, "api/Friend", query);

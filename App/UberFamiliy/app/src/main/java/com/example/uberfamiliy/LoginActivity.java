@@ -25,6 +25,8 @@ public class LoginActivity extends AppCompatActivity implements CallAPIResponse 
     protected void onStart() {
         if (checkIfUserUsedRememberMe()) {
             openMainScreen();
+        } else {
+            user.deleteAll(User.class);
         }
         super.onStart();
     }
@@ -106,7 +108,7 @@ public class LoginActivity extends AppCompatActivity implements CallAPIResponse 
         if ((user) != null) {
             if (rememberMe.isChecked()) {
                 user.setRemembered(true);
-                user.deleteAll(User.class);
+
             } else {
                 user.setRemembered(false);
             }
