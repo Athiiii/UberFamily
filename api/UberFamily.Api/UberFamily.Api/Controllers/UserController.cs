@@ -17,12 +17,12 @@ namespace UberFamily.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(User user)
+        public User Create(User user)
         {
             if (string.IsNullOrWhiteSpace(user.Password) || string.IsNullOrWhiteSpace(user.Username))
-                return BadRequest();
+                return null;
             _userService.AddUser(user);
-            return Ok();
+            return _userService.GetUser(user.Username, user.Password);
         }
 
         [HttpPost("verify")]
