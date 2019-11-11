@@ -37,7 +37,6 @@ public class RegisterActivity extends AppCompatActivity implements CallAPIRespon
     private static final int RequestPermissionCode = 1;
     private Bitmap bitmap;
     private List<User> users;
-    private User user;
     private EditText userName;
     private Button buttonRegister;
 
