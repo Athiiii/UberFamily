@@ -9,16 +9,16 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.uberfamiliy.communicate.ConnectToAPI;
-import com.example.uberfamiliy.communicate.ConnectToServer;
+import com.example.uberfamiliy.DBConnection.CallAPIResponse;
+import com.example.uberfamiliy.DBConnection.ConnectToDB;
+import com.example.uberfamiliy.DBConnection.IConnectToDB;
+import com.example.uberfamiliy.Helper.ConvertJSONToObject;
 import com.example.uberfamiliy.model.User;
 import com.orm.SugarContext;
 
 import java.util.List;
 
-public class LoginActivity extends AppCompatActivity {
-
-
+public class LoginActivity extends AppCompatActivity implements CallAPIResponse {
     @Override
     protected void onStart() {
         if (checkIfUserUsedRememberMe()) {
@@ -62,26 +62,16 @@ public class LoginActivity extends AppCompatActivity {
         if (users != null && users.size() > 0) {
             user = users.get(0);
         }
+
         return user;
     }
 
     private void tryToSignIn() {
         EditText username = findViewById(R.id.username);
         EditText password = findViewById(R.id.password);
-        CheckBox rememberMe = findViewById(R.id.rememberMe);
         if (checkInputFields(username, password)) {
-            User user = verifyUser();
-            if ((user) != null) {
-                if (rememberMe.isChecked()) {
-                    user.setRemembered(true);
-                } else {
-                    user.setRemembered(false);
-                }
-                user.save();
-                openMainScreen();
-            } else {
-                username.setError("Username or password is incorrect");
-            }
+            verifyUser(username.getText().toString(), password.getText().toString());
+
         }
     }
 
@@ -99,10 +89,30 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    private User verifyUser() {
-        ConnectToServer connectToServer = ConnectToAPI.getInstance();
-        User user = connectToServer.verifyUser();
-        return user;
+    private void verifyUser(String username, String password) {
+        IConnectToDB connectToDB = ConnectToDB.getInstance();
+        connectToDB.verifyUser(username, password, this);
+        //return user;
+    }
+
+    @Override
+    public void processFinish(String output) {
+        EditText username = findViewById(R.id.username);
+        CheckBox rememberMe = findViewById(R.id.rememberMe);
+
+        User user = ConvertJSONToObject.getInstance().convertJsonToUser(output);
+
+        if ((user) != null) {
+            if (rememberMe.isChecked()) {
+                user.setRemembered(true);
+            } else {
+                user.setRemembered(false);
+            }
+            user.save();
+            openMainScreen();
+        } else {
+            username.setError("Username or password is incorrect");
+        }
     }
 
     private void openMainScreen() {
@@ -114,4 +124,6 @@ public class LoginActivity extends AppCompatActivity {
         Intent register = new Intent(this, RegisterActivity.class);
         startActivity(register);
     }
+
+
 }
