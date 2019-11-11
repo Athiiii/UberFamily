@@ -19,6 +19,8 @@ import com.orm.SugarContext;
 import java.util.List;
 
 public class LoginActivity extends AppCompatActivity implements CallAPIResponse {
+    private User user;
+
     @Override
     protected void onStart() {
         if (checkIfUserUsedRememberMe()) {
@@ -52,7 +54,7 @@ public class LoginActivity extends AppCompatActivity implements CallAPIResponse 
 
 
     private boolean checkIfUserUsedRememberMe() {
-        User user = getFirstUser();
+        user = getFirstUser();
         return user != null && user.isRemembered();
     }
 
@@ -104,6 +106,7 @@ public class LoginActivity extends AppCompatActivity implements CallAPIResponse 
         if ((user) != null) {
             if (rememberMe.isChecked()) {
                 user.setRemembered(true);
+                user.deleteAll(User.class);
             } else {
                 user.setRemembered(false);
             }
