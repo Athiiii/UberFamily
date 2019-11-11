@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.uberfamiliy.DBConnection.CallAPIResponse;
 import com.example.uberfamiliy.DBConnection.ConnectToDB;
 import com.example.uberfamiliy.DBConnection.IConnectToDB;
-import com.example.uberfamiliy.Helper.ConvertJSONToObject;
+import com.example.uberfamiliy.Service.ConvertJSON;
 import com.example.uberfamiliy.model.User;
 import com.orm.SugarContext;
 
@@ -92,7 +92,6 @@ public class LoginActivity extends AppCompatActivity implements CallAPIResponse 
     private void verifyUser(String username, String password) {
         IConnectToDB connectToDB = ConnectToDB.getInstance();
         connectToDB.verifyUser(username, password, this);
-        //return user;
     }
 
     @Override
@@ -100,7 +99,7 @@ public class LoginActivity extends AppCompatActivity implements CallAPIResponse 
         EditText username = findViewById(R.id.username);
         CheckBox rememberMe = findViewById(R.id.rememberMe);
 
-        User user = ConvertJSONToObject.getInstance().convertJsonToUser(output);
+        User user = ConvertJSON.getInstance().toUser(output);
 
         if ((user) != null) {
             if (rememberMe.isChecked()) {

@@ -1,7 +1,6 @@
 package com.example.uberfamiliy.DBConnection;
 
 import com.example.uberfamiliy.model.ChatMessage;
-import com.example.uberfamiliy.model.Friend;
 import com.example.uberfamiliy.model.Request;
 import com.example.uberfamiliy.model.User;
 
@@ -57,15 +56,19 @@ public class ConnectToDB implements IConnectToDB {
 
     @Override
     public void getFriends(Long userId, CallAPIResponse callAPIResponse) {
-        List<Friend> friends = null;
         String query = "userId=" + userId;
         connect(callAPIResponse, GET, "api/Friend?" + query);
     }
 
     @Override
+    public void getApprovedFriends(Long userId, CallAPIResponse callAPIResponse) {
+        String query = "userId=" + userId;
+        connect(callAPIResponse, GET, "api/User/approvedFriends?" + query);
+    }
+
+    @Override
     public void sendFriendRequest(Long userId, Long friendId, CallAPIResponse callAPIResponse) {
         String query = "userId=" + userId + "&friendId=" + friendId;
-        Friend friend = null;
         connect(callAPIResponse, POST, "api/Friend", query);
 
         /*if (response != null) {
@@ -73,7 +76,7 @@ public class ConnectToDB implements IConnectToDB {
                 JSONObject object = response.getJSONObject(0);
                 friend = new Friend();
                 friend.setApproved(object.getInt("approved") == 1);
-                friend.setId(object.getLong("id"));
+                friend.setUserId(object.getLong("id"));
                 friend.setFirstFriend(object.getLong("firstFriend"));
                 friend.setSecondFriend(object.getLong("secondFriend"));
             } catch (JSONException e) {
@@ -89,42 +92,18 @@ public class ConnectToDB implements IConnectToDB {
         int approved = accepted ? 1 : 0;
         String query = "friendshipId=" + friendshipId + "&approved=" + approved;
         connect(callAPIResponse, PUT, "api/Friend", query);
-        /*return response != null;*/
     }
 
     @Override
     public void removeFriend(Long friendshipId, CallAPIResponse callAPIResponse) {
         String query = "friendId=" + friendshipId;
         connect(callAPIResponse, DELETE, "api/Friend", query);
-        //return response != null;
     }
 
     @Override
     public void getMessages(Long requestId, CallAPIResponse callAPIResponse) {
         String query = "requestId=" + requestId;
         connect(callAPIResponse, GET, "api/Message?" + query);
-        /*List<ChatMessage> messages = null;
-
-        if (response != null) {
-            messages = new ArrayList<>();
-
-            for (int i = 0; i < response.length(); ++i) {
-                try {
-                    ChatMessage message = new ChatMessage();
-                    JSONObject object = response.getJSONObject(i);
-                    message.setId(object.getLong("id"));
-                    message.setWriter(object.getLong("writer"));
-                    message.setRequestId(object.getLong("requestId"));
-                    message.setMessage(object.getString("message"));
-                    messages.add(message);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        return messages;*/
     }
 
     @Override
@@ -132,7 +111,6 @@ public class ConnectToDB implements IConnectToDB {
         String query = "writer=" + message.getWriter() + "&requestId=" + message.getRequestId()
                 + "&message=" + message.getMessage();
         connect(callAPIResponse, POST, "api/Message", query);
-        //return response != null;
     }
 
     @Override
@@ -146,7 +124,7 @@ public class ConnectToDB implements IConnectToDB {
                 try {
                     Request request = new Request();
                     JSONObject object = response.getJSONObject(i);
-                    request.setId(object.getLong("id"));
+                    request.setUserId(object.getLong("id"));
                     request.setRequester(object.getLong("requester"));
 
                     Object driver = object.getString("driver");
@@ -176,7 +154,7 @@ public class ConnectToDB implements IConnectToDB {
                 for (int i = 0; i < response.length(); ++i) {
                     Request request = new Request();
                     JSONObject object = response.getJSONObject(i);
-                    request.setId(object.getLong("id"));
+                    request.setUserId(object.getLong("id"));
                     request.setRequester(object.getLong("requester"));
 
                     Object driver = object.getString("driver");
@@ -198,7 +176,6 @@ public class ConnectToDB implements IConnectToDB {
     public void closeRequest(Long requestId, CallAPIResponse callAPIResponse) {
         String query = "requestId" + requestId;
         connect(callAPIResponse, PUT, "api/Request", query);
-        //return response != null;
     }
 
     @Override
@@ -219,7 +196,7 @@ public class ConnectToDB implements IConnectToDB {
                 request = new Request();
                 request.setAdress(object.getString("adress"));
                 request.setDriver(object.getLong("driver"));
-                request.setId(object.getLong("id"));
+                request.setUserId(object.getLong("id"));
                 request.setRequester(object.getLong("id"));
                 request.setOpen(object.getInt("open") == 1);
             } catch (JSONException e) {
@@ -233,7 +210,6 @@ public class ConnectToDB implements IConnectToDB {
     public void deleteRequest(Long requestId, CallAPIResponse callAPIResponse) {
         String query = "requestId=" + requestId;
         connect(callAPIResponse, DELETE, "api/Request", query);
-        //return response != null;
     }
 
     @Override
@@ -249,11 +225,8 @@ public class ConnectToDB implements IConnectToDB {
 
     @Override
     public void verifyUser(String username, String password, CallAPIResponse callAPIResponse) {
-        System.out.println(username);
-        System.out.println(password);
-        User user = null;
-        connect(callAPIResponse, POST, "api/User/verify", "username=" + username + "&password=" + password + "");
-        //return user;
+        String query = "username=" + username + "&password=" + password;
+        connect(callAPIResponse, POST, "api/User/verify", query);
     }
 
     @Override
@@ -267,7 +240,7 @@ public class ConnectToDB implements IConnectToDB {
                 for (int i = 0; i < jsonObjects.length(); ++i) {
                     User user = new User();
                     JSONObject object = jsonObjects.getJSONObject(i);
-                    user.setId(object.getInt("id"));
+                    user.setUserId(object.getInt("id"));
                     user.setFullName(object.getString("fullname"));
                     user.setUsername(object.getString("username"));
                     user.setPassword(object.getString("password"));

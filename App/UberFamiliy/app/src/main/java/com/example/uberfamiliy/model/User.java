@@ -1,12 +1,14 @@
 package com.example.uberfamiliy.model;
 
+import androidx.annotation.Nullable;
+
 import com.orm.SugarRecord;
 import com.orm.dsl.Ignore;
 
 import java.io.Serializable;
 
 public class User extends SugarRecord implements Serializable {
-    private Long id;
+    private Long userId;
     private String username;
     private String password;
     private boolean remembered;
@@ -17,13 +19,17 @@ public class User extends SugarRecord implements Serializable {
     @Ignore
     private String image;
 
-    @Override
-    public Long getId() {
-        return id;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        return this.getUserId().equals(((User) obj).getUserId());
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 
     public String getUsername() {
@@ -50,9 +56,13 @@ public class User extends SugarRecord implements Serializable {
         this.password = password;
     }
 
-    public boolean isDriver() {  return isDriver; }
+    public boolean isDriver() {
+        return isDriver;
+    }
 
-    public void setDriver(boolean driver) { isDriver = driver; }
+    public void setDriver(boolean driver) {
+        isDriver = driver;
+    }
 
     public String getImage() {
         return image;

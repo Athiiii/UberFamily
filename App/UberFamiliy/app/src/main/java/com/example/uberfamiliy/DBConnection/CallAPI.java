@@ -60,7 +60,7 @@ public class CallAPI extends AsyncTask<String, Void, String> {
         } catch (Exception e) {
             Log.d(TAG, e.getLocalizedMessage());
         }
-        return "";
+        return null;
     }
 
     private String convertInputStreamToString(InputStream inputStream) {

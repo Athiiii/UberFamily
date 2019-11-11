@@ -21,8 +21,8 @@ import androidx.core.content.ContextCompat;
 import com.example.uberfamiliy.DBConnection.CallAPIResponse;
 import com.example.uberfamiliy.DBConnection.ConnectToDB;
 import com.example.uberfamiliy.DBConnection.IConnectToDB;
-import com.example.uberfamiliy.Helper.ConvertJSONToObject;
-import com.example.uberfamiliy.Helper.CreateUser;
+import com.example.uberfamiliy.Service.ConvertJSON;
+import com.example.uberfamiliy.Service.CreateUser;
 import com.example.uberfamiliy.model.User;
 
 import java.io.FileNotFoundException;
@@ -139,8 +139,8 @@ public class RegisterActivity extends AppCompatActivity implements CallAPIRespon
     public void processFinish(String output) {
         EditText username = findViewById(R.id.username);
         CheckBox rememberMe = findViewById(R.id.rememberMe);
-        System.out.println(output);
-        User user = ConvertJSONToObject.getInstance().convertJsonToUser(output);
+
+        User user = ConvertJSON.getInstance().toUser(output);
 
         if ((user) != null) {
             if (rememberMe.isChecked()) {
