@@ -1,24 +1,10 @@
 package com.example.uberfamiliy.DBConnection;
 
-import android.app.admin.DelegatedAdminReceiver;
-
 import com.example.uberfamiliy.model.ChatMessage;
-import com.example.uberfamiliy.model.Friend;
 import com.example.uberfamiliy.model.Request;
 import com.example.uberfamiliy.model.User;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -44,7 +30,6 @@ public class ConnectToDB implements IConnectToDB {
     }
 
     private ConnectToDB() {
-        // Create a trust manager that does not validate certificate chains
         TrustManager[] trustAllCerts = new TrustManager[]{
                 new X509TrustManager() {
                     public java.security.cert.X509Certificate[] getAcceptedIssuers() {
@@ -60,7 +45,7 @@ public class ConnectToDB implements IConnectToDB {
                     }
                 }
         };
-        // Install the all-trusting trust manager
+
         try {
             SSLContext sc = SSLContext.getInstance("SSL");
             sc.init(null, trustAllCerts, new java.security.SecureRandom());
@@ -70,43 +55,28 @@ public class ConnectToDB implements IConnectToDB {
     }
 
     @Override
-    public List<Friend> getFriends(Long userId) {
-        List<Friend> friends = null;
+    public void getFriends(Long userId, CallAPIResponse callAPIResponse) {
         String query = "userId=" + userId;
-        JSONArray response = connect(GET, "api/Friend?" + query);
-
-        if(response != null) {
-            friends = new ArrayList<>();
-            for(int i = 0; i < response.length(); ++i) {
-                try {
-                    JSONObject object = response.getJSONObject(i);
-                    Friend friend = new Friend();
-                    friend.setId(object.getLong("id"));
-                    friend.setFirstFriend(object.getLong("firstFriend"));
-                    friend.setSecondFriend(object.getLong("secondFriend"));
-                    friend.setApproved(object.getInt("approved") == 1);
-                    friends.add(friend);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        return friends;
+        connect(callAPIResponse, GET, "api/Friend?" + query);
     }
 
     @Override
-    public Friend sendFriendRequest(Long userId, Long friendId) {
-        String query = "userId=" + userId + "&friendId=" + friendId;
-        Friend friend = null;
-        JSONArray response = connect(POST, "api/Friend", query);
+    public void getApprovedFriends(Long userId, CallAPIResponse callAPIResponse) {
+        String query = "userId=" + userId;
+        connect(callAPIResponse, GET, "api/User/approvedFriends?" + query);
+    }
 
-        if(response != null) {
+    @Override
+    public void sendFriendRequest(Long userId, Long friendId, CallAPIResponse callAPIResponse) {
+        String query = "userId=" + userId + "&friendId=" + friendId;
+        connect(callAPIResponse, POST, "api/Friend", query);
+
+        /*if (response != null) {
             try {
                 JSONObject object = response.getJSONObject(0);
                 friend = new Friend();
                 friend.setApproved(object.getInt("approved") == 1);
-                friend.setId(object.getLong("id"));
+                friend.setUserId(object.getLong("id"));
                 friend.setFirstFriend(object.getLong("firstFriend"));
                 friend.setSecondFriend(object.getLong("secondFriend"));
             } catch (JSONException e) {
@@ -114,72 +84,47 @@ public class ConnectToDB implements IConnectToDB {
             }
         }
 
-        return friend;
+        return friend;*/
     }
 
     @Override
-    public boolean acceptFriendship(boolean accepted, Long friendshipId) {
+    public void acceptFriendship(boolean accepted, Long friendshipId, CallAPIResponse callAPIResponse) {
         int approved = accepted ? 1 : 0;
         String query = "friendshipId=" + friendshipId + "&approved=" + approved;
-        JSONArray response = connect(PUT, "api/Friend", query);
-        return response != null;
+        connect(callAPIResponse, PUT, "api/Friend", query);
     }
 
     @Override
-    public boolean removeFriend(Long friendshipId) {
+    public void removeFriend(Long friendshipId, CallAPIResponse callAPIResponse) {
         String query = "friendId=" + friendshipId;
-        JSONArray response = connect(DELETE, "api/Friend", query);
-        return response != null;
+        connect(callAPIResponse, DELETE, "api/Friend", query);
     }
 
     @Override
-    public List<ChatMessage> getMessages(Long requestId) {
+    public void getMessages(Long requestId, CallAPIResponse callAPIResponse) {
         String query = "requestId=" + requestId;
-        JSONArray response = connect(GET, "api/Message?" + query);
-        List<ChatMessage> messages = null;
-
-        if (response != null) {
-            messages = new ArrayList<>();
-
-            for (int i = 0; i < response.length(); ++i) {
-                try {
-                    ChatMessage message = new ChatMessage();
-                    JSONObject object = response.getJSONObject(i);
-                    message.setId(object.getLong("id"));
-                    message.setWriter(object.getLong("writer"));
-                    message.setRequestId(object.getLong("requestId"));
-                    message.setMessage(object.getString("message"));
-                    messages.add(message);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        return messages;
+        connect(callAPIResponse, GET, "api/Message?" + query);
     }
 
     @Override
-    public boolean sendMessage(ChatMessage message) {
+    public void sendMessage(ChatMessage message, CallAPIResponse callAPIResponse) {
         String query = "writer=" + message.getWriter() + "&requestId=" + message.getRequestId()
                 + "&message=" + message.getMessage();
-        JSONArray response = connect(POST, "api/Message", query);
-        return response != null;
+        connect(callAPIResponse, POST, "api/Message", query);
     }
 
     @Override
-    public List<Request> getRequests() {
+    public void getRequests(CallAPIResponse callAPIResponse) {
         List<Request> requests = null;
-        JSONArray response = connect(GET, "api/Request");
+        connect(callAPIResponse, GET, "api/Request");
 
-        if (response != null) {
+        /*if (response != null) {
             requests = new ArrayList<>();
             for (int i = 0; i < response.length(); ++i) {
                 try {
                     Request request = new Request();
                     JSONObject object = response.getJSONObject(i);
-                    request.setId(object.getLong("id"));
+                    request.setUserId(object.getLong("id"));
                     request.setRequester(object.getLong("requester"));
 
                     Object driver = object.getString("driver");
@@ -195,21 +140,21 @@ public class ConnectToDB implements IConnectToDB {
             }
 
         }
-        return requests;
+        return requests;*/
     }
 
     @Override
-    public List<Request> getOpenRequest() {
+    public void getOpenRequest(CallAPIResponse callAPIResponse) {
         List<Request> requests = null;
-        JSONArray response = connect(GET, "api/Request/open");
+        connect(callAPIResponse, GET, "api/Request/open");
 
-        if (response != null) {
+        /*if (response != null) {
             requests = new ArrayList<>();
             try {
                 for (int i = 0; i < response.length(); ++i) {
                     Request request = new Request();
                     JSONObject object = response.getJSONObject(i);
-                    request.setId(object.getLong("id"));
+                    request.setUserId(object.getLong("id"));
                     request.setRequester(object.getLong("requester"));
 
                     Object driver = object.getString("driver");
@@ -224,96 +169,78 @@ public class ConnectToDB implements IConnectToDB {
                 e.printStackTrace();
             }
         }
-        return requests;
+        return requests;*/
     }
 
     @Override
-    public boolean closeRequest(Long requestId) {
+    public void closeRequest(Long requestId, CallAPIResponse callAPIResponse) {
         String query = "requestId" + requestId;
-        JSONArray response = connect(PUT, "api/Request", query);
-        return response != null;
+        connect(callAPIResponse, PUT, "api/Request", query);
     }
 
     @Override
-    public void createRequest(Long userId, String address) {
+    public void createRequest(Long userId, CallAPIResponse callAPIResponse, String address) {
         String query = "userId=" + userId + "&adress=" + address;
-        JSONArray response = connect(POST, "api/Request", query);
+        connect(callAPIResponse, POST, "api/Request", query);
     }
 
     @Override
-    public Request acceptRequest(Long requestId, Long userId) {
+    public void acceptRequest(Long requestId, CallAPIResponse callAPIResponse, Long userId) {
         Request request = null;
         String query = "requestId=" + requestId + "&userId=" + userId;
-        JSONArray response = connect(POST, "api/Request/driver", query);
+        connect(callAPIResponse, POST, "api/Request/driver", query);
 
-        if (response != null) {
+        /*if (response != null) {
             try {
                 JSONObject object = response.getJSONObject(0);
                 request = new Request();
                 request.setAdress(object.getString("adress"));
                 request.setDriver(object.getLong("driver"));
-                request.setId(object.getLong("id"));
+                request.setUserId(object.getLong("id"));
                 request.setRequester(object.getLong("id"));
                 request.setOpen(object.getInt("open") == 1);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        return request;
+        return request;*/
     }
 
     @Override
-    public boolean deleteRequest(Long requestId) {
+    public void deleteRequest(Long requestId, CallAPIResponse callAPIResponse) {
         String query = "requestId=" + requestId;
-        JSONArray response = connect(DELETE, "api/Request", query);
-        return response != null;
+        connect(callAPIResponse, DELETE, "api/Request", query);
     }
 
     @Override
-    public boolean createUser(User user) {
+    public void registerUser(User user, CallAPIResponse callAPIResponse) {
         int driver = 0;
         if (user.isDriver()) {
             driver = 1;
         }
         String query = "fullname=" + user.getFullName() + "&username=" + user.getUsername()
                 + "&password=" + user.getPassword() + "&isDriver=" + driver + "&picture=" + user.getImage() + "";
-        JSONArray response = connect(POST, "api/User", query);
-        return response != null;
+        connect(callAPIResponse, POST, "api/User", query);
     }
 
     @Override
-    public User verifyUser(String username, String password) {
-        User user = null;
-        JSONArray jsonObject = connect(POST, "api/User/verify", "username=" + username + "&password=" + password + "");
-        if (jsonObject != null) {
-            try {
-                JSONObject object = jsonObject.getJSONObject(0);
-                user = new User();
-                user.setId(object.getInt("id"));
-                user.setFullName(object.getString("fullname"));
-                user.setUsername(object.getString("username"));
-                user.setPassword(object.getString("password"));
-                user.setDriver(object.getInt("isDriver") == 1);
-                user.setImage(object.getString("picture"));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        return user;
+    public void verifyUser(String username, String password, CallAPIResponse callAPIResponse) {
+        String query = "username=" + username + "&password=" + password;
+        connect(callAPIResponse, POST, "api/User/verify", query);
     }
 
     @Override
-    public List<User> getUsers() {
+    public void getUsers(CallAPIResponse callAPIResponse) {
         List<User> users = null;
 
-        JSONArray jsonObjects = connect(GET, "api/User");
-        if (jsonObjects != null) {
+        connect(callAPIResponse, GET, "api/User");
+        /*if (jsonObjects != null) {
             users = new ArrayList<>();
             try {
                 for (int i = 0; i < jsonObjects.length(); ++i) {
                     User user = new User();
                     JSONObject object = jsonObjects.getJSONObject(i);
-                    user.setId(object.getInt("id"));
+                    user.setUserId(object.getInt("id"));
                     user.setFullName(object.getString("fullname"));
                     user.setUsername(object.getString("username"));
                     user.setPassword(object.getString("password"));
@@ -325,54 +252,20 @@ public class ConnectToDB implements IConnectToDB {
                 e.printStackTrace();
             }
         }
-        return users;
+        return users;*/
     }
 
     @Override
-    public boolean deleteUser(Long userId) {
+    public void deleteUser(Long userId, CallAPIResponse callAPIResponse) {
         String query = "userId=" + userId;
-        JSONArray response = connect(DELETE, "api/User", query);
-        return response != null;
+        connect(callAPIResponse, DELETE, "api/User", query);
     }
 
-    private JSONArray connect(String type, String apiDomain, String body) {
-        JSONArray output = null;
-        BufferedReader br = null;
-        String response = "";
-
-        try {
-            URL url = new URL(domain + apiDomain);
-            HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-            conn.setRequestMethod(type);
-            conn.setRequestProperty("Accept", "application/json");
-
-            if (body != null) {
-                byte[] postData = body.getBytes(StandardCharsets.UTF_8);
-                conn.setRequestProperty("Content-Length", Integer.toString(postData.length));
-                try (DataOutputStream wr = new DataOutputStream(conn.getOutputStream())) {
-                    wr.write(postData);
-                }
-            }
-            if (conn.getResponseCode() == 200) {
-                br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                response = br.lines().collect(Collectors.joining());
-                output = new JSONArray(response);
-            }
-            conn.disconnect();
-        } catch (JSONException je) {
-            try {
-                output = new JSONArray("[" + response + "]");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-        } catch (Exception e) {
-            System.out.println("Exception in NetClientGet:- " + e);
-        }
-        return output;
+    private void connect(CallAPIResponse callAPIResponse, String type, String apiDomain, String body) {
+        new CallAPI(body, type, callAPIResponse).execute(domain + apiDomain);
     }
 
-    private JSONArray connect(String type, String apiDomain) {
-        return connect(type, apiDomain, null);
+    private void connect(CallAPIResponse callAPIResponse, String type, String apiDomain) {
+        connect(callAPIResponse, type, apiDomain, null);
     }
 }

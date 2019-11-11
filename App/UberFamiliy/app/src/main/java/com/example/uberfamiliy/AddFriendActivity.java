@@ -13,26 +13,26 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.uberfamiliy.Actions.OnTextChangedAdapter;
-import com.example.uberfamiliy.communicate.ConnectToAPI;
-import com.example.uberfamiliy.communicate.ConnectToServer;
+import com.example.uberfamiliy.DBConnection.CallAPIResponse;
+import com.example.uberfamiliy.DBConnection.ConnectToDB;
+import com.example.uberfamiliy.Service.ConvertJSON;
 import com.example.uberfamiliy.model.User;
 import com.orm.SugarContext;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddFriendActivity extends AppCompatActivity {
+public class AddFriendActivity extends AppCompatActivity implements CallAPIResponse {
     private ListView userListView;
     private List<User> users;
     private User selectedUser;
-    private ConnectToServer connectToServer;
+
     Button addFriendBtn;
 
     @Override
     protected void onStart() {
         super.onStart();
         init();
-        fillUpListView(this.users);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class AddFriendActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                connectToServer.addFriend(getFirstUser().getId(), selectedUser.getId());
+                //connectToServer.addFriend(getFirstUser().getUserId(), selectedUser.getUserId());
 
             }
         });
@@ -79,12 +79,28 @@ public class AddFriendActivity extends AppCompatActivity {
             userListView = findViewById(R.id.userList);
             setHeader();
         }
-        if (connectToServer == null) {
-            connectToServer = ConnectToAPI.getInstance();
-        }
+
         if (users == null) {
-            this.users = this.connectToServer.getAllUsers();
+
+            ConnectToDB.getInstance().getUsers(this);
+
         }
+    }
+
+    @Override
+    public void processFinish(String output) {
+        User user = getFirstUser();
+        List<User> userList = ConvertJSON.getInstance().toFriends(output);
+        this.users = userList;
+        ConnectToDB.getInstance().getApprovedFriends(user.getUserId(), new CallAPIResponse() {
+            @Override
+            public void processFinish(String output) {
+                List<User> friends = ConvertJSON.getInstance().toFriends(output);
+                users.removeAll(friends);
+                fillUpListView(users);
+            }
+        });
+
     }
 
     private void setButtonEnabled() {
@@ -100,7 +116,6 @@ public class AddFriendActivity extends AppCompatActivity {
 
     private void filterList(String searchEntry) {
         List<User> filteredUsers = new ArrayList<>();
-
 
         for (User user : this.users) {
             if (user != null
@@ -122,19 +137,22 @@ public class AddFriendActivity extends AppCompatActivity {
     }
 
     private void fillUpListView(List<User> userList) {
-        ArrayAdapter<User> userArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_single_choice, removeOwnUser(userList));
+        ArrayAdapter<User> userArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_single_choice, removeOwnUserAndFriends(userList));
         userListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         userListView.setAdapter(userArrayAdapter);
     }
 
-    private List<User> removeOwnUser(List<User> userList) {
+    private List<User> removeOwnUserAndFriends(List<User> userList) {
         List<User> listWithoutOwnUser = new ArrayList<>();
         listWithoutOwnUser.addAll(userList);
 
         User user = getFirstUser();
+        System.out.println(user.getUserId());
         for (User u : userList) {
-            if (u != null && u.getId().equals(user.getId())) {
-                listWithoutOwnUser.remove(u);
+            if (u != null) {
+                if (u.getUserId().equals(user.getUserId())) {
+                    listWithoutOwnUser.remove(u);
+                }
             }
         }
 
@@ -149,4 +167,6 @@ public class AddFriendActivity extends AppCompatActivity {
         }
         return user;
     }
+
+
 }

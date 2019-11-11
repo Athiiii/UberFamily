@@ -1,33 +1,43 @@
 package com.example.uberfamiliy.DBConnection;
 
 import com.example.uberfamiliy.model.ChatMessage;
-import com.example.uberfamiliy.model.Friend;
-import com.example.uberfamiliy.model.Request;
 import com.example.uberfamiliy.model.User;
-
-import java.util.List;
 
 public interface IConnectToDB {
     // Friend API
-    List<Friend> getFriends(Long userId);
-    Friend sendFriendRequest(Long userId, Long friendId);
-    boolean acceptFriendship(boolean accepted, Long friendshipId);
-    boolean removeFriend(Long friendshipId);
+    void getFriends(Long userId, CallAPIResponse callAPIResponse);
+
+    void getApprovedFriends(Long userId, CallAPIResponse callAPIResponse);
+
+    void sendFriendRequest(Long userId, Long friendId, CallAPIResponse callAPIResponse);
+
+    void acceptFriendship(boolean accepted, Long friendshipId, CallAPIResponse callAPIResponse);
+
+    void removeFriend(Long friendshipId, CallAPIResponse callAPIResponse);
 
     // Chat message API
-    List<ChatMessage> getMessages(Long requestId);
-    boolean sendMessage(ChatMessage message);
+    void getMessages(Long requestId, CallAPIResponse callAPIResponse);
+
+    void sendMessage(ChatMessage message, CallAPIResponse callAPIResponse);
 
     // Request API
-    List<Request> getRequests();
-    List<Request> getOpenRequest();
-    boolean closeRequest(Long requestId);
-    void createRequest(Long userId, String adress);
-    Request acceptRequest(Long requestId, Long userId);
-    boolean deleteRequest(Long requestId);
+    void getRequests(CallAPIResponse callAPIResponse);
 
-    boolean createUser(User user);
-    User verifyUser(String username, String password);
-    List<User> getUsers();
-    boolean deleteUser(Long userId);
+    void getOpenRequest(CallAPIResponse callAPIResponse);
+
+    void closeRequest(Long requestId, CallAPIResponse callAPIResponse);
+
+    void createRequest(Long userId, CallAPIResponse callAPIResponse, String adress);
+
+    void acceptRequest(Long requestId, CallAPIResponse callAPIResponse, Long userId);
+
+    void deleteRequest(Long requestId, CallAPIResponse callAPIResponse);
+
+    void registerUser(User user, CallAPIResponse callAPIResponse);
+
+    void verifyUser(String username, String password, CallAPIResponse callAPIResponse);
+
+    void getUsers(CallAPIResponse callAPIResponse);
+
+    void deleteUser(Long userId, CallAPIResponse callAPIResponse);
 }

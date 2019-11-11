@@ -18,18 +18,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.example.uberfamiliy.communicate.ConnectToAPI;
-import com.example.uberfamiliy.communicate.ConnectToServer;
+import com.example.uberfamiliy.DBConnection.CallAPIResponse;
+import com.example.uberfamiliy.DBConnection.ConnectToDB;
+import com.example.uberfamiliy.DBConnection.IConnectToDB;
+import com.example.uberfamiliy.Service.ConvertJSON;
+import com.example.uberfamiliy.Service.CreateUser;
 import com.example.uberfamiliy.model.User;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity implements CallAPIResponse {
     private static final int RESULT_TAKE_IMAGE = 7;
     private static int RESULT_LOAD_IMAGE = 1;
     private static final int RequestPermissionCode = 1;
-    private boolean accessOk = false;
+    private Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,19 +83,6 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-    private boolean handleCameraPermissions() {
-        if (ContextCompat.checkSelfPermission(RegisterActivity.this, Manifest.permission.CAMERA)
-                == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        } else {
-            ActivityCompat.requestPermissions(RegisterActivity.this, new String[]{
-                    Manifest.permission.CAMERA}, RequestPermissionCode);
-
-        }
-        return false;
-    }
-
-
     @Override
     public void onRequestPermissionsResult(int RC, String per[], int[] PResult) {
 
@@ -111,11 +101,6 @@ public class RegisterActivity extends AppCompatActivity {
                 }
                 break;
         }
-    }
-
-    private void callCamera() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, 7);
     }
 
     @Override
@@ -140,31 +125,37 @@ public class RegisterActivity extends AppCompatActivity {
         EditText fullName = findViewById(R.id.fullName);
         EditText username = findViewById(R.id.username);
         EditText password = findViewById(R.id.password);
-        CheckBox rememberMe = findViewById(R.id.rememberMe);
-        if (checkInputFields(username, password, fullName)) {
-            User user = verifyUser();
-            if ((user) != null) {
-                if (rememberMe.isChecked()) {
-                    user.setRemembered(true);
-                } else {
-                    user.setRemembered(false);
-                }
-                user.save();
-                openMainScreen();
-            } else {
-                username.setError("Username or password is incorrect");
-            }
+        if (checkInputFields(fullName, username, password)) {
+            registerUser(fullName.getText().toString(), username.getText().toString(), password.getText().toString(), bitmap);
         }
     }
 
-    private User verifyUser() {
-        ConnectToServer connectToServer = ConnectToAPI.getInstance();
-        User user = connectToServer.verifyUser();
-        return user;
+    private void registerUser(String fullName, String username, String password, Bitmap image) {
+        IConnectToDB connectToDB = ConnectToDB.getInstance();
+        connectToDB.registerUser(CreateUser.getInstance().createUser(fullName, username, password, image), this);
     }
 
+    @Override
+    public void processFinish(String output) {
+        EditText username = findViewById(R.id.username);
+        CheckBox rememberMe = findViewById(R.id.rememberMe);
 
-    private boolean checkInputFields(EditText username, EditText password, EditText fullName) {
+        User user = ConvertJSON.getInstance().toUser(output);
+
+        if ((user) != null) {
+            if (rememberMe.isChecked()) {
+                user.setRemembered(true);
+            } else {
+                user.setRemembered(false);
+            }
+            user.save();
+            openMainScreen();
+        } else {
+            username.setError("Something went wrong");
+        }
+    }
+
+    private boolean checkInputFields(EditText fullName, EditText password, EditText username) {
         boolean inputFieldIsOK = true;
         if (username.getText().toString().trim().equals("")) {
             username.setError("Type in a username");
@@ -174,17 +165,35 @@ public class RegisterActivity extends AppCompatActivity {
             password.setError("Type in a password");
             inputFieldIsOK = false;
         }
-        if (fullName.toString().trim().equals("")) {
+        if (fullName.getText().toString().trim().equals("")) {
             fullName.setError("Type in a fullName");
             inputFieldIsOK = false;
         }
         return inputFieldIsOK;
     }
 
+    private boolean handleCameraPermissions() {
+        if (ContextCompat.checkSelfPermission(RegisterActivity.this, Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        } else {
+            ActivityCompat.requestPermissions(RegisterActivity.this, new String[]{
+                    Manifest.permission.CAMERA}, RequestPermissionCode);
+
+        }
+        return false;
+    }
+
+    private void callCamera() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, 7);
+    }
+
+
     private void pictureLoad(Intent data, ImageView imageView) {
         Uri selectedImage = data.getData();
 
-        Bitmap bitmap = null;
+        bitmap = null;
 
         try {
             bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
@@ -194,15 +203,19 @@ public class RegisterActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        if (bitmap != null) {
-            imageView.setImageBitmap(bitmap);
-        }
+        setImage(imageView);
     }
 
     private void pictureTaken(Intent data, ImageView imageView) {
-        Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+        bitmap = (Bitmap) data.getExtras().get("data");
 
-        imageView.setImageBitmap(bitmap);
+        setImage(imageView);
+    }
+
+    private void setImage(ImageView imageView) {
+        if (bitmap != null) {
+            imageView.setImageBitmap(bitmap);
+        }
     }
 
     private void openSignInScreen() {
@@ -214,4 +227,6 @@ public class RegisterActivity extends AppCompatActivity {
         Intent main = new Intent(this, MainActivity.class);
         startActivity(main);
     }
+
+
 }
