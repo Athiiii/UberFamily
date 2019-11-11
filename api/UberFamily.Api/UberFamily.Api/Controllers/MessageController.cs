@@ -19,6 +19,14 @@ namespace UberFamily.Api.Controllers
             _messageService = messageService;
         }
 
+
+
+        [HttpGet]
+        public IEnumerable<ChatMessage> GetMessage(int requestId)
+        {
+            return _messageService.GetMessages(requestId);
+        }
+
         [HttpPost]
         public IActionResult AddMessage(int writer, int requestId, string message)
         {
@@ -29,12 +37,6 @@ namespace UberFamily.Api.Controllers
                 Writer = writer
             });
             return Ok();
-        }
-
-        [HttpGet]
-        public IEnumerable<ChatMessage> GetMessage(int requestId)
-        {
-            return _messageService.GetMessages(requestId);
         }
     }
 }

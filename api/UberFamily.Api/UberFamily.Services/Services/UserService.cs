@@ -33,12 +33,14 @@ namespace UberFamily.Services.Services
             }
         }
 
-        public IEnumerable<User> GetApprovedFriends(int userId)
+        public IEnumerable<User> GetApprovedFriends(bool approved, int userId)
         {
             using (var context = new UberFamilyContext())
             {
                 var user = context.User.FirstOrDefault(x => x.Id == userId);
-                var friendList = _friendService.GetFriends(userId).Where(x => x.Approved == 1).ToList();
+                var friendList = _friendService.GetFriends(userId);
+                if (approved)
+                    friendList = _friendService.GetFriends(userId).Where(x => x.Approved == 1).ToList();
                 var userList = new List<User>();
                 foreach (var item in friendList)
                 {

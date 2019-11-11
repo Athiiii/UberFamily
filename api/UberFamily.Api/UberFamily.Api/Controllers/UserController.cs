@@ -15,6 +15,25 @@ namespace UberFamily.Api.Controllers
         {
             _userService = userService;
         }
+        [HttpGet]
+        public IEnumerable<User> GetUsers()
+        {
+            return _userService.GetUsers();
+        }
+
+        [HttpGet("approvedFriends")] 
+        public IEnumerable<User> GetApprovedFriends(int userId)
+        {
+            return _userService.GetApprovedFriends(true, userId);
+        }
+        
+        [HttpGet("allFriends")]
+        public IEnumerable<User> GetAllFriends(int userId)
+        {
+            return _userService.GetApprovedFriends(false, userId);
+        }
+
+
 
         [HttpPost]
         public User Create(User user)
@@ -27,20 +46,8 @@ namespace UberFamily.Api.Controllers
 
         [HttpPost("verify")]
         public User VerifyUser(string username, string password)
-        {            
+        {
             return _userService.GetUser(username, password);
-        }
-
-        [HttpGet]
-        public IEnumerable<User> GetUsers()
-        {
-            return _userService.GetUsers();
-        }
-
-        [HttpGet("approvedFriends")] 
-        public IEnumerable<User> GetApprovedFriends(int userId)
-        {
-            return _userService.GetApprovedFriends(userId);
         }
 
         [HttpDelete]
@@ -49,5 +56,6 @@ namespace UberFamily.Api.Controllers
             _userService.DeleteUser(userId);
             return Ok();
         }
+
     }
 }

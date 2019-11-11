@@ -16,6 +16,14 @@ namespace UberFamily.Api.Controllers
             _friendService = friendService;
         }
 
+
+
+        [HttpGet]
+        public IEnumerable<Friend> GetFriends(int userId)
+        {
+            return _friendService.GetFriends(userId);
+        }
+
         [HttpPost]
         public Friend AddFriend(int userId, int friendId)
         {
@@ -25,19 +33,6 @@ namespace UberFamily.Api.Controllers
                 FirstFriend = userId,
                 SecondFriend = friendId
             });
-        }
-
-        [HttpDelete]
-        public IActionResult RemoveFriend(int friendId)
-        {
-            _friendService.RemoveFriend(friendId);
-            return Ok();
-        }
-
-        [HttpGet]
-        public IEnumerable<Friend> GetFriends(int userId)
-        {
-            return _friendService.GetFriends(userId);
         }
 
         [HttpPut]
@@ -55,5 +50,14 @@ namespace UberFamily.Api.Controllers
             }
             return Ok();
         }
+
+
+        [HttpDelete]
+        public IActionResult RemoveFriend(int friendId)
+        {
+            _friendService.RemoveFriend(friendId);
+            return Ok();
+        }
+
     }
 }

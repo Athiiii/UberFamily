@@ -19,6 +19,19 @@ namespace UberFamily.Api.Controllers
             _requestService = requestService;
         }
 
+        [HttpGet]
+        public IEnumerable<Request> GetRequest()
+        {
+            return _requestService.GetRequests();
+        }
+
+
+        [HttpGet("open")]
+        public IEnumerable<Request> GetOpenRequest()
+        {
+            return _requestService.GetOpenRequests();
+        }
+
         [HttpPost]
         public Request PickMeUp(int userId, string adress)
         {
@@ -53,19 +66,6 @@ namespace UberFamily.Api.Controllers
                 return BadRequest();
             }
             return Ok();
-        }
-
-        [HttpGet]
-        public IEnumerable<Request> GetRequest()
-        {
-            return _requestService.GetRequests();
-        }
-
-
-        [HttpGet("open")]
-        public IEnumerable<Request> GetOpenRequest()
-        {
-            return _requestService.GetOpenRequests();
         }
 
         [HttpDelete]
