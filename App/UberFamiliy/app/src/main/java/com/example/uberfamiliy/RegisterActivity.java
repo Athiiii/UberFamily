@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.uberfamiliy.Actions.OnTextChangedAdapter;
 import com.example.uberfamiliy.DBConnection.CallAPIResponse;
 import com.example.uberfamiliy.DBConnection.ConnectToDB;
 import com.example.uberfamiliy.DBConnection.IConnectToDB;
@@ -27,6 +28,7 @@ import com.example.uberfamiliy.model.User;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RegisterActivity extends AppCompatActivity implements CallAPIResponse {
@@ -34,13 +36,50 @@ public class RegisterActivity extends AppCompatActivity implements CallAPIRespon
     private static int RESULT_LOAD_IMAGE = 1;
     private static final int RequestPermissionCode = 1;
     private Bitmap bitmap;
+    private List<User> users;
     private User user;
+    private EditText userName;
+    private Button buttonRegister;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_register);
+        users = new ArrayList<>();
+        ConnectToDB.getInstance().getUsers(new CallAPIResponse() {
+            @Override
+            public void processFinish(String output) {
+                List<User> userList = ConvertJSON.getInstance().toFriends(output);
+                users = userList;
+            }
+        });
+
+        userName = findViewById(R.id.username);
+        userName.addTextChangedListener(new OnTextChangedAdapter() {
+            @Override
+            public void onTextChanged(CharSequence searchEntry, int start, int before, int count) {
+                boolean taken = false;
+                for (User user : users) {
+                    if (userName.getText().toString().equals(user.getUsername())) {
+                        taken = true;
+                    }
+                }
+                if (taken) {
+                    userName.setError("This username is already taken");
+                    if (buttonRegister.isEnabled()) {
+                        buttonRegister.setEnabled(false);
+                        buttonRegister.setClickable(false);
+                    }
+                } else {
+                    if (!buttonRegister.isEnabled()) {
+                        buttonRegister.setEnabled(true);
+                        buttonRegister.setClickable(true);
+                    }
+
+                }
+            }
+        });
 
         View signIn = findViewById(R.id.signIn);
         signIn.setOnClickListener(new View.OnClickListener() {
@@ -74,8 +113,7 @@ public class RegisterActivity extends AppCompatActivity implements CallAPIRespon
                 }
             }
         });
-
-        Button buttonRegister = findViewById(R.id.register);
+        buttonRegister = findViewById(R.id.register);
         buttonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
