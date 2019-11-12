@@ -1,8 +1,6 @@
 package com.example.uberfamiliy;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.Menu;
@@ -94,8 +92,8 @@ public class NavigationActivity extends AppCompatActivity {
                         username.setText(object.getString("username"));
                         String image = object.getString("picture");
                         if (!image.equals("null")) {
-                            byte[] decodedString = Base64.decode(image, Base64.DEFAULT);
-                            Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                            byte[] encodeBytes = Base64.encode(null, Base64.DEFAULT);
+                            System.out.println("Hey");
                         }
 
                     } catch (JSONException e) {
