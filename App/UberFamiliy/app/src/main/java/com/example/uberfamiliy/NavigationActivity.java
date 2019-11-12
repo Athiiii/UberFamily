@@ -86,10 +86,13 @@ public class NavigationActivity extends AppCompatActivity {
             public void processFinish(String output) {
                 if (output != null) {
                     try {
-                        JSONObject object = new JSONArray(output).getJSONObject(0);
+                        JSONObject object = new JSONArray("[" + output + "]").getJSONObject(0);
                         fullname.setText(object.getString("fullname"));
                         username.setText(object.getString("username"));
-                        //user.setImage(object.getString("picture"));
+                        String image = object.getString("picture");
+                        if (image != null) {
+                            
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
