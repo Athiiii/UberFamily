@@ -24,6 +24,7 @@ import com.example.uberfamiliy.DBConnection.ConnectToDB;
 import com.example.uberfamiliy.DBConnection.IConnectToDB;
 import com.example.uberfamiliy.Service.ConvertJSON;
 import com.example.uberfamiliy.Service.CreateUser;
+import com.example.uberfamiliy.Service.SQLLight;
 import com.example.uberfamiliy.model.User;
 
 import java.util.ArrayList;
@@ -37,12 +38,15 @@ public class RegisterActivity extends AppCompatActivity implements CallAPIRespon
     private List<User> users;
     private EditText userName;
     private Button buttonRegister;
+    private SQLLight sqlLight;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        init();
+
         users = new ArrayList<>();
         ConnectToDB.getInstance().getUsers(new CallAPIResponse() {
             @Override
@@ -121,6 +125,12 @@ public class RegisterActivity extends AppCompatActivity implements CallAPIRespon
         });
     }
 
+    private void init() {
+        if (sqlLight == null) {
+            sqlLight = SQLLight.getInstance();
+        }
+    }
+
     @Override
     public void onRequestPermissionsResult(int RC, String per[], int[] PResult) {
         // give proper message to user pending if app has access to camera
@@ -177,7 +187,7 @@ public class RegisterActivity extends AppCompatActivity implements CallAPIRespon
         if ((user) != null) {
             User firstUser = getFirstUser();
             if (firstUser != null) {
-                User.deleteAll(User.class);
+                sqlLight.deleteAllFields();
             }
 
             if (rememberMe.isChecked()) {

@@ -17,6 +17,7 @@ import com.example.uberfamiliy.Adapter.OnTextChangedAdapter;
 import com.example.uberfamiliy.DBConnection.CallAPIResponse;
 import com.example.uberfamiliy.DBConnection.ConnectToDB;
 import com.example.uberfamiliy.Service.ConvertJSON;
+import com.example.uberfamiliy.Service.SQLLight;
 import com.example.uberfamiliy.model.User;
 import com.orm.SugarContext;
 
@@ -28,6 +29,7 @@ public class AddFriendActivity extends AppCompatActivity implements CallAPIRespo
     private List<User> users;
     private User firstUser;
     private User selectedUser;
+    private SQLLight sqlLight;
 
     Button addFriendBtn;
 
@@ -101,17 +103,20 @@ public class AddFriendActivity extends AppCompatActivity implements CallAPIRespo
     }
 
     private void init() {
+        if (sqlLight == null) {
+            sqlLight = SQLLight.getInstance();
+        }
         if (userListView == null) {
             userListView = findViewById(R.id.userList);
         }
         if (firstUser == null) {
-            firstUser = getFirstUser();
+            firstUser = sqlLight.getFirstUser();
         }
         if (users == null) {
 
             ConnectToDB.getInstance().getUsers(this);
-
         }
+
     }
 
     @Override

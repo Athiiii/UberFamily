@@ -14,6 +14,10 @@ import java.io.ByteArrayOutputStream;
 public class CreateUser {
     private static CreateUser createUser;
 
+    private CreateUser() {
+
+    }
+
     public static CreateUser getInstance() {
         if (createUser == null) {
             createUser = new CreateUser();

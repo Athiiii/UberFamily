@@ -17,6 +17,10 @@ import java.util.List;
 public class ConvertJSON {
     private static ConvertJSON instance;
 
+    private ConvertJSON() {
+
+    }
+
     public static ConvertJSON getInstance() {
         if (instance == null) {
             instance = new ConvertJSON();
