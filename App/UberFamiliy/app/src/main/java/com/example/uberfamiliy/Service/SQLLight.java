@@ -39,7 +39,7 @@ public class SQLLight {
             List<User> users = User.listAll(User.class);
             if (users != null && users.size() > 0) {
                 this.user = users.get(0);
-                System.out.println(user.getId());
+                System.out.println(user.getUserId());
                 System.out.println(user.getUsername());
             }
         }
