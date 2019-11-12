@@ -30,17 +30,7 @@ public class CreateUser {
         user.setFullName(fullName);
         user.setUsername(username);
         user.setPassword(password);
-        user.setImage(convertImageToString(image));
+        user.setImage(ImageUtil.convert(image));
         return user;
-    }
-
-    private String convertImageToString(Bitmap image) {
-        byte[] byteArray = null;
-        if (image != null) {
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            image.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-            byteArray = byteArrayOutputStream.toByteArray();
-        }
-        return Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
 }
