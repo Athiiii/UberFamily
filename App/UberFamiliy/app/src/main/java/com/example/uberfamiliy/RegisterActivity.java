@@ -186,7 +186,7 @@ public class RegisterActivity extends AppCompatActivity implements CallAPIRespon
         if ((user) != null) {
             User firstUser = getFirstUser();
             if (firstUser != null) {
-                firstUser.deleteAll(User.class);
+                User.deleteAll(User.class);
             }
             if (rememberMe.isChecked()) {
                 user.setRemembered(true);

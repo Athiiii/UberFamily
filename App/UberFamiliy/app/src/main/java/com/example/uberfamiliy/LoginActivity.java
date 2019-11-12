@@ -26,7 +26,7 @@ public class LoginActivity extends AppCompatActivity implements CallAPIResponse 
         if (checkIfUserUsedRememberMe()) {
             openMainScreen();
         } else {
-            user.deleteAll(User.class);
+            User.deleteAll(User.class);
         }
         super.onStart();
     }

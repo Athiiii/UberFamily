@@ -11,6 +11,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Converts JSON to Objects
+ */
 public class ConvertJSON {
     private static ConvertJSON instance;
 

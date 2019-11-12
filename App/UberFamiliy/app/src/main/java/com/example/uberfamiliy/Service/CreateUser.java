@@ -7,6 +7,10 @@ import com.example.uberfamiliy.model.User;
 
 import java.io.ByteArrayOutputStream;
 
+
+/**
+ * Creates a user with parameters
+ */
 public class CreateUser {
     private static CreateUser createUser;
 

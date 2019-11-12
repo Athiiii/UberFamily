@@ -86,6 +86,7 @@ public class AddFriendActivity extends AppCompatActivity implements CallAPIRespo
                         Context context = getApplicationContext();
 
                         CharSequence text = "You have send a friend request to " + selectedUser.getUsername();
+                        setButtonDisabled();
                         int duration = Toast.LENGTH_SHORT;
 
                         Toast toast = Toast.makeText(context, text, duration);
@@ -137,6 +138,7 @@ public class AddFriendActivity extends AppCompatActivity implements CallAPIRespo
     }
 
     private void setButtonDisabled() {
+        addFriendBtn.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.ButtonGreyedOut)));
         addFriendBtn.setEnabled(false);
         addFriendBtn.setClickable(false);
     }
