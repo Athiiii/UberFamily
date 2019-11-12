@@ -7,6 +7,7 @@ import java.util.List;
 public class SQLLight {
     private static SQLLight instance;
     private Long id;
+    private User user;
 
     public static SQLLight getInstance() {
         if (instance == null) {
@@ -24,10 +25,11 @@ public class SQLLight {
     }
 
     public User getFirstUser() {
-        List<User> users = User.listAll(User.class);
-        User user = null;
-        if (users != null && users.size() > 0) {
-            user = users.get(0);
+        if (user == null) {
+            List<User> users = User.listAll(User.class);
+            if (users != null && users.size() > 0) {
+                this.user = users.get(0);
+            }
         }
         return user;
     }
