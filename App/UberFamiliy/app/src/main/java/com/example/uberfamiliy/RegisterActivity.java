@@ -187,7 +187,7 @@ public class RegisterActivity extends AppCompatActivity implements CallAPIRespon
         if ((user) != null) {
             User firstUser = getFirstUser();
             if (firstUser != null) {
-                sqlLight.deleteAllFields();
+                sqlLight.deleteAllFields(this);
             }
 
             if (rememberMe.isChecked()) {
@@ -196,7 +196,7 @@ public class RegisterActivity extends AppCompatActivity implements CallAPIRespon
                 user.setRemembered(false);
             }
 
-            user.save();
+            sqlLight.saveUser(this, user);
 
             openMainScreen();
         } else {

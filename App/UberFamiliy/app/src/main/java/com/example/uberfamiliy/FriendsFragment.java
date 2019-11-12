@@ -27,7 +27,7 @@ public class FriendsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_friends, container, false);
-        ConnectToDB.getInstance().getApprovedFriends(SQLLight.getInstance().getId(), new CallAPIResponse() {
+        ConnectToDB.getInstance().getApprovedFriends(SQLLight.getInstance().getId(this.getContext()), new CallAPIResponse() {
             @Override
             public void processFinish(String output) {
 

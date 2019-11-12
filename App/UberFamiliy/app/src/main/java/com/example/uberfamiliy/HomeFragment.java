@@ -40,41 +40,37 @@ public class HomeFragment extends Fragment {
         Button pickUpBtn = root.findViewById(R.id.buttonPickUP);
 
         requestPermission();
-        //Create a new instance of FusedLocationProviderClient(The main entry point for interacting with the fused location provider) for use in an Activity
         client = LocationServices.getFusedLocationProviderClient(getContext());
-
-        mMapView = root.findViewById(R.id.mapView);
-
-        mMapView.onCreate(savedInstanceState);
-        mMapView.onResume(); // needed to get the map to display immediately
-        try {
-            MapsInitializer.initialize(getActivity().getApplicationContext());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        mMapView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap mMap) {
-                // For showing a move to my location button and a blue point where the user is
-                mMap.setMyLocationEnabled(true);
-                posMyLocationButton();
-
-                googleMap = mMap;
-            }
-
-            private void posMyLocationButton() {
-                //Here the MyLocationButton gets positioned in the right bottom corner
-                @SuppressLint("ResourceType") View locationButton = ((View) HomeFragment.this.getView().findViewById(1).getParent()).findViewById(2);
-                RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
-                rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
-                rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-                rlp.setMargins(0, 0, 30, 30);
-            }
-        });
-        //Checks if user has permissions for GPS data
         if (ActivityCompat.checkSelfPermission(getContext(), ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            //get current GPS data
+            mMapView = root.findViewById(R.id.mapView);
+
+            mMapView.onCreate(savedInstanceState);
+            mMapView.onResume();
+            try {
+                MapsInitializer.initialize(getActivity().getApplicationContext());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            mMapView.getMapAsync(new OnMapReadyCallback() {
+                @Override
+                public void onMapReady(GoogleMap mMap) {
+                    mMap.setMyLocationEnabled(true);
+                    posMyLocationButton();
+
+                    googleMap = mMap;
+                }
+
+                private void posMyLocationButton() {
+                    @SuppressLint("ResourceType") View locationButton = ((View) HomeFragment.this.getView().findViewById(1).getParent()).findViewById(2);
+                    RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
+                    rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
+                    rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+                    rlp.setMargins(0, 0, 30, 30);
+                }
+            });
+
+
             client.getLastLocation().addOnSuccessListener(getActivity(), new OnSuccessListener() {
                 @Override
                 public void onSuccess(Object location) {
@@ -90,17 +86,6 @@ public class HomeFragment extends Fragment {
             });
         }
 
-        pickUpBtn.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if (ActivityCompat.checkSelfPermission(getContext(), ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    return;
-                }
-
-
-            }
-        });
 
         return root;
     }
@@ -109,29 +94,32 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        mMapView.onResume();
+        if (mMapView != null)
+            mMapView.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mMapView.onPause();
+        if (mMapView != null)
+            mMapView.onPause();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mMapView.onDestroy();
+        if (mMapView != null)
+            mMapView.onDestroy();
     }
 
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        mMapView.onLowMemory();
+        if (mMapView != null)
+            mMapView.onLowMemory();
     }
 
     private void requestPermission() {
-        //request the permissions for GPS data
         ActivityCompat.requestPermissions(this.getActivity(), new String[]{ACCESS_FINE_LOCATION}, 1);
     }
 
