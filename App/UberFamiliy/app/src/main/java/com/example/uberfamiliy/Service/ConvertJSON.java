@@ -51,6 +51,31 @@ public class ConvertJSON {
         return user;
     }
 
+    public List<User> toUsers(String json) {
+        List<User> users = new ArrayList<>();
+        if (json != null) {
+            JSONArray jsonArray = getJsonArray(json);
+            for (int i = 0; i < jsonArray.length(); ++i) {
+                if (jsonArray != null) {
+                    try {
+                        JSONObject object = jsonArray.getJSONObject(i);
+                        User user = new User();
+                        user.setUserId(object.getInt("id"));
+                        user.setFullName(object.getString("fullname"));
+                        user.setUsername(object.getString("username"));
+                        user.setPassword(object.getString("password"));
+                        user.setDriver(object.getInt("isDriver") == 1);
+                        user.setImage(object.getString("picture"));
+                        users.add(user);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        return users;
+    }
+
     public List<User> toFriends(String json) {
         List<User> friends = new ArrayList<>();
         if (json != null) {
@@ -113,6 +138,32 @@ public class ConvertJSON {
             }
         }
         return request;
+    }
+
+    public List<Request> toRequests(String json) {
+        List<Request> requestList = new ArrayList<>();
+        JSONArray responses = null;
+        try {
+            responses = new JSONArray(json);
+
+            for (int i = 0; i < responses.length(); ++i) {
+                Request request = new Request();
+                JSONObject object = responses.getJSONObject(i);
+                request.setId(object.getLong("id"));
+                request.setRequester(object.getLong("requester"));
+
+                String driver = object.getString("driver");
+                if (!driver.equals("null"))
+                    request.setDriver(object.getLong("driver"));
+
+                request.setOpen(object.getInt("open") == 1);
+                request.setAdress(object.getString("adress"));
+                requestList.add(request);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return requestList;
     }
 
     private JSONArray getJsonArray(String output) {

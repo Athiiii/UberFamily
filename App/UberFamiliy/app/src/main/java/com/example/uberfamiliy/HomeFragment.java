@@ -1,19 +1,26 @@
 package com.example.uberfamiliy;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.uberfamiliy.DBConnection.ConnectToDB;
+import com.example.uberfamiliy.Service.SQLLight;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -27,17 +34,20 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements View.OnClickListener {
     private FusedLocationProviderClient client;
     private View root;
     private MapView mMapView;
     private GoogleMap googleMap;
+    private String adress = "";
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_home, container, false);
         Button pickUpBtn = root.findViewById(R.id.buttonPickUP);
+        pickUpBtn.setOnClickListener(this);
+
 
         requestPermission();
         client = LocationServices.getFusedLocationProviderClient(getContext());
@@ -92,6 +102,27 @@ public class HomeFragment extends Fragment {
 
 
     @Override
+    public void onClick(View view) {
+        final EditText input = new EditText(getActivity());
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        input.setLayoutParams(lp);
+
+        new AlertDialog.Builder(getActivity())
+                .setTitle("Pick up request")
+                .setMessage("Please enter your current address")
+                .setView(input)
+                .setNegativeButton("Cancel", null)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        adress = input.getText().toString();
+                        ConnectToDB.getInstance().createRequest(SQLLight.getInstance().getFirstUser(getActivity()).getUserId(), adress, null);
+                    }
+                })
+                .show();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         if (mMapView != null)
@@ -122,5 +153,4 @@ public class HomeFragment extends Fragment {
     private void requestPermission() {
         ActivityCompat.requestPermissions(this.getActivity(), new String[]{ACCESS_FINE_LOCATION}, 1);
     }
-
 }
