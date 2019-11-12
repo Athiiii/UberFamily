@@ -52,6 +52,6 @@ public class Request extends SugarRecord implements Serializable {
 
     @Override
     public String toString() {
-        return this.requesterObject.toString();
+        return this.requesterObject.toString() + " - " + this.adress;
     }
 }

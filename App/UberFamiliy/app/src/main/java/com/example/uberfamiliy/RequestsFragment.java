@@ -85,7 +85,7 @@ public class RequestsFragment extends Fragment implements CallAPIResponse {
         for (int i = 0; i < requests.size(); ++i) {
             for (int j = 0; j < userList.size(); ++j) {
                 if (userList.get(j).getUserId() == requests.get(i).getRequester()) {
-                    requests.get(j).setRequesterObject(userList.get(j));
+                    requests.get(i).setRequesterObject(userList.get(j));
                 }
             }
         }
