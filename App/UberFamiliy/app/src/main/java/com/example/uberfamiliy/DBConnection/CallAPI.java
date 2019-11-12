@@ -15,6 +15,9 @@ import java.nio.charset.StandardCharsets;
 
 import static android.content.ContentValues.TAG;
 
+/**
+ * This class is used too make an asynchronous api call.
+ */
 public class CallAPI extends AsyncTask<String, Void, String> {
     private String method;
     private String body;
@@ -77,6 +80,7 @@ public class CallAPI extends AsyncTask<String, Void, String> {
         return sb.toString();
     }
 
+    //sends back the data from the api call to the onPostExecute method.
     @Override
     protected void onPostExecute(String result) {
         delegate.processFinish(result);
