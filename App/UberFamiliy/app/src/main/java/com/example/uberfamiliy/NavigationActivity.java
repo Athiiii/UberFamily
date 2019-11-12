@@ -16,7 +16,15 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.uberfamiliy.DBConnection.CallAPIResponse;
+import com.example.uberfamiliy.DBConnection.ConnectToDB;
+import com.example.uberfamiliy.Service.SQLLight;
+import com.example.uberfamiliy.model.User;
 import com.google.android.material.navigation.NavigationView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class NavigationActivity extends AppCompatActivity {
 
@@ -69,9 +77,25 @@ public class NavigationActivity extends AppCompatActivity {
     public void setupHeaderNavbar() {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View hView = navigationView.getHeaderView(0);
-        TextView fullname = (TextView) hView.findViewById(R.id.fullName);
-        TextView username = (TextView) hView.findViewById(R.id.username);
-        
+        final TextView fullname = (TextView) hView.findViewById(R.id.fullName);
+        final TextView username = (TextView) hView.findViewById(R.id.username);
+
+        User firstUser = SQLLight.getInstance().getFirstUser();
+        ConnectToDB.getInstance().verifyUser(firstUser.getUsername(), firstUser.getPassword(), new CallAPIResponse() {
+            @Override
+            public void processFinish(String output) {
+                if (output != null) {
+                    try {
+                        JSONObject object = new JSONArray(output).getJSONObject(0);
+                        fullname.setText(object.getString("fullname"));
+                        username.setText(object.getString("username"));
+                        //user.setImage(object.getString("picture"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
 
     }
 
