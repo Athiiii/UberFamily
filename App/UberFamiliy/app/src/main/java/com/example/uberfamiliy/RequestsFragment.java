@@ -58,8 +58,9 @@ public class RequestsFragment extends Fragment implements CallAPIResponse {
                                                 @Override
                                                 public void processFinish(String output) {
                                                     // TODO SHOW ADRESS
-                                                    FragmentTransaction ft = getFragmentManager().beginTransaction();
-                                                    ft.replace(R.id.nav_home, new HomeFragment());
+
+                                                    // Remove if redirect works
+                                                    ConnectToDB.getInstance().getOpenRequest(this);
                                                 }
                                             });
                                 }
