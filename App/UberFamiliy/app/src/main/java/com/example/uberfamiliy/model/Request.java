@@ -10,6 +10,7 @@ public class Request extends SugarRecord implements Serializable {
     private Long driver;
     private boolean open;
     private String adress;
+    private User requesterObject;
 
     @Override
     public Long getId() {
@@ -43,7 +44,14 @@ public class Request extends SugarRecord implements Serializable {
         return adress;
     }
 
-    public void setAdress(String adress) {
-        this.adress = adress;
+    public void setAdress(String adress) { this.adress = adress; }
+
+    public User getRequesterObject() { return this.requesterObject; }
+
+    public void setRequesterObject(User requesterObject) { this.requesterObject = requesterObject; }
+
+    @Override
+    public String toString() {
+        return this.requesterObject.toString();
     }
 }

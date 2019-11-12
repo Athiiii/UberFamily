@@ -51,6 +51,31 @@ public class ConvertJSON {
         return user;
     }
 
+    public List<User> toUsers(String json) {
+        List<User> users = new ArrayList<>();
+        if (json != null) {
+            JSONArray jsonArray = getJsonArray(json);
+            for (int i = 0; i < jsonArray.length(); ++i) {
+                if (jsonArray != null) {
+                    try {
+                        JSONObject object = jsonArray.getJSONObject(i);
+                        User user = new User();
+                        user.setUserId(object.getInt("id"));
+                        user.setFullName(object.getString("fullname"));
+                        user.setUsername(object.getString("username"));
+                        user.setPassword(object.getString("password"));
+                        user.setDriver(object.getInt("isDriver") == 1);
+                        user.setImage(object.getString("picture"));
+                        users.add(user);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        return users;
+    }
+
     public List<User> toFriends(String json) {
         List<User> friends = new ArrayList<>();
         if (json != null) {

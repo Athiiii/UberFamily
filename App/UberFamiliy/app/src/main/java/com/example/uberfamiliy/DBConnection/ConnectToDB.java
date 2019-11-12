@@ -185,13 +185,13 @@ public class ConnectToDB implements IConnectToDB {
     }
 
     @Override
-    public void createRequest(Long userId, CallAPIResponse callAPIResponse, String address) {
+    public void createRequest(Long userId, String address, CallAPIResponse callAPIResponse) {
         String query = "userId=" + userId + "&adress=" + address;
         connect(callAPIResponse, POST, "api/Request", query);
     }
 
     @Override
-    public void acceptRequest(Long requestId, CallAPIResponse callAPIResponse, Long userId) {
+    public void acceptRequest(Long requestId, Long userId, CallAPIResponse callAPIResponse) {
         Request request = null;
         String query = "requestId=" + requestId + "&userId=" + userId;
         connect(callAPIResponse, POST, "api/Request/driver", query);

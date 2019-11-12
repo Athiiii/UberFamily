@@ -29,9 +29,9 @@ public interface IConnectToDB {
 
     void closeRequest(Long requestId, CallAPIResponse callAPIResponse);
 
-    void createRequest(Long userId, CallAPIResponse callAPIResponse, String adress);
+    void createRequest(Long userId, String adress, CallAPIResponse callAPIResponse);
 
-    void acceptRequest(Long requestId, CallAPIResponse callAPIResponse, Long userId);
+    void acceptRequest(Long requestId, Long userId, CallAPIResponse callAPIResponse);
 
     void deleteRequest(Long requestId, CallAPIResponse callAPIResponse);
 
