@@ -53,7 +53,7 @@ public class RequestsFragment extends Fragment implements CallAPIResponse {
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    ConnectToDB.getInstance().acceptRequest(request.getId(), SQLLight.getInstance().getFirstUser(getActivity()).getId(),
+                                    ConnectToDB.getInstance().acceptRequest(request.getId(), SQLLight.getInstance().getFirstUser(getActivity()).getUserId(),
                                             new CallAPIResponse() {
                                                 @Override
                                                 public void processFinish(String output) {

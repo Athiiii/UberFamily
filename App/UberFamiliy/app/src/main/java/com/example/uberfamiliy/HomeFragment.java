@@ -101,8 +101,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         final EditText input = new EditText(getActivity());
-        input.setPadding(10,0,10,0);
-        input.setHint("Address");
 
         new AlertDialog.Builder(getActivity())
                 .setTitle("Pick up request")
