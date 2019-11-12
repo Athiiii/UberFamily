@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class User extends SugarRecord implements Serializable {
     @Unique
     private Long id;
-    private Long userId;
+    private int userId;
     private String username;
     private String password;
     private boolean remembered;
@@ -24,14 +24,14 @@ public class User extends SugarRecord implements Serializable {
 
     @Override
     public boolean equals(@Nullable Object obj) {
-        return this.getUserId().equals(((User) obj).getUserId());
+        return this.getUserId() == ((User) obj).getUserId();
     }
 
-    public Long getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
