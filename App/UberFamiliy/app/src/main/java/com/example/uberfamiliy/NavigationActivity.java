@@ -21,6 +21,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.uberfamiliy.DBConnection.CallAPIResponse;
 import com.example.uberfamiliy.DBConnection.ConnectToDB;
+import com.example.uberfamiliy.Service.ImageUtil;
 import com.example.uberfamiliy.Service.SQLLight;
 import com.example.uberfamiliy.model.User;
 import com.google.android.material.navigation.NavigationView;
@@ -97,12 +98,13 @@ public class NavigationActivity extends AppCompatActivity {
                         username.setText(object.getString("username"));
                         String image = object.getString("picture");
                         if (!image.equals("null")) {
-                            InputStream stream = new ByteArrayInputStream(Base64.decode(image.getBytes(), Base64.DEFAULT));
-                            Bitmap bitmap = BitmapFactory.decodeStream(stream);
+                            //InputStream stream = new ByteArrayInputStream(Base64.decode(image.getBytes(), Base64.DEFAULT));
+                            //Bitmap bitmap = BitmapFactory.decodeStream(stream);
+                            Bitmap map = ImageUtil.convert(image);
                             System.out.println("Here");
                         }
 
-                    } catch (JSONException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
