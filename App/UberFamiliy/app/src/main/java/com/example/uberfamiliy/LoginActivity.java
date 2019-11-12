@@ -125,7 +125,7 @@ public class LoginActivity extends AppCompatActivity implements CallAPIResponse 
     }
 
     private void openRegisterScreen() {
-        Intent register = new Intent(this, RegisterActivity.class);
+        Intent register = new Intent(this, NavigationActivity.class);
         startActivity(register);
     }
 

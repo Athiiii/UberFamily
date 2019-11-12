@@ -8,6 +8,13 @@ namespace UberFamily.Services.Services
     class UserService
         : IUserService
     {
+        IFriendService _friendService;
+
+        public UserService(IFriendService friendService)
+        {
+            _friendService = friendService;
+        }
+
         public async void AddUser(User user)
         {
             using (var context = new UberFamilyContext())
@@ -23,6 +30,31 @@ namespace UberFamily.Services.Services
             {
                 context.User.Remove(context.User.FirstOrDefault(x => x.Id == userId));
                 await context.SaveChangesAsync();
+            }
+        }
+
+        public IEnumerable<User> GetApprovedFriends(bool approved, int userId)
+        {
+            using (var context = new UberFamilyContext())
+            {
+                var user = context.User.FirstOrDefault(x => x.Id == userId);
+                var friendList = _friendService.GetFriends(userId);
+                if (approved)
+                    friendList = _friendService.GetFriends(userId).Where(x => x.Approved == 1).ToList();
+                var userList = new List<User>();
+                foreach (var item in friendList)
+                {
+                    if (item.FirstFriend != userId && userList.FirstOrDefault(x => x.Id == item.FirstFriend) == null)
+                        userList.Add(context.User.First(x => x.Id == item.FirstFriend));
+
+                    if (item.SecondFriend != userId && userList.FirstOrDefault(x => x.Id == item.SecondFriend) == null)
+                        userList.Add(context.User.First(x => x.Id == item.SecondFriend));
+                }
+                return userList.Select(x => new User
+                {
+                    Id = x.Id,
+                    Username = x.Username
+                }).ToList();
             }
         }
 
