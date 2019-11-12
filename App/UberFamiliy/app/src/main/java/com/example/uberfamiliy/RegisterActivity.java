@@ -18,7 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.example.uberfamiliy.Actions.OnTextChangedAdapter;
+import com.example.uberfamiliy.Adapter.OnTextChangedAdapter;
 import com.example.uberfamiliy.DBConnection.CallAPIResponse;
 import com.example.uberfamiliy.DBConnection.ConnectToDB;
 import com.example.uberfamiliy.DBConnection.IConnectToDB;
@@ -26,8 +26,6 @@ import com.example.uberfamiliy.Service.ConvertJSON;
 import com.example.uberfamiliy.Service.CreateUser;
 import com.example.uberfamiliy.model.User;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,12 +86,13 @@ public class RegisterActivity extends AppCompatActivity implements CallAPIRespon
                 //opens the gallery where you can pick a photo
                 Intent i = new Intent(
                         Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
                 startActivityForResult(i, RESULT_LOAD_IMAGE);
             }
         });
 
+        // Take picture event
         Button buttonTakePic = findViewById(R.id.takeAPic);
         buttonTakePic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,12 +119,11 @@ public class RegisterActivity extends AppCompatActivity implements CallAPIRespon
                 openSignInScreen();
             }
         });
-
     }
 
     @Override
     public void onRequestPermissionsResult(int RC, String per[], int[] PResult) {
-
+        // give proper message to user pending if app has access to camera
         switch (RC) {
 
             case RequestPermissionCode:
@@ -133,11 +131,8 @@ public class RegisterActivity extends AppCompatActivity implements CallAPIRespon
                 if (PResult.length > 0 && PResult[0] == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(RegisterActivity.this, "Permission Granted, Now Uber Familiy can access CAMERA.", Toast.LENGTH_LONG).show();
                     callCamera();
-
                 } else {
-
                     Toast.makeText(RegisterActivity.this, "Permission Canceled, Uber Familiy cannot access CAMERA.", Toast.LENGTH_LONG).show();
-
                 }
                 break;
         }
@@ -148,17 +143,12 @@ public class RegisterActivity extends AppCompatActivity implements CallAPIRespon
         super.onActivityResult(requestCode, resultCode, data);
         ImageView imageView = findViewById(R.id.imgView);
 
+        // check if request Mode is request taken or request load
         if (requestCode == RESULT_TAKE_IMAGE && resultCode == RESULT_OK) {
-
             pictureTaken(data, imageView);
-        }
-
-        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+        } else if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
             pictureLoad(data, imageView);
-
         }
-
-
     }
 
     private void tryToRegister() {
@@ -177,23 +167,27 @@ public class RegisterActivity extends AppCompatActivity implements CallAPIRespon
     }
 
     @Override
-    public void processFinish(String output) {
+    public void processFinish(String result) {
         EditText username = findViewById(R.id.username);
         CheckBox rememberMe = findViewById(R.id.rememberMe);
 
-        User user = ConvertJSON.getInstance().toUser(output);
+        // Convert User JSON to User Instance
+        User user = ConvertJSON.getInstance().toUser(result);
 
         if ((user) != null) {
             User firstUser = getFirstUser();
             if (firstUser != null) {
                 User.deleteAll(User.class);
             }
+
             if (rememberMe.isChecked()) {
                 user.setRemembered(true);
             } else {
                 user.setRemembered(false);
             }
+
             user.save();
+
             openMainScreen();
         } else {
             username.setError("Something went wrong");
@@ -202,6 +196,7 @@ public class RegisterActivity extends AppCompatActivity implements CallAPIRespon
 
     private boolean checkInputFields(EditText fullName, EditText password, EditText username) {
         boolean inputFieldIsOK = true;
+
         if (username.getText().toString().trim().equals("")) {
             username.setError("Type in a username");
             inputFieldIsOK = false;
@@ -228,10 +223,12 @@ public class RegisterActivity extends AppCompatActivity implements CallAPIRespon
     }
 
     private boolean handleCameraPermissions() {
+        // Check if app has access to Camera
         if (ContextCompat.checkSelfPermission(RegisterActivity.this, Manifest.permission.CAMERA)
                 == PackageManager.PERMISSION_GRANTED) {
             return true;
         } else {
+            // request for access Camera
             ActivityCompat.requestPermissions(RegisterActivity.this, new String[]{
                     Manifest.permission.CAMERA}, RequestPermissionCode);
 
@@ -244,17 +241,15 @@ public class RegisterActivity extends AppCompatActivity implements CallAPIRespon
         startActivityForResult(intent, 7);
     }
 
-
     private void pictureLoad(Intent data, ImageView imageView) {
         Uri selectedImage = data.getData();
 
         bitmap = null;
 
         try {
+            // Convert Image to Bitmap
             bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -263,12 +258,12 @@ public class RegisterActivity extends AppCompatActivity implements CallAPIRespon
 
     private void pictureTaken(Intent data, ImageView imageView) {
         bitmap = (Bitmap) data.getExtras().get("data");
-
         setImage(imageView);
     }
 
     private void setImage(ImageView imageView) {
         if (bitmap != null) {
+            // save bitmap
             imageView.setImageBitmap(bitmap);
         }
     }
