@@ -3,7 +3,6 @@ package com.example.uberfamiliy;
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,12 +38,14 @@ public class HomeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_home, container, false);
         Button pickUpBtn = root.findViewById(R.id.buttonPickUP);
+
         requestPermission();
+        //Create a new instance of FusedLocationProviderClient(The main entry point for interacting with the fused location provider) for use in an Activity
         client = LocationServices.getFusedLocationProviderClient(getContext());
 
         mMapView = root.findViewById(R.id.mapView);
-        mMapView.onCreate(savedInstanceState);
 
+        mMapView.onCreate(savedInstanceState);
         mMapView.onResume(); // needed to get the map to display immediately
         try {
             MapsInitializer.initialize(getActivity().getApplicationContext());
@@ -55,25 +56,32 @@ public class HomeFragment extends Fragment {
         mMapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap mMap) {
+                // For showing a move to my location button and a blue point where the user is
                 mMap.setMyLocationEnabled(true);
+                posMyLocationButton();
 
+                googleMap = mMap;
+            }
+
+            private void posMyLocationButton() {
+                //Here the MyLocationButton gets positioned in the right bottom corner
                 @SuppressLint("ResourceType") View locationButton = ((View) HomeFragment.this.getView().findViewById(1).getParent()).findViewById(2);
                 RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
                 rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
                 rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
                 rlp.setMargins(0, 0, 30, 30);
-                googleMap = mMap;
             }
         });
-
+        //Checks if user has permissions for GPS data
         if (ActivityCompat.checkSelfPermission(getContext(), ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            //get current GPS data
             client.getLastLocation().addOnSuccessListener(getActivity(), new OnSuccessListener() {
                 @Override
                 public void onSuccess(Object location) {
                     Location loc = (Location) location;
                     if (location != null) {
                         LatLng currentLocation = new LatLng(loc.getLatitude(), loc.getLongitude());
-                        // For zooming automatically to the location of the marker
+                        // zooming automatically to the current location of the user
                         CameraPosition cameraPosition = new CameraPosition.Builder().target(currentLocation).zoom(12).build();
                         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                     }
@@ -93,7 +101,6 @@ public class HomeFragment extends Fragment {
 
             }
         });
-
 
         return root;
     }
@@ -123,9 +130,8 @@ public class HomeFragment extends Fragment {
         mMapView.onLowMemory();
     }
 
-    LocationManager locationManager = null;
-
     private void requestPermission() {
+        //request the permissions for GPS data
         ActivityCompat.requestPermissions(this.getActivity(), new String[]{ACCESS_FINE_LOCATION}, 1);
     }
 

@@ -80,15 +80,6 @@ public class RegisterActivity extends AppCompatActivity implements CallAPIRespon
             }
         });
 
-        View signIn = findViewById(R.id.signIn);
-        signIn.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                openSignInScreen();
-            }
-        });
-
         Button buttonLoadImage = findViewById(R.id.buttonLoadPicture);
         buttonLoadImage.setOnClickListener(new View.OnClickListener() {
 
@@ -117,6 +108,15 @@ public class RegisterActivity extends AppCompatActivity implements CallAPIRespon
             @Override
             public void onClick(View v) {
                 tryToRegister();
+            }
+        });
+
+        View signIn = findViewById(R.id.signIn);
+        signIn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                openSignInScreen();
             }
         });
 
