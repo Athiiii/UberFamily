@@ -4,14 +4,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.example.uberfamiliy.DBConnection.CallAPIResponse;
 import com.example.uberfamiliy.DBConnection.ConnectToDB;
+import com.example.uberfamiliy.Service.ConvertJSON;
 import com.example.uberfamiliy.model.Request;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,41 +18,35 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-public class RequestsFragment extends Fragment {
+public class RequestsFragment extends Fragment implements CallAPIResponse {
+    private ListView userListView;
+    private List<Request> requestList = new ArrayList<>();
+    private View root;
 
-    List<Request> requestList = new ArrayList<>();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_requests, container, false);
-        ConnectToDB.getInstance().getOpenRequest(new CallAPIResponse() {
-            @Override
-            public void processFinish(String output) {
-                if (output != null) {
-                    try {
-                        JSONArray responses = new JSONArray(output);
-                        requestList = new ArrayList<>();
-
-                        for (int i = 0; i < responses.length(); ++i) {
-                            Request request = new Request();
-                            JSONObject object = responses.getJSONObject(i);
-                            request.setId(object.getLong("id"));
-                            request.setRequester(object.getLong("requester"));
-
-                            String driver = object.getString("driver");
-                            if (!driver.equals("null"))
-                                request.setDriver(object.getLong("driver"));
-
-                            request.setOpen(object.getInt("open") == 1);
-                            request.setAdress(object.getString("adress"));
-                            requestList.add(request);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
+        root = inflater.inflate(R.layout.fragment_requests, container, false);
+        init();
+        ConnectToDB.getInstance().getOpenRequest(this);
         return root;
+    }
+
+    private void init() {
+        if (userListView == null) {
+            userListView = root.findViewById(R.id.requestList);
+        }
+    }
+
+    private void fillUpListView(List<Request> userList) {
+        ArrayAdapter<Request> userArrayAdapter = new android.widget.ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_single_choice, userList);
+        userListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        userListView.setAdapter(userArrayAdapter);
+    }
+
+    @Override
+    public void processFinish(String output) {
+        requestList = ConvertJSON.getInstance().toRequests(output);
+        fillUpListView(requestList);
     }
 }

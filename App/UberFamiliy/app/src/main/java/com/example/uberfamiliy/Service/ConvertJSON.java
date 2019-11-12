@@ -115,6 +115,32 @@ public class ConvertJSON {
         return request;
     }
 
+    public List<Request> toRequests(String json) {
+        List<Request> requestList = new ArrayList<>();
+        JSONArray responses = null;
+        try {
+            responses = new JSONArray(json);
+
+            for (int i = 0; i < responses.length(); ++i) {
+                Request request = new Request();
+                JSONObject object = responses.getJSONObject(i);
+                request.setId(object.getLong("id"));
+                request.setRequester(object.getLong("requester"));
+
+                String driver = object.getString("driver");
+                if (!driver.equals("null"))
+                    request.setDriver(object.getLong("driver"));
+
+                request.setOpen(object.getInt("open") == 1);
+                request.setAdress(object.getString("adress"));
+                requestList.add(request);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return requestList;
+    }
+
     private JSONArray getJsonArray(String output) {
         JSONArray jsonArray = new JSONArray();
         try {
