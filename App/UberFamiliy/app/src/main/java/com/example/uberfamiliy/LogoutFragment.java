@@ -17,9 +17,11 @@ public class LogoutFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_logout, container, false);
+
         init();
         sqlLight.deleteAllFields();
         openLoginScreen();
+
         return root;
     }
 
