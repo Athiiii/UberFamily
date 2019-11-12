@@ -1,4 +1,4 @@
-package com.example.uberfamiliy.ui.home;
+package com.example.uberfamiliy;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.uberfamiliy.Actions.OnPickMeUpClick;
-import com.example.uberfamiliy.R;
 
 public class HomeFragment extends Fragment {
 

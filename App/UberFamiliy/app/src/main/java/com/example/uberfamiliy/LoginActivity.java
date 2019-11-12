@@ -106,12 +106,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void openMainScreen() {
-        Intent main = new Intent(this, MainActivity.class);
+        Intent main = new Intent(this, NavigationActivity.class);
         startActivity(main);
     }
 
     private void openRegisterScreen() {
-        Intent register = new Intent(this, NavigationActivity.class);
+        Intent register = new Intent(this, RegisterActivity.class);
         startActivity(register);
     }
 }

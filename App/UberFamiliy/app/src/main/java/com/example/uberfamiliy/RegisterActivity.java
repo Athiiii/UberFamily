@@ -211,7 +211,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void openMainScreen() {
-        Intent main = new Intent(this, MainActivity.class);
+        Intent main = new Intent(this, NavigationActivity.class);
         startActivity(main);
     }
 }

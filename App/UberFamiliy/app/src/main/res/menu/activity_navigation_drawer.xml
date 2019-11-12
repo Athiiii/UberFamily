@@ -9,15 +9,15 @@
             android:icon="@drawable/ic_home"
             android:title="Home" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_profile"
             android:icon="@drawable/ic_profile"
             android:title="Profile" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_requests"
             android:icon="@drawable/ic_openrequests"
             android:title="Open Requests" />
         <item
-            android:id="@+id/nav_tools"
+            android:id="@+id/nav_friends"
             android:icon="@drawable/ic_settings"
             android:title="Manage Friends" />
     </group>
@@ -25,7 +25,7 @@
     <item android:title="">
         <menu>
             <item
-                android:id="@+id/nav_send"
+                android:id="@+id/nav_logout"
                 android:icon="@drawable/ic_logout"
                 android:title="Logout" />
         </menu>
