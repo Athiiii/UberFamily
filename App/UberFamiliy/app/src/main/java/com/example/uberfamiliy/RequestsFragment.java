@@ -26,13 +26,15 @@ import androidx.fragment.app.FragmentTransaction;
 
 public class RequestsFragment extends Fragment implements CallAPIResponse {
     private ListView userListView;
-    private List<Request> requestList = new ArrayList<>();
-    private List<User> userList = new ArrayList<>();
+    private List<Request> requestList = null;
+    private List<User> userList = null;
     private View root;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        requestList = new ArrayList<>();
+        userList = new ArrayList<>();
         root = inflater.inflate(R.layout.fragment_requests, container, false);
         init();
         ConnectToDB.getInstance().getOpenRequest(this);

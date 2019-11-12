@@ -105,7 +105,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         final EditText input = new EditText(getActivity());
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        lp.setMargins(70, 0, 10, 0);
         input.setLayoutParams(lp);
 
         new AlertDialog.Builder(getActivity())
