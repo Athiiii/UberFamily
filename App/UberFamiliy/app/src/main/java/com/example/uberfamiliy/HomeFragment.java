@@ -12,12 +12,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.uberfamiliy.DBConnection.ConnectToDB;
+import com.example.uberfamiliy.Service.SQLLight;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -101,6 +104,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         final EditText input = new EditText(getActivity());
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        lp.setMargins(70, 0, 10, 0);
+        input.setLayoutParams(lp);
 
         new AlertDialog.Builder(getActivity())
                 .setTitle("Pick up request")
@@ -111,6 +117,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         adress = input.getText().toString();
+                        ConnectToDB.getInstance().createRequest(SQLLight.getInstance().getFirstUser(getActivity()).getUserId(), adress, null);
                     }
                 })
                 .show();
