@@ -29,7 +29,7 @@ public class LoginActivity extends AppCompatActivity implements CallAPIResponse 
         if (checkIfUserUsedRememberMe()) {
             openMainScreen();
         } else {
-            sqlLight.deleteAllFields();
+            sqlLight.deleteAllFields(this);
         }
         super.onStart();
     }
@@ -120,7 +120,7 @@ public class LoginActivity extends AppCompatActivity implements CallAPIResponse 
             } else {
                 user.setRemembered(false);
             }
-            user.save();
+            sqlLight.saveUser(this, user);
             openMainScreen();
         } else {
             username.setError("Username or password is incorrect");

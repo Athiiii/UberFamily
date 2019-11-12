@@ -110,7 +110,7 @@ public class AddFriendActivity extends AppCompatActivity implements CallAPIRespo
             userListView = findViewById(R.id.userList);
         }
         if (firstUser == null) {
-            firstUser = sqlLight.getFirstUser();
+            firstUser = sqlLight.getFirstUser(this);
         }
         if (users == null) {
 
