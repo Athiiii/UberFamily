@@ -81,7 +81,7 @@ public class LoginActivity extends AppCompatActivity implements CallAPIResponse 
     private void tryToSignIn() {
         EditText username = findViewById(R.id.username);
         EditText password = findViewById(R.id.password);
-        if (checkInputFields(username, password)) {
+        if (checkInputFields(username, password)) { 
             verifyUser(username.getText().toString(), password.getText().toString());
 
         }
