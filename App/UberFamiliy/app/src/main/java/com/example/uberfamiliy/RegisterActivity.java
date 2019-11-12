@@ -277,7 +277,7 @@ public class RegisterActivity extends AppCompatActivity implements CallAPIRespon
     }
 
     private void openMainScreen() {
-        Intent main = new Intent(this, MainActivity.class);
+        Intent main = new Intent(this, NavigationActivity.class);
         startActivity(main);
     }
 
