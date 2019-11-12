@@ -86,6 +86,7 @@ public class NavigationActivity extends AppCompatActivity {
         View hView = navigationView.getHeaderView(0);
         final TextView fullname = (TextView) hView.findViewById(R.id.fullName);
         final TextView username = (TextView) hView.findViewById(R.id.username);
+        final ImageView picture = (ImageView) hView.findViewById(R.id.imageView);
 
         User firstUser = SQLLight.getInstance().getFirstUser(this);
         ConnectToDB.getInstance().verifyUser(firstUser.getUsername(), firstUser.getPassword(), new CallAPIResponse() {
@@ -98,10 +99,8 @@ public class NavigationActivity extends AppCompatActivity {
                         username.setText(object.getString("username"));
                         String image = object.getString("picture");
                         if (!image.equals("null")) {
-                            //InputStream stream = new ByteArrayInputStream(Base64.decode(image.getBytes(), Base64.DEFAULT));
-                            //Bitmap bitmap = BitmapFactory.decodeStream(stream);
                             Bitmap map = ImageUtil.convert(image);
-                            System.out.println("Here");
+                            picture.setImageBitmap(map);
                         }
 
                     } catch (Exception e) {
