@@ -81,7 +81,7 @@ public class NavigationActivity extends AppCompatActivity {
         final TextView fullname = (TextView) hView.findViewById(R.id.fullName);
         final TextView username = (TextView) hView.findViewById(R.id.username);
 
-        User firstUser = SQLLight.getInstance().getFirstUser();
+        User firstUser = SQLLight.getInstance().getFirstUser(this);
         ConnectToDB.getInstance().verifyUser(firstUser.getUsername(), firstUser.getPassword(), new CallAPIResponse() {
             @Override
             public void processFinish(String output) {
