@@ -22,7 +22,7 @@ public class CreateUser {
         user.setFullName(fullName);
         user.setUsername(username);
         user.setPassword(password);
-        user.setImage("");
+        user.setImage(convertImageToString(image));
         return user;
     }
 

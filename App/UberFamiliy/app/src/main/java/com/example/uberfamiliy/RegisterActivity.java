@@ -85,7 +85,7 @@ public class RegisterActivity extends AppCompatActivity implements CallAPIRespon
 
             @Override
             public void onClick(View arg0) {
-
+                //opens the gallery where you can pick a photo
                 Intent i = new Intent(
                         Intent.ACTION_PICK,
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -99,6 +99,7 @@ public class RegisterActivity extends AppCompatActivity implements CallAPIRespon
             @Override
             public void onClick(View v) {
                 if (handleCameraPermissions()) {
+                    //opens the Camera
                     callCamera();
                 }
             }
@@ -161,6 +162,7 @@ public class RegisterActivity extends AppCompatActivity implements CallAPIRespon
     }
 
     private void tryToRegister() {
+
         EditText fullName = findViewById(R.id.fullName);
         EditText username = findViewById(R.id.username);
         EditText password = findViewById(R.id.password);
