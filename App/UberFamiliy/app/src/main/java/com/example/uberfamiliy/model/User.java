@@ -4,13 +4,10 @@ import androidx.annotation.Nullable;
 
 import com.orm.SugarRecord;
 import com.orm.dsl.Ignore;
-import com.orm.dsl.Unique;
 
 import java.io.Serializable;
 
 public class User extends SugarRecord implements Serializable {
-    @Unique
-    private Long id;
     private Long userId;
     private String username;
     private String password;
@@ -24,7 +21,7 @@ public class User extends SugarRecord implements Serializable {
 
     @Override
     public boolean equals(@Nullable Object obj) {
-        return this.getUserId().equals(((User) obj).getUserId());
+        return this.getUserId() == ((User) obj).getUserId();
     }
 
     public Long getUserId() {
@@ -87,14 +84,5 @@ public class User extends SugarRecord implements Serializable {
     public String toString() {
         return getUsername();
     }
-
-    @Override
-    public Long getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Long id) {
-        this.id = id;
-    }
+    
 }

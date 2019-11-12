@@ -28,7 +28,7 @@ public class SQLLight {
     public Long getId(Context context) {
         if (id == null) {
             User user = getFirstUser(context);
-            id = user.getId();
+            id = user.getUserId();
         }
         return id;
     }
@@ -39,7 +39,7 @@ public class SQLLight {
             List<User> users = User.listAll(User.class);
             if (users != null && users.size() > 0) {
                 this.user = users.get(0);
-                System.out.println(user.getId());
+                System.out.println(user.getUserId());
                 System.out.println(user.getUsername());
             }
         }
