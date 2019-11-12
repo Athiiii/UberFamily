@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.uberfamiliy.Actions.OnTextChangedAdapter;
+import com.example.uberfamiliy.Adapter.OnTextChangedAdapter;
 import com.example.uberfamiliy.DBConnection.CallAPIResponse;
 import com.example.uberfamiliy.DBConnection.ConnectToDB;
 import com.example.uberfamiliy.Service.ConvertJSON;
