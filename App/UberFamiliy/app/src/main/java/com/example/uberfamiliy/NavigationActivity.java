@@ -39,6 +39,7 @@ public class NavigationActivity extends AppCompatActivity {
                 .build();
 
         ImageView menu = findViewById(R.id.menus);
+        menu.bringToFront();
         menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -47,6 +48,7 @@ public class NavigationActivity extends AppCompatActivity {
         });
 
         ImageView addFriendIMG = findViewById(R.id.addFriends);
+        addFriendIMG.bringToFront();
         addFriendIMG.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
