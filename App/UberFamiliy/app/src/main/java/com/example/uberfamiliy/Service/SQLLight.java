@@ -9,6 +9,10 @@ public class SQLLight {
     private Long id;
     private User user;
 
+    private SQLLight() {
+
+    }
+
     public static SQLLight getInstance() {
         if (instance == null) {
             instance = new SQLLight();
@@ -32,5 +36,9 @@ public class SQLLight {
             }
         }
         return user;
+    }
+
+    public void deleteAllFields() {
+        User.deleteAll(User.class);
     }
 }

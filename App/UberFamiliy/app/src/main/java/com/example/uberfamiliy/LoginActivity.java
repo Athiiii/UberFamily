@@ -13,6 +13,7 @@ import com.example.uberfamiliy.DBConnection.CallAPIResponse;
 import com.example.uberfamiliy.DBConnection.ConnectToDB;
 import com.example.uberfamiliy.DBConnection.IConnectToDB;
 import com.example.uberfamiliy.Service.ConvertJSON;
+import com.example.uberfamiliy.Service.SQLLight;
 import com.example.uberfamiliy.model.User;
 import com.orm.SugarContext;
 
@@ -20,19 +21,22 @@ import java.util.List;
 
 public class LoginActivity extends AppCompatActivity implements CallAPIResponse {
     private User user;
+    private SQLLight sqlLight;
 
     @Override
     protected void onStart() {
+        init();
         if (checkIfUserUsedRememberMe()) {
             openMainScreen();
         } else {
-            User.deleteAll(User.class);
+            sqlLight.deleteAllFields();
         }
         super.onStart();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        init();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         SugarContext.init(this);
@@ -53,6 +57,11 @@ public class LoginActivity extends AppCompatActivity implements CallAPIResponse 
         });
     }
 
+    private void init() {
+        if (sqlLight == null) {
+            sqlLight = SQLLight.getInstance();
+        }
+    }
 
     private boolean checkIfUserUsedRememberMe() {
         user = getFirstUser();
