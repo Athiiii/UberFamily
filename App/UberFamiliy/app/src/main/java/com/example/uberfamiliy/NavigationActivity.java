@@ -1,10 +1,14 @@
 package com.example.uberfamiliy;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -15,7 +19,19 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.uberfamiliy.DBConnection.CallAPIResponse;
+import com.example.uberfamiliy.DBConnection.ConnectToDB;
+import com.example.uberfamiliy.Service.ImageUtil;
+import com.example.uberfamiliy.Service.SQLLight;
+import com.example.uberfamiliy.model.User;
 import com.google.android.material.navigation.NavigationView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 
 public class NavigationActivity extends AppCompatActivity {
 
@@ -47,6 +63,8 @@ public class NavigationActivity extends AppCompatActivity {
             }
         });
 
+        setupHeaderNavbar();
+
         ImageView addFriendIMG = findViewById(R.id.addFriends);
         addFriendIMG.bringToFront();
         addFriendIMG.setOnClickListener(new View.OnClickListener() {
@@ -63,6 +81,36 @@ public class NavigationActivity extends AppCompatActivity {
 
     }
 
+    public void setupHeaderNavbar() {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View hView = navigationView.getHeaderView(0);
+        final TextView fullname = (TextView) hView.findViewById(R.id.fullName);
+        final TextView username = (TextView) hView.findViewById(R.id.username);
+        final ImageView picture = (ImageView) hView.findViewById(R.id.imageView);
+
+        User firstUser = SQLLight.getInstance().getFirstUser(this);
+        ConnectToDB.getInstance().verifyUser(firstUser.getUsername(), firstUser.getPassword(), new CallAPIResponse() {
+            @Override
+            public void processFinish(String output) {
+                if (output != null) {
+                    try {
+                        JSONObject object = new JSONArray("[" + output + "]").getJSONObject(0);
+                        fullname.setText(object.getString("fullname"));
+                        username.setText(object.getString("username"));
+                        String image = object.getString("picture");
+                        if (!image.equals("null")) {
+                            Bitmap map = ImageUtil.convert(image);
+                            picture.setImageBitmap(map);
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
+    }
 
     private void openAddFriendWindow() {
         Intent addFriendWindow = new Intent(this, AddFriendActivity.class);

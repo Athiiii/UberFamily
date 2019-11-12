@@ -16,7 +16,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyD8UVpD1Q_TxCL2e4bUMHfU9x0ZSRAAqDwd" />
+            android:value="AIzaSyD8UVpD1Q_TxCL2e4bUMHfU9x0ZSRAAqDw" />
 
         <activity
             android:name=".NavigationActivity"
