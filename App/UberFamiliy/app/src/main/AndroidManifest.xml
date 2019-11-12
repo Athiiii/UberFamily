@@ -36,9 +36,14 @@
         <meta-data
             android:name="QUERY_LOG"
             android:value="true" />
+
         <meta-data
             android:name="DOMAIN_PACKAGE_NAME"
             android:value="com.example.uberfamiliy" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
 
     </application>
 

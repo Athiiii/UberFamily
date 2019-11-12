@@ -36,7 +36,6 @@ public class LoginActivity extends AppCompatActivity implements CallAPIResponse 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         SugarContext.init(this);
-
         View register = findViewById(R.id.register);
         register.setOnClickListener(new View.OnClickListener() {
             @Override
