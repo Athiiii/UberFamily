@@ -9,7 +9,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -104,7 +103,6 @@ public class AddFriendActivity extends AppCompatActivity implements CallAPIRespo
     private void init() {
         if (userListView == null) {
             userListView = findViewById(R.id.userList);
-            setHeader();
         }
         if (firstUser == null) {
             firstUser = getFirstUser();
@@ -158,12 +156,6 @@ public class AddFriendActivity extends AppCompatActivity implements CallAPIRespo
         fillUpListView(filteredUsers);
     }
 
-    private void setHeader() {
-        TextView textView = new TextView(this);
-        textView.setText(R.string.usernames);
-        textView.setTextSize(15);
-        this.userListView.addHeaderView(textView);
-    }
 
     private void fillUpListView(List<User> userList) {
         ArrayAdapter<User> userArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_single_choice, removeOwnUserAndFriends(userList));
@@ -185,15 +177,6 @@ public class AddFriendActivity extends AppCompatActivity implements CallAPIRespo
         }
 
         return listWithoutOwnUser;
-    }
-
-    private User getFirstUser() {
-        List<User> users = User.listAll(User.class);
-        User user = null;
-        if (users != null && users.size() > 0) {
-            user = users.get(0);
-        }
-        return user;
     }
 
 

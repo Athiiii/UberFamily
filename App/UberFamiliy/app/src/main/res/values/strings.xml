@@ -11,14 +11,16 @@
     <string name="takeAPicture"><b>Take a picture</b></string>
     <string name="register">Register</string>
     <string name="rememberMe">Remember me</string>
-    <string name="usernames"><b> Usernames:</b></string>
-    <string name="userSearch"><b>User search</b></string>
+    <string name="userSearch"><b>Add Friends</b></string>
     <string name="addFriend"><b>Add Friend</b></string>
+    <string name="removeFriend"><b>Remove Friend</b></string>
     <string name="title_activity_navigation">Navigation</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_maps">Map</string>
+    <string name="manageFriend">Manage Friend</string>
+    <string name="manageRequests">Manage Requests</string>
 
 </resources>
