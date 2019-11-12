@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -47,6 +48,8 @@ public class NavigationActivity extends AppCompatActivity {
             }
         });
 
+        setupHeaderNavbar();
+
         ImageView addFriendIMG = findViewById(R.id.addFriends);
         addFriendIMG.bringToFront();
         addFriendIMG.setOnClickListener(new View.OnClickListener() {
@@ -63,6 +66,14 @@ public class NavigationActivity extends AppCompatActivity {
 
     }
 
+    public void setupHeaderNavbar() {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View hView = navigationView.getHeaderView(0);
+        TextView fullname = (TextView) hView.findViewById(R.id.fullName);
+        TextView username = (TextView) hView.findViewById(R.id.username);
+        
+
+    }
 
     private void openAddFriendWindow() {
         Intent addFriendWindow = new Intent(this, AddFriendActivity.class);
