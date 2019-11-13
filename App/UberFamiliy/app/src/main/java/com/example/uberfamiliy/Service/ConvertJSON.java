@@ -91,7 +91,7 @@ public class ConvertJSON {
                     friend.setIp(object.getString("ipAddress"));
                     String port = object.getString("port");
                     if (!port.equals("null"))
-                        friend.setPort(Integer.getInteger(port));
+                        friend.setPort(Integer.parseInt(port));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
