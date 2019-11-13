@@ -38,11 +38,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -350,13 +350,22 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             String msgReply = "Hello from Android, you are #" + cnt;
 
             try {
-                outputStream = hostThreadSocket.getOutputStream();
-                PrintStream printStream = new PrintStream(outputStream);
-                printStream.print(msgReply);
-                printStream.close();
+                DataInputStream dIn = new DataInputStream(hostThreadSocket.getInputStream());
 
-                message += "replayed: " + msgReply + "\n";
+                boolean done = false;
+                while (!done) {
+                    byte messageType = dIn.readByte();
 
+                    switch (messageType) {
+                        case 1: // Type A
+                            System.out.println("Message A: " + dIn.readUTF());
+                            break;
+                        default:
+                            done = true;
+                    }
+                }
+
+                dIn.close();
                 activity.runOnUiThread(new Runnable() {
 
                     @Override
