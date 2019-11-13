@@ -94,7 +94,7 @@ public class NavigationActivity extends AppCompatActivity {
                         String image = object.getString("picture");
                         if (!image.equals("null")) {
                             Bitmap map = ImageUtil.convert(image);
-                            //picture.setImageBitmap(map);
+                            picture.setImageBitmap(map);
                         }
 
                     } catch (Exception e) {

@@ -172,6 +172,16 @@ public class ConnectToDB implements IConnectToDB {
         connect(callAPIResponse, DELETE, "api/User", query);
     }
 
+    public void updateUser(User user, CallAPIResponse callAPIResponse) {
+        int driver = 0;
+        if (user.isDriver()) {
+            driver = 1;
+        }
+        String query = "id=" + user.getUserId() + "&fullname=" + user.getFullName() + "&password=" +
+                user.getPassword() + "&isDriver=" + driver;
+        connect(callAPIResponse, PUT, "api/User", query);
+    }
+
     private void connect(CallAPIResponse callAPIResponse, String type, String apiDomain, String body) {
         new CallAPI(body, type, callAPIResponse).execute(domain + apiDomain);
     }
