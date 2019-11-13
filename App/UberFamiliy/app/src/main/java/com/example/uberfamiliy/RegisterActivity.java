@@ -187,7 +187,7 @@ public class RegisterActivity extends AppCompatActivity implements CallAPIRespon
 
         if ((user) != null) {
             User firstUser = getFirstUser();
-            ConnectToDB.getInstance().updateUserConnect(firstUser.getUserId(), Connectivity.getInstance().getIPAddress(true), "8080", null);
+            ConnectToDB.getInstance().updateUserConnect(firstUser.getUserId(), "8080", Connectivity.getInstance().getIPAddress(true), null);
             if (firstUser != null) {
                 sqlLight.deleteAllFields(this);
             }

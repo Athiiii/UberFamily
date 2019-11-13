@@ -115,7 +115,7 @@ public class LoginActivity extends AppCompatActivity implements CallAPIResponse 
         User user = ConvertJSON.getInstance().toUser(output);
 
         if ((user) != null) {
-            ConnectToDB.getInstance().updateUserConnect(user.getUserId(), Connectivity.getInstance().getIPAddress(true), "8080", null);
+            ConnectToDB.getInstance().updateUserConnect(user.getUserId(), "8080", Connectivity.getInstance().getIPAddress(true), null);
             if (rememberMe.isChecked()) {
                 user.setRemembered(true);
 

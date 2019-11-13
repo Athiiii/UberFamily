@@ -53,7 +53,9 @@ namespace UberFamily.Services.Services
                 return userList.Select(x => new User
                 {
                     Id = x.Id,
-                    Username = x.Username
+                    Username = x.Username,
+                    Port = x.Port,
+                    IpAddress = x.IpAddress
                 }).ToList();
             }
         }

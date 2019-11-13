@@ -89,7 +89,9 @@ public class ConvertJSON {
                     friend.setUsername(object.getString("username"));
                     friends.add(friend);
                     friend.setIp(object.getString("ipAddress"));
-                    friend.setPort(Integer.getInteger(object.getString("port")));
+                    String port = object.getString("port");
+                    if (!port.equals("null"))
+                        friend.setPort(Integer.getInteger(port));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
