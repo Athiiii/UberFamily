@@ -1,42 +1,42 @@
 {
   "project_info": {
-    "project_number": "1018246306051",
-    "firebase_url": "https://uberfamiliy-f4d8d.firebaseio.com",
-    "project_id": "uberfamiliy-f4d8d",
-    "storage_bucket": "uberfamiliy-f4d8d.appspot.com"
+    "project_number": "208383919771",
+    "firebase_url": "https://uberfamiliy-e80e8.firebaseio.com",
+    "project_id": "uberfamiliy-e80e8",
+    "storage_bucket": "uberfamiliy-e80e8.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1018246306051:android:101b8577bc2994c92f7136",
+        "mobilesdk_app_id": "1:208383919771:android:d43bfe1df80c8b186fe83e",
         "android_client_info": {
           "package_name": "com.example.uberfamiliy"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1018246306051-pgtfg76fnr2491i1pis8eqgiddq23var.apps.googleusercontent.com",
+          "client_id": "208383919771-7frvqqfp4van0r31cqcf7lrjfkqlkunk.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.uberfamiliy",
-            "certificate_hash": "827b4fd9433e46d57a1ff8c791ee629a61226419"
+            "certificate_hash": "bce4a225f0c630153cf98bde2511adc0c6494958"
           }
         },
         {
-          "client_id": "1018246306051-u0525mpabl1fviuog9e6dlsq3dju0646.apps.googleusercontent.com",
+          "client_id": "208383919771-ik2fk3ur9m76ec6v2gg60bvb0gg5pnp3.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCvStGY25B8pj6Me0E8W5zmTuXQ7Xpqumk"
+          "current_key": "AIzaSyCYS7-Mi8YbW3HStoAKoTuJOBETfBKmhTc"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1018246306051-u0525mpabl1fviuog9e6dlsq3dju0646.apps.googleusercontent.com",
+              "client_id": "208383919771-ik2fk3ur9m76ec6v2gg60bvb0gg5pnp3.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
