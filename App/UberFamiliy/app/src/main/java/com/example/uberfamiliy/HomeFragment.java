@@ -65,13 +65,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-
-        user = sqlLight.getFirstUser(getActivity());
-        activity = getActivity();
         root = inflater.inflate(R.layout.fragment_home, container, false);
+        init();
+        activity = getActivity();
+        user = sqlLight.getFirstUser(getActivity());
+
+
         Button pickUpBtn = root.findViewById(R.id.buttonPickUP);
 
-        init();
+
         if (user.isDriver()) {
             Thread socketServerThread = new Thread(new SocketServerThread());
             socketServerThread.start();
