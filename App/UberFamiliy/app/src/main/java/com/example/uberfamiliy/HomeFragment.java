@@ -38,6 +38,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -61,6 +62,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private User user;
     private Activity activity;
     private String message;
+    private LatLng currentLocation;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -127,7 +129,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 public void onSuccess(Object location) {
                     Location loc = (Location) location;
                     if (location != null) {
-                        LatLng currentLocation = new LatLng(loc.getLatitude(), loc.getLongitude());
+                        currentLocation = new LatLng(loc.getLatitude(), loc.getLongitude());
                         // zooming automatically to the current location of the user
                         CameraPosition cameraPosition = new CameraPosition.Builder().target(currentLocation).zoom(12).build();
                         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
@@ -226,6 +228,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
             try {
                 socket = new Socket(dstAddress, dstPort);
+                DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
+                dOut.writeByte(1);
+                dOut.writeUTF(currentLocation.longitude + ";" + currentLocation.latitude);
+                dOut.flush(); // Send off the data
+                // Send the exit message
+                dOut.writeByte(-1);
+                dOut.flush();
+
+                dOut.close();
+
 
                 ByteArrayOutputStream byteArrayOutputStream =
                         new ByteArrayOutputStream(1024);
@@ -352,7 +364,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
                     @Override
                     public void run() {
-                        CharSequence text = message;
+                        CharSequence text = message + "-----------";
                         int duration = Toast.LENGTH_SHORT;
                         Toast toast = Toast.makeText(getContext(), text, duration);
                         toast.show();

@@ -14,7 +14,7 @@ public class Connectivity {
         return instance;
     }
 
-    public String getIPAddress(boolean useIPv4) {
+    public String getIPAddress() {
         try {
             Enumeration<NetworkInterface> enumNetworkInterfaces = NetworkInterface
                     .getNetworkInterfaces();
