@@ -104,15 +104,15 @@ public class FriendsFragment extends Fragment {
     }
 
     private void setButtonEnabled() {
-        addFriendBtn.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.Button)));
-        addFriendBtn.setClickable(true);
-        addFriendBtn.setEnabled(true);
+        removeButton.setBackgroundTintList(ColorStateList.valueOf(this.getContext().getColor(R.color.Button)));
+        removeButton.setClickable(true);
+        removeButton.setEnabled(true);
     }
 
     private void setButtonDisabled() {
-        addFriendBtn.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.ButtonGreyedOut)));
-        addFriendBtn.setEnabled(false);
-        addFriendBtn.setClickable(false);
+        removeButton.setBackgroundTintList(ColorStateList.valueOf(this.getContext().getColor(R.color.ButtonGreyedOut)));
+        removeButton.setEnabled(false);
+        removeButton.setClickable(false);
     }
 
 
