@@ -82,6 +82,20 @@ namespace UberFamily.Services.Services
             }
         }
 
+        public void UpdateConnectivity(string ipAdress, string port, int userId)
+        {
+            using (var context = new UberFamilyContext())
+            {
+                var userDb = context.User.FirstOrDefault(x => x.Id == userId);
+                if (userDb != null)
+                {
+                    userDb.Port = port;
+                    userDb.IpAddress = ipAdress;
+                    context.SaveChanges();
+                }
+            }
+        }
+
         public void UpdateUser(User user)
         {
             using (var context = new UberFamilyContext()) 

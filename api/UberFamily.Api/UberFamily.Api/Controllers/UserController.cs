@@ -56,11 +56,25 @@ namespace UberFamily.Api.Controllers
             return _userService.GetUser(username, password);
         }
 
+        [HttpPut("port")]
+        public IActionResult SaveConnectivity(string ipAdress, string port, int userId)
+        {
+            _userService.UpdateConnectivity(ipAdress, port, userId);
+            return Ok();
+        }
+
+
         [HttpDelete]
         public IActionResult DeleteUser(int userId)
         {
             _userService.DeleteUser(userId);
             return Ok();
+        }
+
+        [HttpGet("single")]
+        public User GetUserById(int userId)
+        {
+            return _userService.GetUserById(userId);
         }
 
     }

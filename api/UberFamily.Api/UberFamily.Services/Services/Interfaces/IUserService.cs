@@ -18,5 +18,7 @@ namespace UberFamily.Services.Services.Interfaces
         IEnumerable<User> GetApprovedFriends(bool approved, int userId);
 
         void UpdateUser(User user);
+
+        void UpdateConnectivity(string ipAdress, string port, int userId);
     }
 }
