@@ -30,6 +30,7 @@ public class FriendsFragment extends Fragment {
     private SQLLight sqlLight;
     private View root;
     private Button removeButton;
+    private User selectedFriend;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -50,7 +51,7 @@ public class FriendsFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 setButtonEnabled();
-                selectedUser = (User) (userListView).getAdapter().getItem(position);
+                selectedFriend = (User) friendsView.getAdapter().getItem(position);
             }
         });
 
