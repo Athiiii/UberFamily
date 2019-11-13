@@ -84,5 +84,5 @@ public class User extends SugarRecord implements Serializable {
     public String toString() {
         return getUsername();
     }
-    
+
 }
