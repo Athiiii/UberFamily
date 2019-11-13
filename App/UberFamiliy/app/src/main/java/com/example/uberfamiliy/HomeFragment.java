@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.AsyncTask;
@@ -358,7 +359,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
                     switch (messageType) {
                         case 1: // Type A
-                            System.out.println("Message A: " + dIn.readUTF());
+                            Intent main = new Intent(getContext(), ShowAddressActivity.class);
+                            String coordinates = dIn.readUTF();
+                            String[] splitedCoordinates = coordinates.split(";");
+                            if (splitedCoordinates != null && splitedCoordinates.length == 2) {
+                                main.putExtra("longitude", splitedCoordinates[0]);
+                                main.putExtra("latitude", splitedCoordinates[1]);
+                            }
+                            startActivity(main);
                             break;
                         default:
                             done = true;
