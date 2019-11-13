@@ -1,6 +1,7 @@
 package com.example.uberfamiliy;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
@@ -14,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -38,8 +40,15 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.Enumeration;
 import java.util.List;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
@@ -52,15 +61,25 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private String address = "";
     private List<User> friends;
     private SQLLight sqlLight;
-
+    private ServerSocket serverSocket;
+    private User user;
+    private Activity activity;
+    private String message;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
+        user = sqlLight.getFirstUser(getActivity());
+        activity = getActivity();
         root = inflater.inflate(R.layout.fragment_home, container, false);
         Button pickUpBtn = root.findViewById(R.id.buttonPickUP);
 
         init();
+        if (user.isDriver()) {
+            Thread socketServerThread = new Thread(new SocketServerThread());
+            socketServerThread.start();
+        }
 
         pickUpBtn.setOnClickListener(this);
 
@@ -71,8 +90,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
             }
         });
+
         requestPermission();
         client = LocationServices.getFusedLocationProviderClient(getContext());
+
         if (ActivityCompat.checkSelfPermission(getContext(), ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mMapView = root.findViewById(R.id.mapView);
 
@@ -144,7 +165,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         address = input.getText().toString();
-                        ConnectToDB.getInstance().createRequest(SQLLight.getInstance().getFirstUser(getActivity()).getUserId(), address, null);
+                        ConnectToDB.getInstance().createRequest(user.getUserId(), address, null);
                     }
                 })
                 .show();
@@ -251,5 +272,137 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             System.out.println(response);
             super.onPostExecute(result);
         }
+    }
+
+    private class SocketServerThread extends Thread {
+
+        static final int SocketServerPORT = 8080;
+        int count = 0;
+
+
+        @Override
+        public void run() {
+            try {
+                serverSocket = new ServerSocket(SocketServerPORT);
+                activity.runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        CharSequence text = "You are a Driver";
+
+                        int duration = Toast.LENGTH_SHORT;
+
+                        Toast toast = Toast.makeText(getContext(), text, duration);
+                        toast.show();
+                    }
+                });
+
+                while (true) {
+                    Socket socket = serverSocket.accept();
+                    count++;
+                    message += "#" + count + " from " + socket.getInetAddress()
+                            + ":" + socket.getPort() + "\n";
+
+                    getActivity().runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            CharSequence text = message;
+                            int duration = Toast.LENGTH_SHORT;
+                            Toast toast = Toast.makeText(getContext(), text, duration);
+                            toast.show();
+                        }
+                    });
+
+                    HomeFragment.SocketServerReplyThread socketServerReplyThread = new HomeFragment.SocketServerReplyThread(
+                            socket, count);
+                    socketServerReplyThread.run();
+
+                }
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    private class SocketServerReplyThread extends Thread {
+
+        private Socket hostThreadSocket;
+        int cnt;
+
+        SocketServerReplyThread(Socket socket, int c) {
+            hostThreadSocket = socket;
+            cnt = c;
+        }
+
+        @Override
+        public void run() {
+            OutputStream outputStream;
+            String msgReply = "Hello from Android, you are #" + cnt;
+
+            try {
+                outputStream = hostThreadSocket.getOutputStream();
+                PrintStream printStream = new PrintStream(outputStream);
+                printStream.print(msgReply);
+                printStream.close();
+
+                message += "replayed: " + msgReply + "\n";
+
+                Connection.this.runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        msg.setText(message);
+                    }
+                });
+
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                message += "Something wrong! " + e.toString() + "\n";
+            }
+
+            Connection.this.runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+                    msg.setText(message);
+                }
+            });
+        }
+
+    }
+
+    private String getIpAddress() {
+        String ip = "";
+        try {
+            Enumeration<NetworkInterface> enumNetworkInterfaces = NetworkInterface
+                    .getNetworkInterfaces();
+            while (enumNetworkInterfaces.hasMoreElements()) {
+                NetworkInterface networkInterface = enumNetworkInterfaces
+                        .nextElement();
+                Enumeration<InetAddress> enumInetAddress = networkInterface
+                        .getInetAddresses();
+                while (enumInetAddress.hasMoreElements()) {
+                    InetAddress inetAddress = enumInetAddress.nextElement();
+
+                    if (inetAddress.isSiteLocalAddress()) {
+                        ip += "SiteLocalAddress: "
+                                + inetAddress.getHostAddress() + "\n";
+                    }
+
+                }
+
+            }
+
+        } catch (SocketException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            ip += "Something Wrong! " + e.toString() + "\n";
+        }
+
+        return ip;
     }
 }

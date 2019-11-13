@@ -12,10 +12,9 @@ public class User extends SugarRecord implements Serializable {
     private String username;
     private String password;
     private boolean remembered;
+    private boolean isDriver;
     @Ignore
     private String fullName;
-    @Ignore
-    private boolean isDriver;
     @Ignore
     private String image;
     @Ignore
