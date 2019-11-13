@@ -42,13 +42,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.Enumeration;
 import java.util.List;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
@@ -350,11 +346,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
                 message += "replayed: " + msgReply + "\n";
 
-                Connection.this.runOnUiThread(new Runnable() {
+                activity.runOnUiThread(new Runnable() {
 
                     @Override
                     public void run() {
-                        msg.setText(message);
+                        CharSequence text = message;
+                        int duration = Toast.LENGTH_SHORT;
+                        Toast toast = Toast.makeText(getContext(), text, duration);
+                        toast.show();
                     }
                 });
 
@@ -364,45 +363,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 message += "Something wrong! " + e.toString() + "\n";
             }
 
-            Connection.this.runOnUiThread(new Runnable() {
+            activity.runOnUiThread(new Runnable() {
 
                 @Override
                 public void run() {
-                    msg.setText(message);
+                    CharSequence text = message;
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast toast = Toast.makeText(getContext(), text, duration);
+                    toast.show();
                 }
             });
         }
 
-    }
-
-    private String getIpAddress() {
-        String ip = "";
-        try {
-            Enumeration<NetworkInterface> enumNetworkInterfaces = NetworkInterface
-                    .getNetworkInterfaces();
-            while (enumNetworkInterfaces.hasMoreElements()) {
-                NetworkInterface networkInterface = enumNetworkInterfaces
-                        .nextElement();
-                Enumeration<InetAddress> enumInetAddress = networkInterface
-                        .getInetAddresses();
-                while (enumInetAddress.hasMoreElements()) {
-                    InetAddress inetAddress = enumInetAddress.nextElement();
-
-                    if (inetAddress.isSiteLocalAddress()) {
-                        ip += "SiteLocalAddress: "
-                                + inetAddress.getHostAddress() + "\n";
-                    }
-
-                }
-
-            }
-
-        } catch (SocketException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            ip += "Something Wrong! " + e.toString() + "\n";
-        }
-
-        return ip;
     }
 }
