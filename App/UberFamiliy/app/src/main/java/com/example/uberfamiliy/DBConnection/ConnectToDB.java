@@ -76,21 +76,6 @@ public class ConnectToDB implements IConnectToDB {
     public void sendFriendRequest(Long userId, Long friendId, CallAPIResponse callAPIResponse) {
         String query = "userId=" + userId + "&friendId=" + friendId;
         connect(callAPIResponse, POST, "api/Friend", query);
-
-        /*if (response != null) {
-            try {
-                JSONObject object = response.getJSONObject(0);
-                friend = new Friend();
-                friend.setApproved(object.getInt("approved") == 1);
-                friend.setUserId(object.getLong("id"));
-                friend.setFirstFriend(object.getLong("firstFriend"));
-                friend.setSecondFriend(object.getLong("secondFriend"));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return friend;*/
     }
 
     @Override
@@ -123,30 +108,6 @@ public class ConnectToDB implements IConnectToDB {
     public void getRequests(CallAPIResponse callAPIResponse) {
         List<Request> requests = null;
         connect(callAPIResponse, GET, "api/Request");
-
-        /*if (response != null) {
-            requests = new ArrayList<>();
-            for (int i = 0; i < response.length(); ++i) {
-                try {
-                    Request request = new Request();
-                    JSONObject object = response.getJSONObject(i);
-                    request.setUserId(object.getLong("id"));
-                    request.setRequester(object.getLong("requester"));
-
-                    Object driver = object.getString("driver");
-                    if (driver != null && !driver.equals("null"))
-                        request.setDriver(object.getLong("driver"));
-
-                    request.setOpen(object.getInt("open") == 1);
-                    request.setAdress(object.getString("adress"));
-                    requests.add(request);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        }
-        return requests;*/
     }
 
     @Override
@@ -154,28 +115,6 @@ public class ConnectToDB implements IConnectToDB {
         List<Request> requests = null;
         connect(callAPIResponse, GET, "api/Request/open");
 
-        /*if (response != null) {
-            requests = new ArrayList<>();
-            try {
-                for (int i = 0; i < response.length(); ++i) {
-                    Request request = new Request();
-                    JSONObject object = response.getJSONObject(i);
-                    request.setUserId(object.getLong("id"));
-                    request.setRequester(object.getLong("requester"));
-
-                    Object driver = object.getString("driver");
-                    if (driver != null && !driver.equals("null"))
-                        request.setDriver(object.getLong("driver"));
-
-                    request.setOpen(object.getInt("open") == 1);
-                    request.setAdress(object.getString("adress"));
-                    requests.add(request);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        return requests;*/
     }
 
     @Override
@@ -195,21 +134,6 @@ public class ConnectToDB implements IConnectToDB {
         Request request = null;
         String query = "requestId=" + requestId + "&userId=" + userId;
         connect(callAPIResponse, POST, "api/Request/driver", query);
-
-        /*if (response != null) {
-            try {
-                JSONObject object = response.getJSONObject(0);
-                request = new Request();
-                request.setAdress(object.getString("adress"));
-                request.setDriver(object.getLong("driver"));
-                request.setUserId(object.getLong("id"));
-                request.setRequester(object.getLong("id"));
-                request.setOpen(object.getInt("open") == 1);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        return request;*/
     }
 
     @Override
@@ -238,27 +162,7 @@ public class ConnectToDB implements IConnectToDB {
     @Override
     public void getUsers(CallAPIResponse callAPIResponse) {
         List<User> users = null;
-
         connect(callAPIResponse, GET, "api/User");
-        /*if (jsonObjects != null) {
-            users = new ArrayList<>();
-            try {
-                for (int i = 0; i < jsonObjects.length(); ++i) {
-                    User user = new User();
-                    JSONObject object = jsonObjects.getJSONObject(i);
-                    user.setUserId(object.getInt("id"));
-                    user.setFullName(object.getString("fullname"));
-                    user.setUsername(object.getString("username"));
-                    user.setPassword(object.getString("password"));
-                    user.setDriver(object.getInt("isDriver") == 1);
-                    user.setImage(object.getString("picture"));
-                    users.add(user);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        return users;*/
     }
 
     @Override

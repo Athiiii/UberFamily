@@ -2,9 +2,7 @@ package com.example.uberfamiliy;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Base64;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
@@ -27,11 +25,7 @@ import com.example.uberfamiliy.model.User;
 import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 
 public class NavigationActivity extends AppCompatActivity {
 
@@ -100,7 +94,7 @@ public class NavigationActivity extends AppCompatActivity {
                         String image = object.getString("picture");
                         if (!image.equals("null")) {
                             Bitmap map = ImageUtil.convert(image);
-                            picture.setImageBitmap(map);
+                            //picture.setImageBitmap(map);
                         }
 
                     } catch (Exception e) {
