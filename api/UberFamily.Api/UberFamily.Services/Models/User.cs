@@ -21,6 +21,8 @@ namespace UberFamily.Services.Models
         public string Password { get; set; }
         public byte? IsDriver { get; set; }
         public string Picture { get; set; }
+        public string IpAddress { get; set; }
+        public string Port { get; set; }
 
         [JsonIgnore]
         internal ICollection<ChatMessage> ChatMessage { get; set; }

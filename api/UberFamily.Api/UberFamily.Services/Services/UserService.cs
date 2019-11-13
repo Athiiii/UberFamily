@@ -81,5 +81,34 @@ namespace UberFamily.Services.Services
                 return context.User.ToList();
             }
         }
+
+        public void UpdateConnectivity(string ipAdress, string port, int userId)
+        {
+            using (var context = new UberFamilyContext())
+            {
+                var userDb = context.User.FirstOrDefault(x => x.Id == userId);
+                if (userDb != null)
+                {
+                    userDb.Port = port;
+                    userDb.IpAddress = ipAdress;
+                    context.SaveChanges();
+                }
+            }
+        }
+
+        public void UpdateUser(User user)
+        {
+            using (var context = new UberFamilyContext()) 
+            {
+                var userDb = context.User.FirstOrDefault(x => x.Id == user.Id);
+                if(userDb != null)
+                {
+                    userDb.IsDriver = user.IsDriver;
+                    userDb.Password = user.Password;
+                    userDb.Fullname = user.Fullname;
+                    context.SaveChanges();
+                }
+            }
+        }
     }
 }
