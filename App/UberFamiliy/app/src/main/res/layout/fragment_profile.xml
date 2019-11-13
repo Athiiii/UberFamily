@@ -30,7 +30,6 @@
     </LinearLayout>
 
     <Button
-
         android:id="@+id/updateUser"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -47,7 +46,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/passwordText"
+        android:id="@+id/passwordInput"
         android:layout_width="126dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="45dp"
@@ -94,10 +93,10 @@
         android:text="lorem"
         android:textSize="14sp"
         app:layout_constraintStart_toEndOf="@+id/textView4"
-        app:layout_constraintTop_toBottomOf="@+id/fullname" />
+        app:layout_constraintTop_toBottomOf="@+id/fullnameInput" />
 
     <EditText
-        android:id="@+id/fullname"
+        android:id="@+id/fullnameInput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="52dp"
@@ -105,7 +104,6 @@
         android:autofillHints="Fullname"
         android:ems="10"
         android:hint="Fullname"
-        android:text="fullname"
         android:textSize="10sp"
         app:layout_constraintStart_toEndOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
@@ -138,6 +136,6 @@
         android:layout_marginStart="75dp"
         android:layout_marginTop="15dp"
         app:layout_constraintStart_toEndOf="@+id/textView8"
-        app:layout_constraintTop_toBottomOf="@+id/passwordText" />
+        app:layout_constraintTop_toBottomOf="@+id/passwordInput" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
