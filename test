@@ -1,158 +1,39 @@
-public class MainActivity extends Activity {
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity" >
 
- TextView info, infoip, msg;
- String message = "";
- ServerSocket serverSocket;
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:autoLink="web"
+        android:text="http://android-er.blogspot.com/"
+        android:textStyle="bold" />
 
- @Override
- protected void onCreate(Bundle savedInstanceState) {
-  super.onCreate(savedInstanceState);
-  setContentView(R.layout.activity_main);
-  info = (TextView) findViewById(R.id.info);
-  infoip = (TextView) findViewById(R.id.infoip);
-  msg = (TextView) findViewById(R.id.msg);
-  
-  infoip.setText(getIpAddress());
+    <TextView
+        android:id="@+id/info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/infoip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
-  Thread socketServerThread = new Thread(new SocketServerThread());
-  socketServerThread.start();
- }
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
 
- @Override
- protected void onDestroy() {
-  super.onDestroy();
+        <TextView
+            android:id="@+id/msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </ScrollView>
 
-  if (serverSocket != null) {
-   try {
-    serverSocket.close();
-   } catch (IOException e) {
-    // TODO Auto-generated catch block
-    e.printStackTrace();
-   }
-  }
- }
-
- private class SocketServerThread extends Thread {
-
-  static final int SocketServerPORT = 8080;
-  int count = 0;
-
-  @Override
-  public void run() {
-   try {
-    serverSocket = new ServerSocket(SocketServerPORT);
-    MainActivity.this.runOnUiThread(new Runnable() {
-
-     @Override
-     public void run() {
-      info.setText("I'm waiting here: "
-        + serverSocket.getLocalPort());
-     }
-    });
-
-    while (true) {
-     Socket socket = serverSocket.accept();
-     count++;
-     message += "#" + count + " from " + socket.getInetAddress()
-       + ":" + socket.getPort() + "\n";
-
-     MainActivity.this.runOnUiThread(new Runnable() {
-
-      @Override
-      public void run() {
-       msg.setText(message);
-      }
-     });
-
-     SocketServerReplyThread socketServerReplyThread = new SocketServerReplyThread(
-       socket, count);
-     socketServerReplyThread.run();
-
-    }
-   } catch (IOException e) {
-    // TODO Auto-generated catch block
-    e.printStackTrace();
-   }
-  }
-
- }
-
- private class SocketServerReplyThread extends Thread {
-
-  private Socket hostThreadSocket;
-  int cnt;
-
-  SocketServerReplyThread(Socket socket, int c) {
-   hostThreadSocket = socket;
-   cnt = c;
-  }
-
-  @Override
-  public void run() {
-   OutputStream outputStream;
-   String msgReply = "Hello from Android, you are #" + cnt;
-
-   try {
-    outputStream = hostThreadSocket.getOutputStream();
-             PrintStream printStream = new PrintStream(outputStream);
-             printStream.print(msgReply);
-             printStream.close();
-
-    message += "replayed: " + msgReply + "\n";
-
-    MainActivity.this.runOnUiThread(new Runnable() {
-
-     @Override
-     public void run() {
-      msg.setText(message);
-     }
-    });
-
-   } catch (IOException e) {
-    // TODO Auto-generated catch block
-    e.printStackTrace();
-    message += "Something wrong! " + e.toString() + "\n";
-   }
-
-   MainActivity.this.runOnUiThread(new Runnable() {
-
-    @Override
-    public void run() {
-     msg.setText(message);
-    }
-   });
-  }
-
- }
-
- private String getIpAddress() {
-  String ip = "";
-  try {
-   Enumeration<NetworkInterface> enumNetworkInterfaces = NetworkInterface
-     .getNetworkInterfaces();
-   while (enumNetworkInterfaces.hasMoreElements()) {
-    NetworkInterface networkInterface = enumNetworkInterfaces
-      .nextElement();
-    Enumeration<InetAddress> enumInetAddress = networkInterface
-      .getInetAddresses();
-    while (enumInetAddress.hasMoreElements()) {
-     InetAddress inetAddress = enumInetAddress.nextElement();
-
-     if (inetAddress.isSiteLocalAddress()) {
-      ip += "SiteLocalAddress: " 
-        + inetAddress.getHostAddress() + "\n";
-     }
-     
-    }
-
-   }
-
-  } catch (SocketException e) {
-   // TODO Auto-generated catch block
-   e.printStackTrace();
-   ip += "Something Wrong! " + e.toString() + "\n";
-  }
-
-  return ip;
- }
-}
+</LinearLayout>
