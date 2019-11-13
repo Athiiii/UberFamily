@@ -16,5 +16,7 @@ namespace UberFamily.Services.Services.Interfaces
         void DeleteUser(int userId);
 
         IEnumerable<User> GetApprovedFriends(bool approved, int userId);
+
+        void UpdateUser(User user);
     }
 }

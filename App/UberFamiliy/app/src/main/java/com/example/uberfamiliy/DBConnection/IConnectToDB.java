@@ -42,4 +42,6 @@ public interface IConnectToDB {
     void getUsers(CallAPIResponse callAPIResponse);
 
     void deleteUser(Long userId, CallAPIResponse callAPIResponse);
+
+    void updateUser(User user, CallAPIResponse callAPIResponse);
 }
