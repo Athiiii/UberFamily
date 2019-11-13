@@ -28,6 +28,9 @@ public class LoginActivity extends AppCompatActivity implements CallAPIResponse 
     protected void onStart() {
         init();
         if (checkIfUserUsedRememberMe()) {
+            user = getFirstUser();
+            //UPDATES the ip address and the port from the device
+            ConnectToDB.getInstance().updateUserConnect(user.getUserId(), "8080", Connectivity.getInstance().getIPAddress(), null);
             openMainScreen();
         } else {
             sqlLight.deleteAllFields(this);
@@ -115,6 +118,7 @@ public class LoginActivity extends AppCompatActivity implements CallAPIResponse 
         User user = ConvertJSON.getInstance().toUser(output);
 
         if ((user) != null) {
+            //UPDATES the ip address and the port from the device
             ConnectToDB.getInstance().updateUserConnect(user.getUserId(), "8080", Connectivity.getInstance().getIPAddress(), null);
             if (rememberMe.isChecked()) {
                 user.setRemembered(true);

@@ -44,7 +44,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -66,6 +65,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private String message;
     private LatLng currentLocation;
     private Context context;
+    private Bundle savedInstanceState;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -75,6 +75,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         activity = getActivity();
         context = getContext();
         user = sqlLight.getFirstUser(getActivity());
+        this.savedInstanceState = savedInstanceState;
 
 
         Button pickUpBtn = root.findViewById(R.id.buttonPickUP);
@@ -159,10 +160,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         final EditText input = new EditText(getActivity());
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         input.setLayoutParams(lp);
-
+        //shows an input box
         new AlertDialog.Builder(getActivity())
                 .setTitle("Pick up request")
-                .setMessage("Please enter your current address")
+                .setMessage("Please enter your destination")
                 .setView(input)
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -213,10 +214,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void requestPermission() {
+        //request Permissions
         ActivityCompat.requestPermissions(this.getActivity(), new String[]{ACCESS_FINE_LOCATION}, 1);
     }
 
     public class MyClientTask extends AsyncTask<Void, Void, Void> {
+        //Call the other Phone if you want to be picked up
         String dstAddress;
         int dstPort;
         String response = "";
@@ -234,6 +237,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 socket = new Socket(dstAddress, dstPort);
                 DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
                 dOut.writeByte(1);
+                //sends the current location
                 dOut.writeUTF(currentLocation.longitude + ";" + currentLocation.latitude);
                 dOut.flush(); // Send off the data
                 // Send the exit message
@@ -250,10 +254,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 int bytesRead;
                 InputStream inputStream = socket.getInputStream();
 
-                /*
-                 * notice:
-                 * inputStream.read() will block if no data return
-                 */
+                //saves the result
                 while ((bytesRead = inputStream.read(buffer)) != -1) {
                     byteArrayOutputStream.write(buffer, 0, bytesRead);
                     response += byteArrayOutputStream.toString("UTF-8");
@@ -289,7 +290,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private class SocketServerThread extends Thread {
-
+        //Comes here if your a driver and your friend needs help
         static final int SocketServerPORT = 8080;
         int count = 0;
 
@@ -350,9 +351,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         @Override
         public void run() {
-            OutputStream outputStream;
-            String msgReply = "Hello from Android, you are #" + cnt;
-
             try {
                 DataInputStream dIn = new DataInputStream(hostThreadSocket.getInputStream());
 
@@ -361,7 +359,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     byte messageType = dIn.readByte();
 
                     switch (messageType) {
-                        case 1: // Type A
+                        case 1:
+                            //receives the data send though the socket
                             Intent main = new Intent(context, ShowAddressActivity.class);
                             String coordinates = dIn.readUTF();
                             String[] splitCoordinates = coordinates.split(";");
@@ -383,7 +382,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void run() {
 
-                        System.out.println("YEH------" + message);
                     }
                 });
 
