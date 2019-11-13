@@ -159,6 +159,7 @@ public class ConnectToDB implements IConnectToDB {
         connect(callAPIResponse, POST, "api/User/verify", query);
     }
 
+
     @Override
     public void getUsers(CallAPIResponse callAPIResponse) {
         List<User> users = null;

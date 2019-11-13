@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,8 +19,11 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.uberfamiliy.DBConnection.CallAPIResponse;
 import com.example.uberfamiliy.DBConnection.ConnectToDB;
+import com.example.uberfamiliy.Service.ConvertJSON;
 import com.example.uberfamiliy.Service.SQLLight;
+import com.example.uberfamiliy.model.User;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -31,6 +35,13 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.List;
+
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
@@ -38,16 +49,28 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private View root;
     private MapView mMapView;
     private GoogleMap googleMap;
-    private String adress = "";
+    private String address = "";
+    private List<User> friends;
+    private SQLLight sqlLight;
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_home, container, false);
         Button pickUpBtn = root.findViewById(R.id.buttonPickUP);
+
+        init();
+
         pickUpBtn.setOnClickListener(this);
 
+        ConnectToDB.getInstance().getApprovedFriends(sqlLight.getId(this.getContext()), new CallAPIResponse() {
+            @Override
+            public void processFinish(String output) {
+                friends = ConvertJSON.getInstance().toFriends(output);
 
+            }
+        });
         requestPermission();
         client = LocationServices.getFusedLocationProviderClient(getContext());
         if (ActivityCompat.checkSelfPermission(getContext(), ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -99,6 +122,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         return root;
     }
 
+    private void init() {
+        if (sqlLight == null) {
+            sqlLight = SQLLight.getInstance();
+        }
+    }
+
 
     @Override
     public void onClick(View view) {
@@ -114,11 +143,20 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        adress = input.getText().toString();
-                        ConnectToDB.getInstance().createRequest(SQLLight.getInstance().getFirstUser(getActivity()).getUserId(), adress, null);
+                        address = input.getText().toString();
+                        ConnectToDB.getInstance().createRequest(SQLLight.getInstance().getFirstUser(getActivity()).getUserId(), address, null);
                     }
                 })
                 .show();
+        if (friends != null && friends.size() > 0) {
+            for (User friend : friends) {
+                MyClientTask myClientTask = new MyClientTask(
+                        friend.getIp(),
+                        friend.getPort());
+                myClientTask.execute();
+            }
+        }
+
     }
 
     @Override
@@ -151,5 +189,67 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private void requestPermission() {
         ActivityCompat.requestPermissions(this.getActivity(), new String[]{ACCESS_FINE_LOCATION}, 1);
+    }
+
+    public class MyClientTask extends AsyncTask<Void, Void, Void> {
+        String dstAddress;
+        int dstPort;
+        String response = "";
+
+        MyClientTask(String addr, int port) {
+            dstAddress = addr;
+            dstPort = port;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            Socket socket = null;
+
+            try {
+                socket = new Socket(dstAddress, dstPort);
+
+                ByteArrayOutputStream byteArrayOutputStream =
+                        new ByteArrayOutputStream(1024);
+                byte[] buffer = new byte[1024];
+
+                int bytesRead;
+                InputStream inputStream = socket.getInputStream();
+
+                /*
+                 * notice:
+                 * inputStream.read() will block if no data return
+                 */
+                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                    byteArrayOutputStream.write(buffer, 0, bytesRead);
+                    response += byteArrayOutputStream.toString("UTF-8");
+                }
+
+            } catch (UnknownHostException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                response = "UnknownHostException: " + e.toString();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                response = "IOException: " + e.toString();
+            } finally {
+                if (socket != null) {
+                    try {
+                        socket.close();
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+            }
+            return null;
+
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            System.out.println(response);
+            super.onPostExecute(result);
+        }
     }
 }

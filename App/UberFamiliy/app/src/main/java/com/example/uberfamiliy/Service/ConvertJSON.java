@@ -43,6 +43,7 @@ public class ConvertJSON {
                     user.setPassword(object.getString("password"));
                     user.setDriver(object.getInt("isDriver") == 1);
                     user.setImage(object.getString("picture"));
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -87,6 +88,8 @@ public class ConvertJSON {
                     friend.setUserId(object.getInt("id"));
                     friend.setUsername(object.getString("username"));
                     friends.add(friend);
+                    friend.setIp(object.getString("ipAddress"));
+                    friend.setPort(Integer.getInteger(object.getString("port")));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
