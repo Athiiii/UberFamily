@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.uberfamiliy.DBConnection.CallAPIResponse;
 import com.example.uberfamiliy.DBConnection.ConnectToDB;
 import com.example.uberfamiliy.DBConnection.IConnectToDB;
+import com.example.uberfamiliy.Service.Connectivity;
 import com.example.uberfamiliy.Service.ConvertJSON;
 import com.example.uberfamiliy.Service.SQLLight;
 import com.example.uberfamiliy.model.User;
@@ -114,6 +115,7 @@ public class LoginActivity extends AppCompatActivity implements CallAPIResponse 
         User user = ConvertJSON.getInstance().toUser(output);
 
         if ((user) != null) {
+            ConnectToDB.getInstance().updateUserConnect(user.getUserId(), Connectivity.getInstance().getIPAddress(true), "8080", null);
             if (rememberMe.isChecked()) {
                 user.setRemembered(true);
 

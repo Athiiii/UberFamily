@@ -45,9 +45,9 @@ public interface IConnectToDB {
 
     void updateUser(User user, CallAPIResponse callAPIResponse);
 
-    void GetSingleUser(int userId, CallAPIResponse callAPIResponse);
+    void getSingleUser(Long userId, CallAPIResponse callAPIResponse);
 
-    void UpdateUserConnect(int userId, String port, String ipAdress, CallAPIResponse callAPIResponse);
+    void updateUserConnect(Long userId, String port, String ipAdress, CallAPIResponse callAPIResponse);
 
 
 }

@@ -183,13 +183,13 @@ public class ConnectToDB implements IConnectToDB {
     }
 
     @Override
-    public void GetSingleUser(int userId, CallAPIResponse callAPIResponse) {
+    public void getSingleUser(Long userId, CallAPIResponse callAPIResponse) {
         String query = "userId=" + userId;
         connect(callAPIResponse, GET, "api/domain/single", query);
     }
 
     @Override
-    public void UpdateUserConnect(int userId, String port, String ipAdress, CallAPIResponse callAPIResponse) {
+    public void updateUserConnect(Long userId, String port, String ipAdress, CallAPIResponse callAPIResponse) {
         String query = "userId=" + userId + "&ipAdress=" + ipAdress + "&port=" + port;
         connect(callAPIResponse, PUT, "api/User/port", query);
     }

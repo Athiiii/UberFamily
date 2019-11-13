@@ -22,6 +22,7 @@ import com.example.uberfamiliy.Adapter.OnTextChangedAdapter;
 import com.example.uberfamiliy.DBConnection.CallAPIResponse;
 import com.example.uberfamiliy.DBConnection.ConnectToDB;
 import com.example.uberfamiliy.DBConnection.IConnectToDB;
+import com.example.uberfamiliy.Service.Connectivity;
 import com.example.uberfamiliy.Service.ConvertJSON;
 import com.example.uberfamiliy.Service.CreateUser;
 import com.example.uberfamiliy.Service.SQLLight;
@@ -186,6 +187,7 @@ public class RegisterActivity extends AppCompatActivity implements CallAPIRespon
 
         if ((user) != null) {
             User firstUser = getFirstUser();
+            ConnectToDB.getInstance().updateUserConnect(firstUser.getUserId(), Connectivity.getInstance().getIPAddress(true), "8080", null);
             if (firstUser != null) {
                 sqlLight.deleteAllFields(this);
             }
