@@ -13,8 +13,8 @@ public class ShowAddressActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_address);
-        Intent main = new Intent();
-        Bundle extras = main.getExtras();
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         String longitude = extras.getString("longitude");
         String latitude = extras.getString("latitude");

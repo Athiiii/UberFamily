@@ -3,6 +3,7 @@ package com.example.uberfamiliy;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -64,6 +65,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private Activity activity;
     private String message;
     private LatLng currentLocation;
+    private Context context;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -71,6 +73,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         root = inflater.inflate(R.layout.fragment_home, container, false);
         init();
         activity = getActivity();
+        context = getContext();
         user = sqlLight.getFirstUser(getActivity());
 
 
@@ -359,15 +362,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
                     switch (messageType) {
                         case 1: // Type A
-                            Intent main = new Intent(getContext(), ShowAddressActivity.class);
+                            Intent main = new Intent(context, ShowAddressActivity.class);
                             String coordinates = dIn.readUTF();
-                            String[] splitedCoordinates = coordinates.split(";");
-                            if (splitedCoordinates != null && splitedCoordinates.length == 2) {
-                                main.putExtra("longitude", splitedCoordinates[0]);
-                                main.putExtra("latitude", splitedCoordinates[1]);
+                            String[] splitCoordinates = coordinates.split(";");
+                            if (splitCoordinates != null && splitCoordinates.length == 2) {
+                                main.putExtra("longitude", splitCoordinates[0]);
+                                main.putExtra("latitude", splitCoordinates[1]);
                             }
                             startActivity(main);
-                            break;
+                            return;
+
                         default:
                             done = true;
                     }
