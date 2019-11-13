@@ -15,6 +15,7 @@ public class Connectivity {
     }
 
     public String getIPAddress() {
+        //Gets the correct IP address
         try {
             Enumeration<NetworkInterface> enumNetworkInterfaces = NetworkInterface
                     .getNetworkInterfaces();

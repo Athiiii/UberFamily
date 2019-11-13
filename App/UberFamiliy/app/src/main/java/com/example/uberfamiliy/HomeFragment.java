@@ -44,7 +44,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -161,7 +160,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         final EditText input = new EditText(getActivity());
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         input.setLayoutParams(lp);
-
+        //shows an input box
         new AlertDialog.Builder(getActivity())
                 .setTitle("Pick up request")
                 .setMessage("Please enter your destination")
@@ -215,53 +214,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void requestPermission() {
+        //request Permissions
         ActivityCompat.requestPermissions(this.getActivity(), new String[]{ACCESS_FINE_LOCATION}, 1);
-        //checks if permissions granted and if yes it shows the map
-        if (ActivityCompat.checkSelfPermission(getContext(), ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            mMapView = root.findViewById(R.id.mapView);
-
-            mMapView.onCreate(savedInstanceState);
-            mMapView.onResume();
-            try {
-                MapsInitializer.initialize(getActivity().getApplicationContext());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            mMapView.getMapAsync(new OnMapReadyCallback() {
-                @Override
-                public void onMapReady(GoogleMap mMap) {
-                    mMap.setMyLocationEnabled(true);
-                    posMyLocationButton();
-
-                    googleMap = mMap;
-                }
-
-                private void posMyLocationButton() {
-                    //repositioning the setMyLocation Button on
-                    @SuppressLint("ResourceType") View locationButton = ((View) HomeFragment.this.getView().findViewById(1).getParent()).findViewById(2);
-                    RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
-                    rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
-                    rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-                    rlp.setMargins(0, 0, 30, 30);
-                }
-            });
-
-
-            client.getLastLocation().addOnSuccessListener(getActivity(), new OnSuccessListener() {
-                @Override
-                public void onSuccess(Object location) {
-                    Location loc = (Location) location;
-                    if (location != null) {
-                        currentLocation = new LatLng(loc.getLatitude(), loc.getLongitude());
-                        // zooming automatically to the current location of the user
-                        CameraPosition cameraPosition = new CameraPosition.Builder().target(currentLocation).zoom(12).build();
-                        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                    }
-
-                }
-            });
-        }
     }
 
     public class MyClientTask extends AsyncTask<Void, Void, Void> {
@@ -336,7 +290,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private class SocketServerThread extends Thread {
-
+        //Comes here if your a driver and your friend needs help
         static final int SocketServerPORT = 8080;
         int count = 0;
 
@@ -397,9 +351,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         @Override
         public void run() {
-            OutputStream outputStream;
-            String msgReply = "Hello from Android, you are #" + cnt;
-
             try {
                 DataInputStream dIn = new DataInputStream(hostThreadSocket.getInputStream());
 
@@ -408,7 +359,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     byte messageType = dIn.readByte();
 
                     switch (messageType) {
-                        case 1: // Type A
+                        case 1:
+                            //receives the data send though the socket
                             Intent main = new Intent(context, ShowAddressActivity.class);
                             String coordinates = dIn.readUTF();
                             String[] splitCoordinates = coordinates.split(";");

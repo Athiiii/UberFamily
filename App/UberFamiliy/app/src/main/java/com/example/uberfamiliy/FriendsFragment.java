@@ -46,6 +46,13 @@ public class FriendsFragment extends Fragment {
                 fillUpListView(friends);
             }
         });
+        removeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ConnectToDB.getInstance().removeFriend(selectedFriend.getUserId(), null);
+                setButtonDisabled();
+            }
+        });
 
         friendsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -54,6 +61,7 @@ public class FriendsFragment extends Fragment {
                 selectedFriend = (User) friendsView.getAdapter().getItem(position);
             }
         });
+
 
         EditText searchText = root.findViewById(R.id.searchText);
         searchText.addTextChangedListener(new OnTextChangedAdapter() {
