@@ -313,14 +313,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     message += "#" + count + " from " + socket.getInetAddress()
                             + ":" + socket.getPort() + "\n";
 
-                    getActivity().runOnUiThread(new Runnable() {
+                    activity.runOnUiThread(new Runnable() {
 
                         @Override
                         public void run() {
-                            CharSequence text = message;
-                            int duration = Toast.LENGTH_SHORT;
-                            Toast toast = Toast.makeText(getContext(), text, duration);
-                            toast.show();
+                            System.out.println("YEH" + message);
                         }
                     });
 
@@ -364,10 +361,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
                     @Override
                     public void run() {
-                        CharSequence text = message + "-----------";
-                        int duration = Toast.LENGTH_SHORT;
-                        Toast toast = Toast.makeText(getContext(), text, duration);
-                        toast.show();
+
+                        System.out.println("YEH------" + message);
                     }
                 });
 
