@@ -66,6 +66,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private String message;
     private LatLng currentLocation;
     private Context context;
+    private Bundle savedInstanceState;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -75,6 +76,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         activity = getActivity();
         context = getContext();
         user = sqlLight.getFirstUser(getActivity());
+        this.savedInstanceState = savedInstanceState;
 
 
         Button pickUpBtn = root.findViewById(R.id.buttonPickUP);
@@ -162,7 +164,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         new AlertDialog.Builder(getActivity())
                 .setTitle("Pick up request")
-                .setMessage("Please enter your current address")
+                .setMessage("Please enter your destination")
                 .setView(input)
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -214,9 +216,56 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private void requestPermission() {
         ActivityCompat.requestPermissions(this.getActivity(), new String[]{ACCESS_FINE_LOCATION}, 1);
+        //checks if permissions granted and if yes it shows the map
+        if (ActivityCompat.checkSelfPermission(getContext(), ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            mMapView = root.findViewById(R.id.mapView);
+
+            mMapView.onCreate(savedInstanceState);
+            mMapView.onResume();
+            try {
+                MapsInitializer.initialize(getActivity().getApplicationContext());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            mMapView.getMapAsync(new OnMapReadyCallback() {
+                @Override
+                public void onMapReady(GoogleMap mMap) {
+                    mMap.setMyLocationEnabled(true);
+                    posMyLocationButton();
+
+                    googleMap = mMap;
+                }
+
+                private void posMyLocationButton() {
+                    //repositioning the setMyLocation Button on
+                    @SuppressLint("ResourceType") View locationButton = ((View) HomeFragment.this.getView().findViewById(1).getParent()).findViewById(2);
+                    RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
+                    rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
+                    rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+                    rlp.setMargins(0, 0, 30, 30);
+                }
+            });
+
+
+            client.getLastLocation().addOnSuccessListener(getActivity(), new OnSuccessListener() {
+                @Override
+                public void onSuccess(Object location) {
+                    Location loc = (Location) location;
+                    if (location != null) {
+                        currentLocation = new LatLng(loc.getLatitude(), loc.getLongitude());
+                        // zooming automatically to the current location of the user
+                        CameraPosition cameraPosition = new CameraPosition.Builder().target(currentLocation).zoom(12).build();
+                        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                    }
+
+                }
+            });
+        }
     }
 
     public class MyClientTask extends AsyncTask<Void, Void, Void> {
+        //Call the other Phone if you want to be picked up
         String dstAddress;
         int dstPort;
         String response = "";
@@ -234,6 +283,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 socket = new Socket(dstAddress, dstPort);
                 DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
                 dOut.writeByte(1);
+                //sends the current location
                 dOut.writeUTF(currentLocation.longitude + ";" + currentLocation.latitude);
                 dOut.flush(); // Send off the data
                 // Send the exit message
@@ -250,10 +300,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 int bytesRead;
                 InputStream inputStream = socket.getInputStream();
 
-                /*
-                 * notice:
-                 * inputStream.read() will block if no data return
-                 */
+                //saves the result
                 while ((bytesRead = inputStream.read(buffer)) != -1) {
                     byteArrayOutputStream.write(buffer, 0, bytesRead);
                     response += byteArrayOutputStream.toString("UTF-8");
@@ -383,7 +430,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void run() {
 
-                        System.out.println("YEH------" + message);
                     }
                 });
 
