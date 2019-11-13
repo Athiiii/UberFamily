@@ -57,7 +57,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ListView
-            android:id="@+id/userList"
+            android:id="@+id/friendList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="2dp"
@@ -73,7 +73,7 @@
 
     <Button
 
-        android:id="@+id/addFriend"
+        android:id="@+id/manageFriends"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -90,7 +90,7 @@
 
     <Button
 
-        android:id="@+id/addFriend2"
+        android:id="@+id/removeFriends"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
