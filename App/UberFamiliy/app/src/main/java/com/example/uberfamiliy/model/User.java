@@ -18,6 +18,10 @@ public class User extends SugarRecord implements Serializable {
     private boolean isDriver;
     @Ignore
     private String image;
+    @Ignore
+    private String ip;
+    @Ignore
+    private int port;
 
     @Override
     public boolean equals(@Nullable Object obj) {
@@ -85,4 +89,19 @@ public class User extends SugarRecord implements Serializable {
         return getUsername();
     }
 
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
 }
