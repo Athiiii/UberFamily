@@ -184,8 +184,8 @@ public class ConnectToDB implements IConnectToDB {
 
     @Override
     public void getSingleUser(Long userId, CallAPIResponse callAPIResponse) {
-        String query = "userId=" + userId;
-        connect(callAPIResponse, GET, "api/domain/single", query);
+        String query = "?userId=" + userId;
+        connect(callAPIResponse, GET, "api/User/single" + query);
     }
 
     @Override
