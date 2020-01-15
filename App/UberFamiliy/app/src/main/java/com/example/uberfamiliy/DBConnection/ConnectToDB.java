@@ -88,7 +88,7 @@ public class ConnectToDB implements IConnectToDB {
     @Override
     public void removeFriend(Long friendshipId, CallAPIResponse callAPIResponse) {
         String query = "friendId=" + friendshipId;
-        connect(callAPIResponse, DELETE, "api/Friend", query);
+        connect(callAPIResponse, DELETE, "api/Friend?", query);
     }
 
     @Override
